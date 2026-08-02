@@ -1,0 +1,61 @@
+# GitHub Pages 배포
+#
+# main 에 밀면 확인 -> 빌드 -> https://thgamoo.github.io/handeck/ 로 올라간다.
+# 서버가 없는 정적 웹앱이라 이걸로 끝이다 (빌드 결과 dist/ 를 그대로 올린다).
+#
+# 처음 한 번은 GitHub 에서 켜줘야 한다:
+#   Settings -> Pages -> Build and deployment -> Source: **GitHub Actions**
+#   («Deploy from a branch» 로 두면 이 워크플로 결과가 안 쓰인다)
+
+name: 배포
+
+on:
+  push:
+    branches: [main]
+  # 코드를 안 고쳐도 손으로 한 번 돌릴 수 있게
+  workflow_dispatch:
+
+# Pages 배포에 필요한 권한. 이 셋이 없으면 마지막 단계에서 거절당한다.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 연달아 밀었을 때 뒤엣것만 살린다. 배포가 서로 엇갈리면 어느 게 올라갔는지 알 수 없다.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # package-lock.json 그대로 설치한다 (`npm install` 과 달리 버전이 안 움직인다)
+      - run: npm ci
+
+      # 확인이 깨지면 배포하지 않는다. 잘못된 걸 올리는 것보다 안 올리는 게 낫다.
+      - run: npm run check
+
+      # `build` 안에 타입 검사(tsc --noEmit)가 들어 있다
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

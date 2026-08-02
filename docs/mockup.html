@@ -1,0 +1,215 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>handeck 편집기 — 화면 설계 목업</title>
+<!--
+  v0.1~v0.3 편집기 화면 설계안. 동작하지 않는 정지 목업이다.
+  검토용이라 실제 데이터(sub3 재앙 카드)를 넣어 그렸다.
+-->
+<style>
+  * { box-sizing: border-box }
+  body { margin:0; font:13px/1.5 'Malgun Gothic',sans-serif; color:#2E232A; background:#E9E3DB }
+
+  .app { display:grid; grid-template-columns:196px 1fr 264px; grid-template-rows:46px 1fr 30px; height:100vh }
+
+  /* ── 상단 ─────────────────────────────────────── */
+  header { grid-column:1/-1; background:#571026; color:#FFFDFA;
+           display:flex; align-items:center; gap:18px; padding:0 16px }
+  header .brand { font-weight:700; letter-spacing:.4px }
+  header .file { color:#D8B976; font-size:12px }
+  header .sp { flex:1 }
+  .tabs { display:flex; gap:2px }
+  .tabs span { padding:5px 14px; border-radius:3px 3px 0 0; font-size:12.5px;
+               background:rgba(255,255,255,.10); cursor:default }
+  .tabs span.on { background:#E9E3DB; color:#571026; font-weight:700 }
+  .btn { border:1px solid rgba(255,255,255,.35); background:transparent; color:#FFFDFA;
+         padding:4px 11px; border-radius:3px; font-size:12.5px }
+  .btn.go { background:#D8B976; color:#4A1020; border-color:#D8B976; font-weight:700 }
+
+  /* ── 좌: 덱 목록 ──────────────────────────────── */
+  .left { background:#F6F1EA; border-right:1px solid #D9CFC4; overflow:auto }
+  .left h4 { margin:0; padding:9px 12px 5px; font-size:10.5px; letter-spacing:.6px;
+             color:#9A8D84; text-transform:uppercase }
+  .deck { padding:7px 12px; display:flex; gap:8px; align-items:center; font-size:12.5px;
+          border-left:3px solid transparent }
+  .deck.on { background:#fff; border-left-color:#7D1F38; font-weight:700 }
+  .deck .n { margin-left:auto; color:#A99C92; font-size:11px; font-weight:400 }
+  .thumb { width:15px; height:21px; border-radius:1.5px; flex:none }
+  .add { margin:8px 12px; padding:5px; border:1px dashed #C9BDB2; text-align:center;
+         color:#9A8D84; font-size:12px; border-radius:3px }
+
+  /* ── 중: 캔버스 ───────────────────────────────── */
+  .stage { position:relative; overflow:auto; display:flex; align-items:center;
+           justify-content:center; background:
+           repeating-conic-gradient(#E4DDD4 0% 25%, #EDE7DF 0% 50%) 50%/16px 16px }
+  .card { position:relative; width:276px; height:376px; box-shadow:0 10px 34px rgba(60,30,20,.22) }
+  .card img.bleed { position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+
+  /* 카드 안쪽 실제 디자인 (재앙 카드) */
+  .veil { position:absolute; left:0; right:0; top:0; height:210px;
+          background:linear-gradient(to bottom, rgba(20,18,26,.72) 0%, rgba(20,18,26,.12) 32%,
+                     rgba(255,253,250,0) 58%, rgba(255,253,250,.94) 90%, #FFFDFA 100%) }
+  .paper { position:absolute; left:0; right:0; top:198px; bottom:0; background:#FFFDFA }
+  .kick { position:absolute; top:16px; left:22px; color:#D8B976; font-size:9px;
+          font-weight:700; letter-spacing:3px }
+  .no { position:absolute; top:11px; right:22px; color:#D8B976; font-size:19px; font-family:'Batang',serif }
+  .ttl { position:absolute; left:0; right:0; top:150px; text-align:center; font-family:'Batang',serif;
+         font-weight:700; font-size:23px; color:#571026 }
+  .tags { position:absolute; left:20px; right:20px; top:196px; display:flex; gap:8px }
+  .tags i { flex:1; text-align:center; font-style:normal; font-size:8.5px; font-weight:700;
+            color:#fff; background:#7D1F38; padding:4px 0; border-radius:3px }
+  .txt { position:absolute; left:24px; right:24px; top:226px; font-size:9px; line-height:1.5; color:#2E232A }
+  .cnt { position:absolute; left:24px; right:24px; bottom:38px; font-size:8px; color:#7A6B72;
+         border-top:1px solid #E6D8CF; padding-top:5px }
+  .cnt b { color:#B3893A }
+  .flv { position:absolute; left:24px; right:24px; bottom:16px; text-align:center;
+         font-family:'Batang',serif; font-style:italic; font-size:8px; color:#7D1F38 }
+
+  /* 편집 오버레이 */
+  .ov { position:absolute; inset:0 }
+  .box { position:absolute; border:1px solid rgba(125,31,56,.28) }
+  .box.sel { border:1.6px solid #7D1F38; background:rgba(125,31,56,.07) }
+  .box.sel::after { content:''; position:absolute; right:-4.5px; bottom:-4.5px; width:9px; height:9px;
+                    background:#fff; border:1.6px solid #7D1F38 }
+  .box.sel::before { content:''; position:absolute; left:-4.5px; top:-4.5px; width:9px; height:9px;
+                     background:#fff; border:1.6px solid #7D1F38 }
+  .lbl { position:absolute; top:-16px; left:-1px; background:#7D1F38; color:#fff;
+         font-size:9.5px; padding:1px 5px; border-radius:2px 2px 0 0; white-space:nowrap }
+  .snap { position:absolute; background:#3AA7A0 }
+  .bleedline { position:absolute; inset:12px; border:1px dashed rgba(125,31,56,.45); pointer-events:none }
+  .bleedtag { position:absolute; left:14px; top:-1px; transform:translateY(-100%);
+              font-size:9px; color:#7D1F38; background:#E9E3DB; padding:0 3px }
+
+  /* ── 우: 속성 ─────────────────────────────────── */
+  .right { background:#FFFDFA; border-left:1px solid #D9CFC4; overflow:auto; padding:10px 12px }
+  .right h4 { margin:14px 0 6px; font-size:10.5px; letter-spacing:.6px; color:#9A8D84;
+              text-transform:uppercase }
+  .right h4:first-child { margin-top:0 }
+  .layers { border:1px solid #E6DED6; border-radius:3px; overflow:hidden }
+  .ly { display:flex; gap:7px; align-items:center; padding:5px 8px; font-size:12px;
+        border-bottom:1px solid #F2ECE6 }
+  .ly:last-child { border-bottom:0 }
+  .ly.on { background:#F7E9EE; font-weight:700 }
+  .ly .ico { width:15px; text-align:center; color:#A99C92; font-size:11px }
+  .ly .eye { margin-left:auto; color:#C4B8AE; font-size:11px }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:5px }
+  .f { display:flex; align-items:center; gap:5px; margin:4px 0 }
+  .f label { width:44px; font-size:11px; color:#8A7D74 }
+  .f input, .f select { flex:1; min-width:0; font:inherit; font-size:12px; padding:3px 5px;
+                        border:1px solid #DCD2C8; border-radius:2px; background:#fff }
+  .bind { display:flex; gap:5px; align-items:center; background:#F4E3E8; border:1px solid #E3C9D2;
+          border-radius:3px; padding:5px 7px; font-size:11.5px; margin:5px 0 }
+  .bind code { background:#fff; border:1px solid #E3C9D2; border-radius:2px; padding:0 4px;
+               font-size:11px; color:#7D1F38 }
+  .swatches { display:flex; gap:4px; margin-top:5px }
+  .sw { width:19px; height:19px; border-radius:3px; border:1px solid rgba(0,0,0,.12) }
+
+  /* ── 하단 ─────────────────────────────────────── */
+  footer { grid-column:1/-1; background:#F6F1EA; border-top:1px solid #D9CFC4;
+           display:flex; align-items:center; gap:16px; padding:0 14px; font-size:11.5px; color:#7A6B72 }
+  footer b { color:#2E232A }
+  .ok { color:#2E7D5B; font-weight:700 }
+</style>
+
+<div class="app">
+  <header>
+    <span class="brand">handeck</span>
+    <span class="file">삼류-악녀는-싫어.json</span>
+    <div class="tabs">
+      <span class="on">디자인</span><span>데이터</span><span>인쇄</span>
+    </div>
+    <span class="sp"></span>
+    <button class="btn">실행취소</button>
+    <button class="btn">미리보기</button>
+    <button class="btn go">PDF 내보내기</button>
+  </header>
+
+  <!-- 좌 -->
+  <div class="left">
+    <h4>덱</h4>
+    <div class="deck"><span class="thumb" style="background:#C8A32E"></span>능력<span class="n">100</span></div>
+    <div class="deck"><span class="thumb" style="background:#1F4E79"></span>단서<span class="n">27</span></div>
+    <div class="deck on"><span class="thumb" style="background:#14121A"></span>재앙<span class="n">10</span></div>
+    <div class="deck"><span class="thumb" style="background:#14121A"></span>운명<span class="n">48</span></div>
+    <div class="deck"><span class="thumb" style="background:#5A4632"></span>캐릭터<span class="n">17</span></div>
+    <div class="deck"><span class="thumb" style="background:#C9738C;border-radius:50%"></span>두근!<span class="n">30</span></div>
+    <div class="add">+ 덱 추가</div>
+    <h4>문서</h4>
+    <div class="deck"><span class="thumb" style="background:#fff;border:1px solid #C9BDB2"></span>룰북<span class="n">3쪽</span></div>
+    <div class="deck"><span class="thumb" style="background:#F3E9DC;border:1px solid #C9BDB2"></span>보드판<span class="n">A2</span></div>
+  </div>
+
+  <!-- 중 -->
+  <div class="stage">
+    <div class="card">
+      <img class="bleed" src="../../sub3/nandeck/art/omen-01.png" alt="">
+      <div class="veil"></div>
+      <div class="paper"></div>
+      <div class="kick">재앙</div>
+      <div class="no">1</div>
+      <div class="ttl">선혈의 비</div>
+      <div class="tags"><i>국지</i><i>게임 종료까지</i></div>
+      <div class="txt">주사위를 굴려 나온 지역에 선혈의 비 토큰을 놓는다.<br>
+        (1동 2서 3남 4북 5중부 6동쪽바다)<br>매 막 종료 시 그 지역의 플레이어는 능력 카드 1장을 버린다.</div>
+      <div class="cnt"><b>대응 · 면역</b> 혈술사는 능력 1장, 진조는 능력 2장을 얻는다 (면역).</div>
+      <div class="flv">피비린내가 나는군…</div>
+
+      <div class="ov">
+        <div class="bleedline"><span class="bleedtag">재단선</span></div>
+        <div class="box" style="left:0;top:0;width:276px;height:376px"></div>
+        <div class="box sel" style="left:0;top:143px;width:276px;height:38px">
+          <span class="lbl">제목  ·  {{ name }}</span>
+        </div>
+        <div class="box" style="left:20px;top:196px;width:236px;height:22px"></div>
+        <div class="box" style="left:24px;top:224px;width:228px;height:60px"></div>
+        <!-- 스냅 가이드 -->
+        <div class="snap" style="left:138px;top:0;width:1px;height:376px;opacity:.55"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 우 -->
+  <div class="right">
+    <h4>레이어</h4>
+    <div class="layers">
+      <div class="ly"><span class="ico">T</span>플레이버<span class="eye">◉</span></div>
+      <div class="ly"><span class="ico">T</span>대응·면역<span class="eye">◉</span></div>
+      <div class="ly"><span class="ico">T</span>본문<span class="eye">◉</span></div>
+      <div class="ly"><span class="ico">▭</span>유형 태그<span class="eye">◉</span></div>
+      <div class="ly on"><span class="ico">T</span>제목<span class="eye">◉</span></div>
+      <div class="ly"><span class="ico">▤</span>그늘<span class="eye">◉</span></div>
+      <div class="ly"><span class="ico">🖼</span>일러스트<span class="eye">◉</span></div>
+    </div>
+
+    <h4>제목 — 글자</h4>
+    <div class="bind">데이터 <code>{{ name }}</code> 연결됨</div>
+    <div class="grid2">
+      <div class="f"><label>x</label><input value="0"></div>
+      <div class="f"><label>y</label><input value="35.8"></div>
+      <div class="f"><label>w</label><input value="69"></div>
+      <div class="f"><label>h</label><input value="9.5"></div>
+    </div>
+    <div class="f"><label>글꼴</label><select><option>바탕 (serif)</option></select></div>
+    <div class="grid2">
+      <div class="f"><label>크기</label><input value="17pt"></div>
+      <div class="f"><label>굵기</label><input value="700"></div>
+    </div>
+    <div class="f"><label>색</label><input value="#571026"></div>
+    <div class="swatches">
+      <span class="sw" style="background:#571026"></span><span class="sw" style="background:#7D1F38"></span>
+      <span class="sw" style="background:#B3893A"></span><span class="sw" style="background:#D8B976"></span>
+      <span class="sw" style="background:#C9738C"></span><span class="sw" style="background:#2E232A"></span>
+      <span class="sw" style="background:#FFFDFA"></span>
+    </div>
+    <div class="f"><label>정렬</label><select><option>가운데</option></select></div>
+    <div class="f"><label>넘칠 때</label><select><option>글자 줄이기</option></select></div>
+  </div>
+
+  <footer>
+    <span>재앙 · <b>10장</b></span>
+    <span>63 × 88 mm + 블리드 3</span>
+    <span>A4 3×3 · <b>2시트</b></span>
+    <span>뒷면: 운명과 공유 <span class="ok">✓</span></span>
+    <span class="ok">장수 10/10</span>
+    <span style="margin-left:auto">저장됨</span>
+  </footer>
+</div>

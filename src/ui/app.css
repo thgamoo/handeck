@@ -1,0 +1,541 @@
+/* 편집기 껍데기. 카드 안쪽 스타일은 core/render 가 인라인으로 넣는다 —
+   인쇄에도 그대로 쓰이므로 여기 규칙이 카드에 새면 안 된다. */
+
+:root {
+  --hd-sans: 'Malgun Gothic', 'Pretendard', -apple-system, sans-serif;
+  --hd-serif: 'Batang', 'Nanum Myeongjo', serif;
+
+  --ink: #2e232a;
+  --muted: #7a6b72;
+  --line: #d9cfc4;
+  --wine: #7d1f38;
+  --wine-deep: #571026;
+  --gold: #b3893a;
+  --paper: #fffdfa;
+  --bg: #e9e3db;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  font: 13px/1.5 var(--hd-sans);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: var(--wine); color: var(--wine); }
+button:disabled { opacity: 0.4; cursor: default; }
+button.danger:hover { border-color: #b3261e; color: #b3261e; }
+input, select, textarea {
+  font: inherit; font-size: 12px;
+  border: 1px solid var(--line); border-radius: 2px;
+  padding: 3px 5px; background: #fff; min-width: 0;
+}
+textarea { resize: vertical; font-size: 12px; line-height: 1.45; }
+
+/* ── 레이아웃 ─────────────────────────────────────── */
+.app {
+  display: grid;
+  grid-template-columns: 226px 1fr 272px;
+  grid-template-rows: 46px 1fr 28px;
+  height: 100%;
+}
+
+header {
+  grid-column: 1/-1;
+  background: var(--wine-deep);
+  color: var(--paper);
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px;
+}
+header .brand { font-weight: 700; letter-spacing: 0.4px; }
+/* 프로젝트 이름 — 머리말에서 바로 고친다. 평소엔 글자처럼 보이고 누르면 칸이 된다 */
+header .file {
+  color: #d8b976; font-size: 12px; background: transparent;
+  border: 1px solid transparent; border-radius: 4px; padding: 3px 6px; min-width: 80px;
+}
+header .file:hover { border-color: #4a423b; }
+header .file:focus { border-color: #d8b976; background: #191512; outline: none; }
+header .dirty { color: #d8b976; font-size: 12px; margin-left: -4px; }
+header .sp { flex: 1; }
+header button {
+  background: transparent; color: var(--paper);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+header button:hover:not(:disabled) { background: rgba(255,255,255,.12); color: #fff; border-color: #fff; }
+header button.go { background: #d8b976; color: #4a1020; border-color: #d8b976; font-weight: 700; }
+.zoom { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #e8d9c6; }
+.zoom .cal { min-width: 52px; }
+.zoom .cal em { font-style: normal; color: #d8b976; margin-left: 2px; font-size: 10px; }
+.zoom span { min-width: 38px; text-align: center; }
+
+footer {
+  grid-column: 1/-1;
+  background: #f6f1ea; border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 14px; font-size: 11.5px; color: var(--muted);
+}
+footer .sp { flex: 1; }
+footer b { color: var(--ink); }
+
+/* ── 좌: 덱·카드 ─────────────────────────────────── */
+.left {
+  background: #f6f1ea; border-right: 1px solid var(--line);
+  overflow: auto; padding-bottom: 16px;
+}
+h4 {
+  margin: 0; padding: 10px 12px 5px;
+  font-size: 10.5px; letter-spacing: 0.6px; color: #9a8d84; text-transform: uppercase;
+  display: flex; align-items: center; gap: 6px;
+}
+.count { margin-left: auto; color: #6d8f7a; font-weight: 700; }
+.count.warn { color: #b3261e; }
+.hint.warn { color: #b3261e; }
+
+.deck {
+  padding: 6px 12px; font-size: 12.5px; cursor: pointer;
+  border-left: 3px solid transparent; display: flex; gap: 8px;
+}
+.deck.on { background: #fff; border-left-color: var(--wine); font-weight: 700; }
+.deck .n { margin-left: auto; color: #a99c92; font-weight: 400; font-size: 11px; }
+
+.cards { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 12px; }
+.card { padding: 2px; border-radius: 2px; position: relative; line-height: 0; }
+.card.on { outline: 2px solid var(--wine); }
+.thumb { overflow: hidden; background: #fff; }
+.qty {
+  position: absolute; right: 3px; bottom: 3px;
+  background: rgba(0,0,0,.65); color: #fff; font-size: 9px;
+  padding: 0 3px; border-radius: 2px; line-height: 1.4;
+}
+
+/* ── 중: 캔버스 ──────────────────────────────────── */
+.stage {
+  /* 세로 정렬 — 판 아래에 치수 설명이 붙는다.
+     row 로 두면 설명이 판의 폭을 나눠 가져 판이 찌그러진다. */
+  overflow: auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 30px;
+  background: repeating-conic-gradient(#e4ddd4 0% 25%, #ede7df 0% 50%) 50% / 16px 16px;
+}
+/* 판 + 눈금자. 눈금자는 판에 붙어 같이 움직인다 */
+.board { display: grid; }
+.board.withruler { grid-template-columns: 20px auto; grid-template-rows: 20px auto; }
+.rcorner {
+  display: flex; align-items: flex-end; justify-content: flex-end; padding: 0 3px 1px 0;
+  font-size: 8px; color: #a99c92;
+}
+.ruler-bar { position: relative; background: #f4efe8; border: 1px solid #ddd3c6; }
+.ruler-bar.x { border-width: 1px 1px 0 1px; }
+.ruler-bar.y { border-width: 1px 0 1px 1px; }
+.ruler-bar i { position: absolute; background: #c3b7ab; }
+.ruler-bar.x i { bottom: 0; width: 1px; height: 3px; }
+.ruler-bar.y i { right: 0; height: 1px; width: 3px; }
+.ruler-bar i.mid { background: #a99c92; }
+.ruler-bar.x i.mid { height: 6px; }
+.ruler-bar.y i.mid { width: 6px; }
+.ruler-bar i.major { background: #6d6259; }
+.ruler-bar.x i.major { height: 10px; }
+.ruler-bar.y i.major { width: 10px; }
+.ruler-bar i b { position: absolute; font-size: 8px; font-weight: 400; color: #6d6259; white-space: nowrap; }
+.ruler-bar.x i b { top: 1px; left: 2px; }
+.ruler-bar.y i b { left: 1px; top: 2px; transform-origin: 0 0; }
+/* 고른 레이어가 차지하는 구간 — 자를 눈으로 훑지 않아도 된다 */
+.rspan { position: absolute; background: rgba(125,31,56,.18); }
+.ruler-bar.x .rspan { top: 0; bottom: 0; }
+.ruler-bar.y .rspan { left: 0; right: 0; }
+.rcursor { position: absolute; background: var(--wine, #7d1f38); }
+.ruler-bar.x .rcursor { top: 0; bottom: 0; width: 1px; }
+.ruler-bar.y .rcursor { left: 0; right: 0; height: 1px; }
+
+.canvas { position: relative; flex: none; box-shadow: 0 10px 34px rgba(60,30,20,.22); background: #fff; }
+.overlay { position: absolute; inset: 0; }
+
+/* 조작 상자는 보여주기 전용이다. 누르는 건 캔버스가 받아 히트 테스트로 정한다 —
+   상자가 클릭을 먹으면 «위에 있는 상자» 가 무조건 이겨서 투명한 데를 눌러도 그게 잡힌다.
+   그래서 :hover 대신 히트 테스트가 붙여주는 .hov 로 테두리를 켠다. */
+.hbox { position: absolute; border: 1px solid transparent; pointer-events: none; }
+.hbox .hdl, .hbox .pick { pointer-events: auto; }
+.hbox.hov { border-color: rgba(125,31,56,.42); }
+.hbox.sel { border: 1.5px solid var(--wine); background: rgba(125,31,56,.06); }
+.hbox.lock { cursor: default; }
+.hbox .tag {
+  position: absolute; top: -17px; left: -1px;
+  background: var(--wine); color: #fff; font-size: 10px;
+  padding: 0 5px; border-radius: 2px 2px 0 0; white-space: nowrap;
+}
+.hdl { position: absolute; width: 9px; height: 9px; background: #fff; border: 1.5px solid var(--wine); }
+.hdl.nw { left: -5px; top: -5px; cursor: nwse-resize; }
+.hdl.ne { right: -5px; top: -5px; cursor: nesw-resize; }
+.hdl.sw { left: -5px; bottom: -5px; cursor: nesw-resize; }
+.hdl.se { right: -5px; bottom: -5px; cursor: nwse-resize; }
+.drag-hint { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.7); color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; }
+
+/* ── 우: 레이어·속성 ─────────────────────────────── */
+.right { background: var(--paper); border-left: 1px solid var(--line); overflow: auto; padding: 0 12px 24px; }
+.layers { border: 1px solid #e6ded6; border-radius: 3px; overflow: hidden; }
+.ly {
+  display: flex; gap: 7px; align-items: center; padding: 5px 8px;
+  font-size: 12px; border-bottom: 1px solid #f2ece6; cursor: pointer;
+}
+.ly:last-child { border-bottom: 0; }
+.ly.on { background: #f7e9ee; font-weight: 700; }
+.ly .ico { width: 14px; text-align: center; color: #a99c92; font-size: 11px; }
+.ly .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ly .badge {
+  margin-left: auto; font-size: 9.5px; font-weight: 400;
+  background: #f4e3e8; color: var(--wine); border: 1px solid #e3c9d2;
+  border-radius: 2px; padding: 0 4px;
+}
+.ly .eye { margin-left: auto; border: 0; background: none; color: #bfb3a9; padding: 0 2px; }
+.ly .badge + .eye { margin-left: 4px; }
+
+.rowbtn { display: flex; gap: 5px; margin: 8px 0; flex-wrap: wrap; }
+.rowbtn button { flex: 1; font-size: 11.5px; padding: 4px 6px; }
+
+.f { display: flex; align-items: center; gap: 6px; margin: 5px 0; }
+.f > span { width: 52px; font-size: 11px; color: #8a7d74; flex: none; }
+.f input, .f select, .f textarea { flex: 1; }
+.f.col { display: block; }
+.f.col > span { display: block; width: auto; margin-bottom: 3px; }
+.f.col textarea, .f.col input { width: 100%; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; }
+
+.toggle {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: #f7f2ec; border: 1px solid #e6ded6; border-radius: 3px;
+  padding: 7px 9px; margin: 8px 0; cursor: pointer;
+}
+.toggle input { margin-top: 2px; }
+.toggle b { display: block; font-size: 12px; }
+.toggle em { display: block; font-style: normal; font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+.toggle.sm { padding: 5px 8px; }
+.toggle.sm span { font-size: 11.5px; }
+
+.sw { display: flex; gap: 4px; margin: 4px 0 8px; }
+.sw button { width: 20px; height: 20px; padding: 0; border-radius: 3px; border: 1px solid rgba(0,0,0,.14); }
+
+.hint { font-size: 11.5px; color: #9a8d84; line-height: 1.6; padding: 6px 0; }
+.hint.sm { font-size: 11px; }
+
+/* 캔버스에 그림 떨구기 */
+.canvas.dropping { outline: 3px dashed var(--wine); outline-offset: 4px; }
+.dropmsg {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(125,31,56,.12); color: var(--wine-deep);
+  font-weight: 700; font-size: 13px; pointer-events: none;
+}
+.hbox .pick {
+  position: absolute; top: -19px; right: -1px;
+  font-size: 10px; padding: 1px 6px; line-height: 1.5;
+  background: #fff; border: 1px solid var(--wine); color: var(--wine);
+  border-radius: 2px; white-space: nowrap;
+}
+
+.imgpick { border: 1px solid var(--line); border-radius: 3px; padding: 6px; background: #fff; }
+.imgpick img { display: block; width: 100%; max-height: 74px; object-fit: contain; margin-bottom: 5px; }
+.imgpick .none { display: block; font-size: 10.5px; color: #a99c92; padding: 8px 0; text-align: center; }
+.imgpick input { width: 100%; font-size: 11px; }
+
+/* 오른쪽 패널 — 카드 상태 바 / 이 카드의 값 / 공통 속성 구분 */
+.instbar {
+  display: flex; align-items: center; gap: 10px;
+  background: #f7f2ec; border-bottom: 1px solid #e6ded6;
+  margin: 0 -12px; padding: 7px 12px; font-size: 12px; font-weight: 700;
+}
+.instbar label { display: flex; align-items: center; gap: 5px; margin-left: auto; font-weight: 400; color: var(--muted); font-size: 11px; }
+.instbar input { width: 52px; }
+
+.instval {
+  background: #fdf4f7; border: 1px solid #eed7de; border-radius: 4px;
+  margin: 10px 0 4px; padding: 2px 9px 9px;
+}
+.instval h4 { padding-left: 0; padding-right: 0; color: var(--wine); }
+.instval .only {
+  margin-left: auto; font-size: 9.5px; font-weight: 400; text-transform: none;
+  letter-spacing: 0; color: #fff; background: var(--wine); border-radius: 2px; padding: 0 5px;
+}
+.instval textarea.big { width: 100%; font-size: 12.5px; }
+
+.kindtag, .allcards {
+  margin-left: auto; font-size: 9.5px; font-weight: 400;
+  text-transform: none; letter-spacing: 0; color: #a99c92;
+  border: 1px solid #e6ded6; border-radius: 2px; padding: 0 5px; background: #fff;
+}
+
+/* 그림 넣기 */
+.imgpick { margin: 4px 0 8px; }
+.imgpick .drop {
+  display: block; width: 100%; padding: 0; height: 92px;
+  border: 1px dashed var(--line); border-radius: 3px; background: #fff;
+  overflow: hidden; cursor: pointer;
+}
+.imgpick .drop.has { border-style: solid; }
+.imgpick .drop:hover { border-color: var(--wine); }
+.imgpick .drop img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.imgpick .none { font-size: 11px; color: #a99c92; }
+.rowbtn.tight { margin: 5px 0 0; }
+.rowbtn.pad { padding: 0 12px; }
+
+/* 카드 썸네일 번호 */
+.card .idx {
+  position: absolute; left: 3px; top: 3px;
+  background: rgba(255,255,255,.86); color: #4a4038; font-size: 9px;
+  padding: 0 3px; border-radius: 2px; line-height: 1.5;
+}
+
+/* 레이어 순서 끌어 옮기기 */
+.ly { position: relative; }
+.ly .grip {
+  color: #cfc4ba; font-size: 11px; cursor: grab; user-select: none;
+  margin-right: -2px; letter-spacing: -1px;
+}
+.ly:hover .grip { color: var(--wine); }
+.ly.dragging { opacity: .4; }
+.ly.drop-before::before,
+.ly.drop-after::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 2px;
+  background: var(--wine); z-index: 2;
+}
+.ly.drop-before::before { top: -1px; }
+.ly.drop-after::after { bottom: -1px; }
+.hint.nopad { padding: 4px 0 0; }
+
+/* 정렬 가이드
+   조각(캔버스) 기준 = 실선, 다른 레이어 기준 = 점선 + 이름.
+   섞이면 «뭐에 맞춘 건지» 를 알 수 없다. */
+.guides { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.gl { position: absolute; }
+.gl.v { top: -10px; bottom: -10px; width: 0; border-left-width: 1px; border-left-style: solid; }
+.gl.h { left: -10px; right: -10px; height: 0; border-top-width: 1px; border-top-style: solid; }
+
+.gl.center { border-color: #12a594; }            /* 한가운데 */
+.gl.trim   { border-color: #7d1f38; }            /* 재단선 */
+.gl.edge   { border-color: #b3893a; }            /* 조각 가장자리 */
+
+.gl.layer.v { border-left-style: dashed; border-left-color: #d05fa0; }
+.gl.layer.h { border-top-style: dashed; border-top-color: #d05fa0; }
+
+/* 어느 레이어에 맞춘 건지 */
+.gl b {
+  position: absolute; background: #d05fa0; color: #fff;
+  font-size: 9px; font-weight: 400; line-height: 1.6;
+  padding: 0 4px; border-radius: 2px; white-space: nowrap;
+}
+.gl.v b { left: 3px; top: -1px; }
+.gl.h b { top: 3px; left: -1px; }
+
+/* 사이드바 안에서 가로 스크롤이 생기지 않게 — 격자가 폭을 꽉 채운다 */
+.right { overflow-x: hidden; }
+.grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid2 .f { margin: 5px 0; min-width: 0; }
+.grid2 .f > span { width: 18px; flex: none; }
+.grid2 .f input, .grid2 .f select { width: 100%; min-width: 0; }
+.f input, .f select, .f textarea { min-width: 0; }
+
+/* 레이어 삭제 */
+.ly .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; }
+.ly .del:hover { color: #b3261e; background: none; }
+.ly .eye { margin-left: auto; }
+.ly .badge + .eye { margin-left: 4px; }
+
+/* ── 색 고르개 ────────────────────────────────────────── */
+.colorf { margin: 5px 0; }
+.colorf .f { margin: 0; }
+.cwrap { flex: 1; display: flex; align-items: center; gap: 4px; min-width: 0; }
+.cwrap input { flex: 1; min-width: 0; }
+/* [주의] 이 이름을 `.sw` 로 두면 안 된다. **크기 조절 손잡이의 남서쪽**(`.hdl.sw`)과
+   색 팔레트 줄(`.sw`)이 같은 이름을 쓰고 있어서, 여기 규칙이 셋 다에 걸린다.
+   실제로 그랬다 — 레이어를 고르면 **왼쪽 아래 손잡이만 22px 바둑판 네모**가 됐다. */
+.cswatch {
+  flex: none; width: 22px; height: 22px; padding: 0; border-radius: 4px;
+  border: 1px solid #cfc4ba; cursor: pointer;
+  /* 투명·반투명 색을 알아볼 수 있게 바둑판 무늬를 깐다 */
+  background-image: linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%),
+                    linear-gradient(45deg, #ddd 25%, transparent 25%, transparent 75%, #ddd 75%);
+  background-size: 8px 8px; background-position: 0 0, 4px 4px;
+}
+.colorf.open .cswatch { border-color: #8a7d72; box-shadow: 0 0 0 2px rgba(138,125,114,.25); }
+.cpick { margin: 6px 0 2px; padding: 8px; border: 1px solid #e6ded4; border-radius: 6px; background: #fbf8f4; }
+.cpick em { display: block; font-size: 10px; font-style: normal; color: #8a7d72; margin: 0 0 4px; }
+.cpick em + .chips { margin-bottom: 8px; }
+.chips { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.chips button {
+  aspect-ratio: 1; padding: 0; border-radius: 4px; border: 1px solid rgba(0,0,0,.15); cursor: pointer;
+}
+.chips button.none {
+  background: linear-gradient(45deg, transparent 46%, #b3261e 46%, #b3261e 54%, transparent 54%), #fff;
+}
+.chips button.on { outline: 2px solid #241f1b; outline-offset: 1px; }
+.cfree { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 11px; color: #8a7d72; }
+.cfree input[type='color'] { width: 28px; height: 22px; padding: 0; border: 1px solid #cfc4ba; border-radius: 4px; background: none; }
+.lnk { margin-left: auto; border: 0; background: none; color: #8a7d72; text-decoration: underline; padding: 0; }
+
+/* 재단선 — 인쇄소가 자를 위치. 스냅 안내선(실선)과 헷갈리지 않게 점선으로 둔다.
+   바깥(도련)을 어둡게 덮어 «여긴 잘려나간다» 를 한눈에 보이게 한다.
+   조각이 overflow:hidden 이라 큰 box-shadow 가 판 밖으로 새지 않는다. */
+/* 판 아래 치수 설명. 안내선은 없앴다 — 판의 크기가 곧 카드의 크기다 */
+.dims { margin-top: 10px; font-size: 11px; color: #8a7d72; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.dims b { color: #4a423b; font-size: 12px; margin-right: 2px; }
+.dims .q { color: #a2968b; }
+.chk { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink-2, #8a7d72); cursor: pointer; }
+.chk input { margin: 0; }
+
+/* 덱 목록 — 이름 옆에 규격·장수, 오른쪽 끝에 삭제 */
+.deck { display: flex; align-items: center; gap: 6px; }
+.deck .dim { font-size: 10px; color: #a2968b; }
+.deck .n { margin-left: auto; }
+.deck .del, .deck .mv { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; opacity: 0; }
+.deck:hover .del, .deck:hover .mv { opacity: 1; }
+.deck .del:hover, .deck .mv:hover { background: none; }
+.deck .del:hover { color: #b3261e; }
+.deck .mv { font-size: 8px; line-height: 1; }
+.deck .mv:hover { color: var(--wine); }
+/* 순서 이동은 목록 끝(장수) 다음에 온다 — 장수가 밀리지 않게 n 의 auto 여백을 그대로 둔다 */
+.deck .del:disabled, .deck .mv:disabled { opacity: 0 !important; }
+.deck .rn { width: 100%; font-size: 12px; }
+/* 화면 실물 크기 맞추기 */
+.modal {
+  position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+  background: rgba(36, 31, 27, .45); padding: 20px;
+}
+.sheetbox {
+  background: var(--paper, #fbf8f4); border-radius: 8px; padding: 16px 18px 14px;
+  box-shadow: 0 18px 50px rgba(36, 31, 27, .35); max-width: min(560px, 92vw);
+  max-height: 90vh; overflow: auto;
+}
+.sheetbox h3 { margin: 0 0 6px; font-size: 15px; }
+.sheetbox h5 { margin: 14px 0 6px; font-size: 11px; letter-spacing: .4px; color: #8a7d72; text-transform: uppercase; }
+/* 자 — 눈금이 실제 mm 자리에 있어야 재는 의미가 있다 */
+.ruler { position: relative; height: 30px; border-bottom: 1px solid #4a423b; margin: 4px 0 2px; }
+.ruler i { position: absolute; bottom: 0; width: 1px; height: 7px; background: #8a7d72; }
+.ruler i.big { height: 13px; background: #4a423b; }
+.ruler i b {
+  position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 400; color: #8a7d72;
+}
+.cardbox {
+  border: 1.5px dashed var(--wine, #7d1f38); border-radius: 3mm;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #a2968b; margin: 6px 0;
+}
+.cfree .grow { flex: 1; }
+.cfree button { padding: 3px 9px; }
+.cfree input[type='number'] { width: 58px; }
+.cfree.measure { flex-wrap: wrap; }
+
+/* 글꼴 목록 — 이름만 봐서는 뭔지 모른다. 견본을 그 글꼴로 보여준다 */
+.fontlist { border: 1px solid #e6ded6; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+.fitem { display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-bottom: 1px solid #f2ece6; }
+.fitem:last-child { border-bottom: 0; }
+.fitem .sample { flex: 1; font-size: 14px; color: #4a423b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fitem .fname { width: 88px; font-size: 10.5px; flex: none; }
+.fitem .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; }
+.fitem .del:hover { color: #b3261e; background: none; }
+
+/* 제목 옆 버튼 — «+ 덱» 처럼 목록 아래에 쌓을 필요가 없는 것 */
+.h4btn {
+  margin-left: auto; font-size: 10.5px; padding: 2px 7px; border-radius: 4px;
+  border: 1px solid #ddd3c6; background: #fff; color: #6d6259; text-transform: none; letter-spacing: 0;
+}
+.h4btn:hover { border-color: var(--wine, #7d1f38); color: var(--wine, #7d1f38); }
+.rowbtn .badge {
+  margin-left: 5px; background: var(--wine, #7d1f38); color: #fff;
+  border-radius: 8px; padding: 0 5px; font-size: 9.5px;
+}
+
+/* 키워드 — 낱말·모양·색, 그리고 실제 렌더로 그린 미리보기 */
+.kwlist { border: 1px solid #e6ded6; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+.kwitem {
+  display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+  border-bottom: 1px solid #f2ece6;
+}
+.kwitem:last-child { border-bottom: 0; }
+.kwitem .kword { width: 96px; flex: none; }
+.kwitem select { width: 74px; flex: none; }
+.kwitem input[type='color'] { width: 26px; height: 22px; padding: 0; border: 1px solid #cfc4ba; border-radius: 4px; background: none; flex: none; }
+.kwsample { flex: 1; font-size: 11.5px; color: #4a423b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kwitem .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; flex: none; }
+.kwitem .del:hover { color: #b3261e; background: none; }
+
+.newdeck { border: 1px solid #e6ded4; border-radius: 6px; padding: 8px; margin: 6px 0; background: #fbf8f4; }
+.newdeck input, .newdeck select { width: 100%; margin-bottom: 6px; }
+
+/* 조각 규격 — 자주 안 건드려서 접어둔다 */
+.setup { border: 1px solid #e6ded4; border-radius: 6px; background: #fbf8f4; padding: 0 8px; margin-bottom: 10px; }
+.setup > summary {
+  cursor: pointer; padding: 8px 0; font-size: 11px; font-weight: 700; color: #4a423b;
+  display: flex; align-items: center; gap: 6px; list-style: none;
+}
+.setup > summary::-webkit-details-marker { display: none; }
+.setup > summary::before { content: '▸'; color: #a2968b; }
+.setup[open] > summary::before { content: '▾'; }
+.setup > summary .allcards { margin-left: auto; }
+.setup[open] { padding-bottom: 8px; }
+.setup h5 { margin: 10px 0 4px; font-size: 10px; color: #8a7d72; text-transform: none; }
+
+/* ── 인쇄 미리보기 ────────────────────────────────────── */
+.printwrap {
+  position: fixed; inset: 0; z-index: 50; overflow: auto;
+  background: repeating-conic-gradient(#e4ddd4 0% 25%, #ede7df 0% 50%) 50% / 16px 16px;
+}
+.pbar {
+  position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; background: #241f1b; color: #f2ece4; font-size: 12px;
+}
+.pbar b { font-size: 13px; }
+.pbar .sp { flex: 1; }
+.pbar button { border: 0; border-radius: 5px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
+.pbar .go { background: #7d1f38; color: #fff; }
+/* 도련 스위치 — 도련은 카드가 아니라 인쇄물의 속성이라 여기 산다 */
+.pbleed { display: flex; align-items: center; gap: 6px; }
+.pbleed select, .pbleed input {
+  border: 1px solid #4a423b; border-radius: 5px; padding: 4px 6px;
+  background: #191512; color: #f2ece4; font-size: 12px;
+}
+.pbleed input { width: 54px; }
+.pnote { margin: 12px auto; max-width: 210mm; padding: 9px 12px; border-radius: 6px;
+  background: #fff5d6; border: 1px solid #e3cf8c; font-size: 12px; color: #5b4a1e; }
+.pnote.sub { background: #f3efe9; border-color: #ddd3c6; color: #5a4b40; margin-top: -4px; }
+.pempty { text-align: center; padding: 60px; color: #7d1f38; }
+.psheets { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 0 0 40px; }
+.psheet { position: relative; background: #fff; box-shadow: 0 6px 22px rgba(60,30,20,.2); overflow: hidden; }
+.pcell { position: absolute; }
+.cut { position: absolute; }
+.cut.v { border-left: 0.2mm solid #444; }
+.cut.h { border-top: 0.2mm solid #444; }
+.pfoot { position: absolute; left: 3mm; bottom: 1mm; font-size: 6pt; color: #b9aca1; }
+
+@media print {
+  /* 인쇄할 때는 종이만 남긴다.
+     body 기본 여백이 남아 있으면 종이가 297mm 를 넘겨 **빈 쪽이 하나 더** 나온다. */
+  html, body { margin: 0 !important; padding: 0 !important; }
+  /* `.app` 만 숨기면 안 된다 — 감싸고 있는 #root 가 100vh 를 그대로 차지해
+     첫 장이 한 화면만큼 밀리고 빈 쪽이 생긴다. 뿌리째 숨긴다. */
+  #root, .pbar, .pnote { display: none !important; }
+  .printwrap { position: static; overflow: visible; background: none; }
+  .psheets { display: block; padding: 0; gap: 0; }
+  .psheet { box-shadow: none; break-after: page; page-break-after: always; }
+  .psheet:last-child { break-after: auto; page-break-after: auto; }
+  /* 배경색·그림이 빠지면 카드가 아니다. 사용자가 «배경 그래픽» 을 끄더라도 살린다. */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+
+/* 앞면 / 뒷면 */
+.sides { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.sides button {
+  border: 1px solid #d8cec3; background: #f6f1ea; color: #6b6058;
+  border-radius: 6px; padding: 4px 14px; font-size: 12px; cursor: pointer;
+}
+.sides button.on { background: #241f1b; border-color: #241f1b; color: #f2ece4; font-weight: 700; }
+.sides button.add { border-style: dashed; color: #7d1f38; }
+.sides .who { margin-left: 8px; font-size: 11px; color: #8a7d72; }
