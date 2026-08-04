@@ -9,9 +9,12 @@ import { Calibrate } from './ui/Calibrate.tsx'
 const Export = lazy(() => import('./ui/Export.tsx').then((m) => ({ default: m.Export })))
 import { screenScale, screenVersion, subscribeScreen } from './store/screen.ts'
 import { useStore, usedAssets } from './store/project.ts'
-import { assetsVersion, subscribeAssets, warmUrls } from './store/assets.ts'
+import { assetsVersion, assetTally, assetTrouble, keepStorage, subscribeAssets, warmUrls } from './store/assets.ts'
 import { fontsVersion, loadFonts, subscribeFonts } from './store/fonts.ts'
-import { downloadProject, loadLocal, migrate, saveLocal } from './store/persist.ts'
+import { downloadProject, loadFailed, loadLocal, migrate, saveLocal, watchUnload } from './store/persist.ts'
+import { exportBundle, importBundle } from './store/share.ts'
+import { BUNDLE_EXT, looksLikeZip } from './core/bundle.ts'
+import { downloadBlob } from './core/download.ts'
 import { totalPieces } from './core/model.ts'
 import { sampleProject } from './core/sample.ts'
 
@@ -21,6 +24,8 @@ export default function App() {
   const [printing, setPrinting] = useState(false)
   const [calibrating, setCalibrating] = useState(false)
   const [exporting, setExporting] = useState(false)
+  /** 묶는 중·여는 중 — 그림이 많으면 몇 초 걸린다 */
+  const [busy, setBusy] = useState<string | null>(null)
   // 켜고 끈 상태는 기억한다 — 매번 다시 켜야 하면 스위치가 없느니만 못하다
   const [rulers, setRulers] = useState(() => {
     try {
@@ -30,6 +35,8 @@ export default function App() {
     }
   })
   const fileIn = useRef<HTMLInputElement>(null)
+  /** 저장된 작업을 불러오기 전에는 자동 저장을 하지 않는다 */
+  const loaded = useRef(false)
 
   // 에셋 URL 이 채워지면 다시 그린다 (업로드했는데 반영이 안 되는 걸 막는다)
   useSyncExternalStore(subscribeAssets, assetsVersion)
@@ -45,15 +52,25 @@ export default function App() {
 
   // 새로고침해도 작업이 남게 한다. 서버가 없으니 이게 안전망이다.
   useEffect(() => {
+    void keepStorage() // 그림 저장소가 «지워도 되는» 취급을 받지 않게
     const saved = loadLocal()
     if (saved) s.load(saved)
+    // **못 읽었으면 자동 저장을 켜지 않는다.** 화면에는 예제가 떠 있는데
+    // 그대로 저장하면 읽지 못했을 뿐인 원본까지 없어진다.
+    loaded.current = !loadFailed()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
+    // **불러오기 전에는 저장하지 않는다.** 첫 그림에는 예제가 들어 있어서,
+    // 여기서 곧장 저장하면 «저장된 작업 위에 예제를 덮어쓰는» 경쟁이 생긴다.
+    if (!loaded.current) return
     const t = setTimeout(() => saveLocal(s.project), 400)
     return () => clearTimeout(t)
   }, [s.project])
+
+  // 창이 닫히기 전에 밀린 저장을 끝낸다 (0.4초 안에 새로고침하면 날아갔다)
+  useEffect(() => watchUnload(() => useStore.getState().project), [])
 
   // 프로젝트가 쓰는 이미지를 IndexedDB 에서 꺼내 화면용 URL 을 만든다
   useEffect(() => {
@@ -69,6 +86,11 @@ export default function App() {
         if (e.shiftKey) s.redo()
         else s.undo()
       }
+      // 그림 편집기의 관례. 브라우저 기본(즐겨찾기)을 막아야 한다
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd' && s.layerId) {
+        e.preventDefault()
+        s.duplicateLayer(s.layerId)
+      }
       if (e.key === 'Delete' && s.layerId) s.removeLayer(s.layerId)
     }
     window.addEventListener('keydown', onKey)
@@ -78,14 +100,51 @@ export default function App() {
   const deck = s.deck()
   const c = s.component()
 
+  /**
+   * 열기 — 묶음(`.handeck`)과 프로젝트 파일(`.json`) 둘 다 받는다.
+   *
+   * 확장자가 아니라 **내용 앞 네 바이트**로 가른다. 이름은 바뀌기 쉽고
+   * (내려받을 때 `(1)` 이 붙거나 손으로 고치거나), 내용은 안 바뀐다.
+   */
   const openFile = async (f: File) => {
+    setBusy('여는 중…')
     try {
-      const p = migrate(JSON.parse(await f.text()))
-      if (p?.handeck !== 1) throw new Error('handeck 프로젝트 파일이 아닙니다')
-      s.load(p)
-      await warmUrls(usedAssets(p))
+      const buf = await f.arrayBuffer()
+      if (looksLikeZip(buf)) {
+        const { project, warnings } = await importBundle(buf)
+        s.load(project)
+        if (warnings.length) alert(`열었습니다. 다만:\n\n· ${warnings.join('\n· ')}`)
+      } else {
+        const p = migrate(JSON.parse(new TextDecoder().decode(buf)))
+        if (p?.handeck !== 1) throw new Error('handeck 프로젝트 파일이 아닙니다')
+        s.load(p)
+        await warmUrls(usedAssets(p))
+        const need = (p.fonts ?? []).length
+        if (need > 0)
+          alert(
+            `프로젝트만 열었습니다. 이 프로젝트는 그림과 글꼴 ${need}개를 쓰는데 ` +
+              `그건 파일에 들어 있지 않습니다.\n다른 컴퓨터로 옮길 때는 «묶음» 으로 저장하세요.`
+          )
+      }
     } catch (err) {
       alert(`열지 못했습니다: ${err instanceof Error ? err.message : err}`)
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  /** 그림·글꼴까지 한 파일로. 건네주려면 이게 맞다. */
+  const saveBundle = async () => {
+    setBusy('묶는 중…')
+    try {
+      const { blob, missing } = await exportBundle(s.project)
+      downloadBlob(blob, `${(s.project.name || 'handeck').replace(/[\\/:*?"<>|]/g, '')}${BUNDLE_EXT}`)
+      s.markSaved()
+      if (missing.length) alert(`묶었습니다. 다만 이건 저장소에 없어 빠졌습니다:\n\n· ${missing.join('\n· ')}`)
+    } catch (err) {
+      alert(`묶지 못했습니다: ${err instanceof Error ? err.message : err}`)
+    } finally {
+      setBusy(null)
     }
   }
 
@@ -140,8 +199,17 @@ export default function App() {
         <button onClick={s.redo} disabled={!s.future.length} title="Ctrl+Shift+Z">
           다시
         </button>
-        <button onClick={() => fileIn.current?.click()}>열기</button>
-        <button onClick={() => downloadProject(s.project)}>저장</button>
+        <button disabled={!!busy} onClick={() => fileIn.current?.click()}>
+          열기
+        </button>
+        {/* 저장 = 묶음. 건네줄 때 그림·글꼴이 빠지면 받는 쪽에서 빈 칸이 된다.
+            프로젝트 파일만 따로 받는 길도 남겨둔다 — 사람이 읽고 git 에 올리는 용도다. */}
+        <button className="go" disabled={!!busy} onClick={() => void saveBundle()} title="그림·글꼴까지 한 파일로 (.handeck)">
+          {busy ?? '저장'}
+        </button>
+        <button onClick={() => downloadProject(s.project)} title="프로젝트 파일만 (.json) — 그림·글꼴은 안 들어갑니다">
+          JSON
+        </button>
         <button
           onClick={() => {
             if (confirm('예제로 되돌립니다. 지금 작업은 사라집니다.')) s.load(sampleProject())
@@ -158,7 +226,7 @@ export default function App() {
         <input
           ref={fileIn}
           type="file"
-          accept="application/json"
+          accept=".handeck,.json,application/json,application/zip"
           hidden
           onChange={(e) => {
             const f = e.target.files?.[0]
@@ -181,7 +249,20 @@ export default function App() {
         </span>
         <span>레이어 {c.layers.length}</span>
         <span className="sp" />
-        <span>자동 저장됨 (이 브라우저)</span>
+        {/* 그림이 몇 개 붙었는지 늘 보여준다. «안 보인다» 를 셋으로 가를 수 있다:
+            저장소가 안 열림 / 저장소에 그 그림이 없음 / 프로젝트가 안 가리킴 */}
+        {assetTally().want > 0 && (
+          <span className={assetTally().have < assetTally().want ? 'trouble' : undefined}>
+            그림 {assetTally().have}/{assetTally().want}
+          </span>
+        )}
+        {loadFailed() ? (
+          <span className="trouble" title={loadFailed()!}>⚠ {loadFailed()}</span>
+        ) : assetTrouble() ? (
+          <span className="trouble" title={assetTrouble()!}>⚠ {assetTrouble()}</span>
+        ) : (
+          <span>자동 저장됨 (이 브라우저)</span>
+        )}
       </footer>
 
       {printing && (

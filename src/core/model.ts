@@ -155,6 +155,14 @@ export interface Deck {
   duplex: false | 'long' | 'short'
   /** 기대 장수. 어긋나면 경고. */
   expect?: number
+  /**
+   * 이 덱에 대한 메모.
+   *
+   * «뒷면이 운명 카드와 같아야 한다», «원래 동그란 토큰인데 재료가 없어 카드로 뽑는다»
+   * 같은 것. 규칙 문서에는 있지만 카드에는 안 적히는, 그런데 나중에 반드시 잊어버리는
+   * 이유들을 붙여둔다.
+   */
+  note?: string
   instances: Instance[]
 }
 
@@ -190,10 +198,10 @@ export interface Keyword {
   id: string
   /** 카드 글에서 찾을 말 */
   word: string
-  style: 'bold' | 'chip' | 'color'
+  style: 'bold' | 'chip' | 'outline' | 'color'
   /** 글자색 (칩이면 칩 안 글자색) */
   color?: string
-  /** 칩 배경색 */
+  /** 칩 배경색 — 테두리 칩이면 테두리 색 */
   bg?: string
 }
 
@@ -204,6 +212,70 @@ export interface Project {
   decks: Deck[]
   fonts?: FontRef[]
   keywords?: Keyword[]
+  printGroups?: PrintGroup[]
+}
+
+/**
+ * 덱 하나를 통째로 주고받는 꾸러미 — JSON 편집기가 쓴다.
+ *
+ * **다른 프로젝트의 레이어 구조를 그대로 가져오려고** 있다. 카드 한 종류를
+ * 잘 짜두면 그 틀은 다음 게임에서도 쓸 만한데, 지금까지는 손으로 다시 그려야 했다.
+ *
+ * 프로젝트 파일과 달리 **id 를 신경 쓰지 않아도 된다** — 붙여넣을 때
+ * 지금 덱의 id 를 유지하고 내용만 갈아끼우기 때문이다.
+ */
+export interface DeckJson {
+  handeck: 1
+  kind: 'deck'
+  /** 덱 자체의 설정 (이름·종이·양면·메모) */
+  deck: Pick<Deck, 'name' | 'sheet' | 'duplex'> & Partial<Pick<Deck, 'expect' | 'note'>>
+  front: Component
+  back?: Component
+  /** 카드 내용. 가져올지는 고를 수 있다 */
+  instances?: Instance[]
+}
+
+/** 이 덱을 JSON 꾸러미로 */
+export function deckToJson(p: Project, deck: Deck): DeckJson {
+  const front = p.components[deck.component]!
+  const back = deck.back ? p.components[deck.back] : undefined
+  return {
+    handeck: 1,
+    kind: 'deck',
+    deck: {
+      name: deck.name,
+      sheet: deck.sheet,
+      duplex: deck.duplex,
+      ...(deck.expect !== undefined ? { expect: deck.expect } : {}),
+      ...(deck.note ? { note: deck.note } : {}),
+    },
+    front,
+    ...(back ? { back } : {}),
+    instances: deck.instances,
+  }
+}
+
+/** 붙여넣은 것이 덱 꾸러미인지. 아니면 왜 아닌지 알려준다. */
+export function checkDeckJson(v: unknown): { ok: true; value: DeckJson } | { ok: false; why: string } {
+  const d = v as Partial<DeckJson>
+  if (!d || typeof d !== 'object') return { ok: false, why: 'JSON 객체가 아닙니다' }
+  if (d.handeck !== 1) return { ok: false, why: 'handeck 자료가 아닙니다 (handeck: 1 이 없습니다)' }
+  if (d.kind !== 'deck') return { ok: false, why: `덱 꾸러미가 아닙니다 (kind: ${String(d.kind)})` }
+  if (!d.front?.layers || !Array.isArray(d.front.layers)) return { ok: false, why: '앞면 틀(front.layers)이 없습니다' }
+  if (!d.front.size?.w || !d.front.size?.h) return { ok: false, why: '앞면 규격(front.size)이 없습니다' }
+  return { ok: true, value: d as DeckJson }
+}
+
+/** 이 덱이 속한 인쇄 묶음 */
+export function groupOf(p: Project, deckId: string): PrintGroup | undefined {
+  return (p.printGroups ?? []).find((g) => g.decks.includes(deckId))
+}
+
+/** 인쇄할 때 실제로 함께 깔릴 덱들 (묶음이 없으면 자기 혼자) */
+export function printSet(p: Project, deckId: string): Deck[] {
+  const g = groupOf(p, deckId)
+  const ids = g ? g.decks : [deckId]
+  return ids.map((id) => p.decks.find((d) => d.id === id)).filter((d): d is Deck => !!d)
 }
 
 // ---------------------------------------------------------------------------
@@ -222,7 +294,41 @@ export const PIECE_PRESETS: { name: string; size: PieceSize }[] = [
   { name: '토큰 · 원형 25', size: { w: 25, h: 25, shape: 'circle' } },
   { name: '토큰 · 원형 35', size: { w: 35, h: 35, shape: 'circle' } },
   { name: '토큰 · 원형 45', size: { w: 45, h: 45, shape: 'circle' } },
+  // 원형 토큰과 **같은 크기의 네모**. 둥글게 자르는 게 번거로울 때, 또는 아직
+  // 펀치가 없어 가위로 잘라야 할 때 이걸 쓴다 (지름이 곧 한 변이 된다).
+  { name: '토큰 · 네모 25×25', size: { w: 25, h: 25, shape: 'rect' } },
+  { name: '토큰 · 네모 35×35', size: { w: 35, h: 35, shape: 'rect' } },
+  { name: '토큰 · 네모 45×45', size: { w: 45, h: 45, shape: 'rect' } },
 ]
+
+/**
+ * 인쇄 묶음 — **여러 덱을 한 종이에 이어 깐다.**
+ *
+ * 덱마다 따로 인쇄하면 마지막 장은 늘 반쯤 빈다. 10장짜리 덱 다섯 개를 각각 뽑으면
+ * A4 다섯 장인데(9칸 중 1칸씩 버림), 묶으면 50장 = **여섯 장**이면 된다.
+ * 시제품을 여러 번 뽑는 초기 단계에서는 이 차이가 크다.
+ *
+ * **규격이 같은 덱만 묶을 수 있다.** 칸 크기가 다르면 한 격자에 못 깐다.
+ */
+export interface PrintGroup {
+  id: string
+  name: string
+  /** 묶을 덱 id. 순서대로 이어 깔린다 */
+  decks: string[]
+  /**
+   * 목록에 붙는 쇠사슬 표시의 색.
+   *
+   * 묶음이 둘 이상이면 «이 덱이 어느 묶음인지» 를 색으로 구분한다.
+   * 없으면 만든 순서대로 아래 팔레트에서 준다.
+   */
+  color?: string
+}
+
+/** 묶음 색 팔레트 — 서로 잘 구분되는 것들로 */
+export const GROUP_COLORS = ['#7D1F38', '#1F4E79', '#6D8F7A', '#C8A32E', '#6B4E9E', '#C9738C']
+
+export const groupColor = (g: PrintGroup, i: number): string =>
+  g.color ?? GROUP_COLORS[i % GROUP_COLORS.length]!
 
 /**
  * 도련을 쓸 수 있는가. **지금은 꺼둔다 (2026-08-02).**

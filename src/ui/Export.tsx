@@ -6,7 +6,8 @@
  */
 
 import { useState } from 'react'
-import { downloadBlob, exportPng, type PngItem } from '../core/png.ts'
+import { exportPng, type PngItem } from '../core/png.ts'
+import { downloadBlob } from '../core/download.ts'
 import { resolveAsset } from '../core/model.ts'
 import { useStore } from '../store/project.ts'
 import { assetDataUrls } from '../store/assets.ts'

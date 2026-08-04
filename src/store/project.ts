@@ -10,9 +10,11 @@ import { create } from 'zustand'
 import {
   type Component,
   type Deck,
+  type DeckJson,
   type FontRef,
   type Instance,
   type Keyword,
+  GROUP_COLORS,
   type Layer,
   type PieceSize,
   type Project,
@@ -83,6 +85,8 @@ interface State {
   /** 제스처 중 호출 — 히스토리에 안 쌓인다 */
   patchLayerLive: (id: string, patch: Partial<Layer>) => void
   addLayer: (kind: Layer['kind']) => void
+  /** 원본 바로 앞에 사본을 놓고 그걸 고른다 */
+  duplicateLayer: (id: string) => void
   removeLayer: (id: string) => void
   moveLayer: (id: string, dir: -1 | 1) => void
   /** 목록에서 끌어 옮겼을 때. 배열 순서(뒤 -> 앞) 기준 id 목록을 그대로 받는다. */
@@ -94,8 +98,11 @@ interface State {
 
   addDeck: (name: string, size: PieceSize) => void
   renameDeck: (id: string, name: string) => void
-  /** 목록에서 위/아래로. 보이는 순서가 곧 작업 순서다. */
-  moveDeck: (id: string, dir: -1 | 1) => void
+  /** 끌어서 옮겼을 때. 화면에 보이는 순서 그대로의 id 목록을 받는다. */
+  setDeckOrder: (ids: string[]) => void
+  setDeckNote: (id: string, note: string) => void
+  /** 기대 장수. `undefined` 면 대조를 끈다 */
+  setDeckExpect: (id: string, n: number | undefined) => void
   renameProject: (name: string) => void
 
   /** 이 프로젝트가 쓰는 글꼴 목록에 넣고 뺀다 (파일은 IndexedDB 에 따로 있다) */
@@ -103,6 +110,22 @@ interface State {
   removeFont: (id: string) => void
   /** 글꼴 이름이 바뀌면 그 글꼴을 쓰던 글자 레이어도 같이 따라가야 한다 */
   renameFontRef: (id: string, family: string) => void
+
+  /**
+   * JSON 꾸러미로 이 덱의 내용을 갈아끼운다 (다른 프로젝트에서 구조 가져오기).
+   *
+   * **덱과 틀의 id 는 그대로 두고 «내용» 만 바꾼다.** 그래야 이 덱을 가리키던
+   * 인쇄 묶음·선택 상태가 안 깨진다.
+   */
+  applyDeckJson: (deckId: string, data: DeckJson, withCards: boolean) => void
+
+  /** 인쇄 묶기 — 여러 덱을 한 종이에 이어 깐다 */
+  addPrintGroup: (name: string) => void
+  renamePrintGroup: (id: string, name: string) => void
+  setPrintGroupColor: (id: string, color: string) => void
+  removePrintGroup: (id: string) => void
+  /** 덱을 묶음에 넣거나(`groupId`) 뺀다(`null`). 한 덱은 한 묶음에만 든다. */
+  setDeckGroup: (deckId: string, groupId: string | null) => void
 
   /** 카드 글에서 다르게 그릴 낱말 — 프로젝트 전체가 공유한다 */
   addKeyword: () => void
@@ -271,6 +294,33 @@ export const useStore = create<State>((set, get) => ({
     set({ layerId: id })
   },
 
+  duplicateLayer: (id) => {
+    const copyId = uid(get().component().layers.find((l) => l.id === id)?.kind ?? 'layer')
+    get().edit((p) => {
+      const cid = get().componentId()
+      const c = p.components[cid]!
+      const i = c.layers.findIndex((l) => l.id === id)
+      if (i < 0) return
+      const src = c.layers[i]!
+      // 살짝 밀어 놓는다 — 정확히 겹쳐 있으면 복제됐는지 알 수 없다
+      const copy = { ...clone(src), id: copyId, name: `${src.name} 사본`, x: src.x + 2, y: src.y + 2 }
+      c.layers.splice(i + 1, 0, copy) // 원본 «앞»(배열 뒤)에 놓는다
+
+      // «카드마다 다르게» 레이어면 카드별 값도 같이 복사한다.
+      // 값은 레이어 id 로 묶여 있어서, 안 옮기면 사본이 전부 빈 채로 나온다 —
+      // 복제해서 조금 고치려던 사람에게는 그게 «복제가 안 된» 것으로 보인다.
+      if (!src.override) return
+      for (const d of p.decks) {
+        if (d.component !== cid && d.back !== cid) continue
+        for (const inst of d.instances) {
+          const v = inst.values[id]
+          if (v !== undefined) inst.values[copyId] = v
+        }
+      }
+    })
+    set({ layerId: copyId })
+  },
+
   removeLayer: (id) => {
     get().edit((p) => {
       const c = p.components[get().componentId()]!
@@ -395,18 +445,112 @@ export const useStore = create<State>((set, get) => ({
       }
     }, `dn:${id}`),
 
-  moveDeck: (id, dir) =>
+  setDeckOrder: (ids) =>
     get().edit((p) => {
-      const i = p.decks.findIndex((d) => d.id === id)
-      const j = i + dir
-      if (i < 0 || j < 0 || j >= p.decks.length) return
-      ;[p.decks[i], p.decks[j]] = [p.decks[j]!, p.decks[i]!]
+      const byId = new Map(p.decks.map((d) => [d.id, d]))
+      const next = ids.map((id) => byId.get(id)).filter((d): d is Deck => !!d)
+      // 빠진 게 있으면 순서를 건드리지 않는다 (덱을 잃는 것보다 낫다)
+      if (next.length !== p.decks.length) return
+      p.decks = next
     }),
+
+  setDeckNote: (id, note) =>
+    get().edit((p) => {
+      const d = p.decks.find((x) => x.id === id)
+      if (!d) return
+      if (note.trim()) d.note = note
+      else delete d.note
+    }, `dnote:${id}`),
+
+  setDeckExpect: (id, n) =>
+    get().edit((p) => {
+      const d = p.decks.find((x) => x.id === id)
+      if (!d) return
+      if (n === undefined || !Number.isFinite(n) || n < 0) delete d.expect
+      else d.expect = Math.round(n)
+    }, `dexp:${id}`),
 
   renameProject: (name) =>
     get().edit((p) => {
       p.name = name
     }, 'pname'),
+
+  applyDeckJson: (deckId, data, withCards) =>
+    get().edit((p) => {
+      const d = p.decks.find((x) => x.id === deckId)
+      if (!d) return
+
+      // 앞면 — 지금 틀의 껍데기(id·이름)는 두고 알맹이만 바꾼다
+      const front = p.components[d.component]
+      if (!front) return
+      front.size = { ...data.front.size }
+      front.background = data.front.background
+      front.layers = clone(data.front.layers)
+
+      // 뒷면 — 꾸러미에 있으면 만들거나 갈아끼우고, 없으면 뗀다
+      if (data.back) {
+        if (!d.back || !p.components[d.back]) {
+          const bid = uid('c')
+          p.components[bid] = { id: bid, name: `${d.name} 뒷면`, size: { ...data.back.size }, background: data.back.background, layers: clone(data.back.layers) }
+          d.back = bid
+        } else {
+          const back = p.components[d.back]!
+          back.size = { ...data.back.size }
+          back.background = data.back.background
+          back.layers = clone(data.back.layers)
+        }
+      } else if (d.back) {
+        const old = d.back
+        d.back = undefined
+        if (!p.decks.some((x) => x.back === old || x.component === old)) delete p.components[old]
+      }
+
+      d.name = data.deck.name || d.name
+      d.sheet = { ...data.deck.sheet }
+      d.duplex = d.back ? data.deck.duplex : false
+      if (data.deck.expect !== undefined) d.expect = data.deck.expect
+      if (data.deck.note) d.note = data.deck.note
+
+      // 카드 내용은 고를 수 있다. 안 가져오면 **기존 카드의 값이 새 레이어와 안 맞을 수 있다**
+      // (오버라이드 값은 레이어 id 로 묶여 있다) — 부르는 쪽에서 경고한다.
+      if (withCards && data.instances?.length) {
+        d.instances = data.instances.map((i) => ({ id: uid('card'), qty: i.qty, values: { ...i.values } }))
+      }
+    }),
+
+  addPrintGroup: (name) =>
+    get().edit((p) => {
+      const list = p.printGroups ?? []
+      // 만든 순서대로 팔레트를 돌려 쓴다 — 묶음이 둘 이상이면 색으로 구분해야 한다
+      const color = GROUP_COLORS[list.length % GROUP_COLORS.length]!
+      p.printGroups = [...list, { id: uid('pg'), name, decks: [], color }]
+    }),
+
+  setPrintGroupColor: (id, color) =>
+    get().edit((p) => {
+      const g = (p.printGroups ?? []).find((x) => x.id === id)
+      if (g) g.color = color
+    }),
+
+  renamePrintGroup: (id, name) =>
+    get().edit((p) => {
+      const g = (p.printGroups ?? []).find((x) => x.id === id)
+      if (g) g.name = name
+    }, `pg:${id}`),
+
+  removePrintGroup: (id) =>
+    get().edit((p) => {
+      p.printGroups = (p.printGroups ?? []).filter((g) => g.id !== id)
+    }),
+
+  setDeckGroup: (deckId, groupId) =>
+    get().edit((p) => {
+      // 한 덱이 두 묶음에 들면 어느 쪽으로 인쇄할지 알 수 없다 — 먼저 전부에서 뺀다
+      for (const g of p.printGroups ?? []) g.decks = g.decks.filter((d) => d !== deckId)
+      if (!groupId) return
+      const g = (p.printGroups ?? []).find((x) => x.id === groupId)
+      if (g && !g.decks.includes(deckId)) g.decks.push(deckId)
+    }),
 
   addKeyword: () =>
     get().edit((p) => {

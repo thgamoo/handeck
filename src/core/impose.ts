@@ -28,6 +28,16 @@ export interface Cell {
   x: number
   y: number
   instance: Instance
+  /**
+   * 이 칸이 쓸 앞면 틀.
+   *
+   * **칸마다 다를 수 있다.** 여러 덱을 묶어 한 종이에 깔면 한 장 안에
+   * «능력 카드» 와 «재앙 카드» 가 섞인다. 그래서 «이 페이지의 틀» 이 아니라
+   * «이 칸의 틀» 로 들고 있어야 한다.
+   */
+  front: Component
+  /** 이 칸의 뒷면 틀. 없으면 뒷면을 안 찍는다 */
+  back?: Component
   /** 격자에서의 자리. 뒷면을 좌우로 뒤집을 때 쓴다. */
   col: number
   row: number
@@ -121,10 +131,29 @@ export function layout(size: PieceSize, sheet: SheetSpec): {
   }
 }
 
+/** 종이에 깔릴 조각 하나 — 어느 카드이고 어느 틀을 쓰는지 */
+interface Piece {
+  instance: Instance
+  front: Component
+  back?: Component
+}
+
 /** 수량만큼 펼친 인스턴스 목록 */
 export function expand(deck: Deck): Instance[] {
   const out: Instance[] = []
   for (const i of deck.instances) for (let n = 0; n < Math.max(0, i.qty | 0); n++) out.push(i)
+  return out
+}
+
+/** 덱들을 순서대로 이어 붙여 «깔 조각 목록» 으로 */
+function piecesOf(project: Project, decks: Deck[]): Piece[] {
+  const out: Piece[] = []
+  for (const d of decks) {
+    const front = project.components[d.component]
+    if (!front) continue
+    const back = d.back ? project.components[d.back] : undefined
+    for (const instance of expand(d)) out.push({ instance, front, back })
+  }
   return out
 }
 
@@ -162,34 +191,51 @@ function edgesFor(
  * 오른쪽으로 가기 때문이다. 짧은 쪽으로 넘기면 상하까지 뒤집는다.
  */
 export function impose(project: Project, deck: Deck): Plan {
-  const c: Component | undefined = project.components[deck.component]
-  if (!c) return emptyPlan(deck.sheet)
+  return imposeDecks(project, [deck])
+}
 
-  const g = layout(c.size, deck.sheet)
+/**
+ * 여러 덱을 **한 종이에 이어서** 조판한다 (인쇄 묶기).
+ *
+ * 덱마다 따로 뽑으면 마지막 장이 늘 반쯤 빈다. 이어 깔면 그 빈 칸을 다음 덱이
+ * 채운다 — 종이가 줄고, 시제품을 여러 번 뽑는 초기 단계에서는 그 차이가 크다.
+ *
+ * **규격·종이 설정은 첫 덱을 따른다.** 칸 크기가 다른 덱을 섞으면 한 격자에
+ * 깔 수 없으므로 부르는 쪽에서 미리 걸러야 한다 (`sameSize`).
+ * 뒷면은 덱마다 다를 수 있어 **칸이 자기 뒷면을 들고 간다.**
+ */
+export function imposeDecks(project: Project, decks: Deck[]): Plan {
+  const first = decks[0]
+  const c: Component | undefined = first && project.components[first.component]
+  if (!first || !c) return emptyPlan(first?.sheet ?? { w: 210, h: 297, margin: 10, gap: 0, marks: 'crop' })
+
+  const sheet = first.sheet
+  const g = layout(c.size, sheet)
   const per = g.cols * g.rows
-  const items = expand(deck)
+  const items = piecesOf(project, decks)
   const pages: Page[] = []
 
   if (per === 0 || items.length === 0) {
-    return { ...basePlan(g, c.size, deck.sheet), pages }
+    return { ...basePlan(g, c.size, sheet), pages }
   }
 
-  const back = deck.back ? project.components[deck.back] : undefined
-  const flipY = deck.duplex === 'short'
+  // 뒷면을 찍을지는 **묶음 전체**로 정한다. 한 장 안에서 어떤 칸만 뒤집을 수는 없다.
+  const duplex = first.duplex
+  const anyBack = items.some((it) => it.back)
+  const flipY = duplex === 'short'
   let no = 0
 
   for (let start = 0; start < items.length; start += per) {
     const slice = items.slice(start, start + per)
     const at = (i: number) => ({ col: i % g.cols, row: Math.floor(i / g.cols) })
-    const pos = (col: number, row: number) => ({
-      x: g.x0 + col * g.stepX,
-      y: g.y0 + row * g.stepY,
-    })
-    const place = (spots: { col: number; row: number }[], instance: (i: number) => Instance): Cell[] => {
+    const place = (spots: { col: number; row: number }[]): Cell[] => {
       const taken = new Set(spots.map((p) => `${p.col},${p.row}`))
       return spots.map((p, i) => ({
-        ...pos(p.col, p.row),
-        instance: instance(i),
+        x: g.x0 + p.col * g.stepX,
+        y: g.y0 + p.row * g.stepY,
+        instance: slice[i]!.instance,
+        front: slice[i]!.front,
+        back: slice[i]!.back,
         col: p.col,
         row: p.row,
         edges: edgesFor(g.mode, p.col, p.row, taken),
@@ -197,16 +243,9 @@ export function impose(project: Project, deck: Deck): Plan {
     }
 
     no++
-    pages.push({
-      no,
-      side: 'front',
-      cells: place(
-        slice.map((_, i) => at(i)),
-        (i) => slice[i]!
-      ),
-    })
+    pages.push({ no, side: 'front', cells: place(slice.map((_, i) => at(i))) })
 
-    if (back && deck.duplex) {
+    if (anyBack && duplex) {
       pages.push({
         no,
         side: 'back',
@@ -214,14 +253,20 @@ export function impose(project: Project, deck: Deck): Plan {
           slice.map((_, i) => {
             const { col, row } = at(i)
             return { col: g.cols - 1 - col, row: flipY ? g.rows - 1 - row : row }
-          }),
-          (i) => slice[i]!
+          })
         ),
       })
     }
   }
 
-  return { ...basePlan(g, c.size, deck.sheet), pages }
+  return { ...basePlan(g, c.size, sheet), pages }
+}
+
+/** 한 격자에 같이 깔 수 있는가 — 규격이 같아야 한다 */
+export function sameSize(project: Project, a: Deck, b: Deck): boolean {
+  const x = project.components[a.component]?.size
+  const y = project.components[b.component]?.size
+  return !!x && !!y && x.w === y.w && x.h === y.h && x.shape === y.shape
 }
 
 function basePlan(

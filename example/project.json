@@ -1,0 +1,3060 @@
+{
+  "handeck": 1,
+  "name": "삼류 악녀는 싫어!",
+  "components": {
+    "c-ability": {
+      "id": "c-ability",
+      "name": "능력 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#8C2F2F"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "능력",
+          "size": 5.5,
+          "color": "#8C2F2F",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-ability-back": {
+      "id": "c-ability-back",
+      "name": "능력 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#C8A32E",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#C8A32E"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "능력",
+          "size": 12,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-clue": {
+      "id": "c-clue",
+      "name": "물건 · 단서",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#1F4E79"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "과거의 단서",
+          "size": 5.5,
+          "color": "#1F4E79",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-clue-back": {
+      "id": "c-clue-back",
+      "name": "물건 · 단서 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#1F4E79",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#1F4E79"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#D8B976",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "물건",
+          "size": 12,
+          "weight": 700,
+          "color": "#D8B976",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-relic": {
+      "id": "c-relic",
+      "name": "물건 · 유물",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#6B4E9E"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "유물",
+          "size": 5.5,
+          "color": "#6B4E9E",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-relic-back": {
+      "id": "c-relic-back",
+      "name": "물건 · 유물 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#1F4E79",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#1F4E79"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#D8B976",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "물건",
+          "size": 12,
+          "weight": 700,
+          "color": "#D8B976",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-gold": {
+      "id": "c-gold",
+      "name": "금화",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#C8A32E"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "금화",
+          "size": 5.5,
+          "color": "#C8A32E",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-gold-back": {
+      "id": "c-gold-back",
+      "name": "금화 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#1F4E79",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#1F4E79"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#D8B976",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "물건",
+          "size": 12,
+          "weight": 700,
+          "color": "#D8B976",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-fate": {
+      "id": "c-fate",
+      "name": "운명 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#14121A"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "운 명",
+          "size": 5.5,
+          "color": "#14121A",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-fate-back": {
+      "id": "c-fate-back",
+      "name": "운명 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#14121A",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#14121A"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#B3893A",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "운명",
+          "size": 12,
+          "weight": 700,
+          "color": "#B3893A",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-omen": {
+      "id": "c-omen",
+      "name": "재앙 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#7D1F38"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "재 앙",
+          "size": 5.5,
+          "color": "#7D1F38",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-omen-back": {
+      "id": "c-omen-back",
+      "name": "재앙 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#14121A",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#14121A"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#B3893A",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "운명",
+          "size": 12,
+          "weight": 700,
+          "color": "#B3893A",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-scenario": {
+      "id": "c-scenario",
+      "name": "시나리오 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#3D5A9E"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "서 막",
+          "size": 5.5,
+          "color": "#3D5A9E",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-scenario-back": {
+      "id": "c-scenario-back",
+      "name": "시나리오 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#4A423B",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#4A423B"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#D8B976",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "시나리오",
+          "size": 12,
+          "weight": 700,
+          "color": "#D8B976",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-taste": {
+      "id": "c-taste",
+      "name": "남주 성향 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#C9738C"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "성 향",
+          "size": 5.5,
+          "color": "#C9738C",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-taste-back": {
+      "id": "c-taste-back",
+      "name": "남주 성향 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#C9738C",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#C9738C"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "성향",
+          "size": 12,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-pc": {
+      "id": "c-pc",
+      "name": "캐릭터 · 플레이어",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#2E232A"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "플레이어",
+          "size": 5.5,
+          "color": "#2E232A",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-pc-back": {
+      "id": "c-pc-back",
+      "name": "캐릭터 · 플레이어 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#14121A",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#14121A"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#7D1F38",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "악 령",
+          "size": 12,
+          "weight": 700,
+          "color": "#7D1F38",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-npc": {
+      "id": "c-npc",
+      "name": "캐릭터 · NPC",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#6B4E9E"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "NPC",
+          "size": 5.5,
+          "color": "#6B4E9E",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-skull": {
+      "id": "c-skull",
+      "name": "사기 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#4A423B"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "해 골",
+          "size": 5.5,
+          "color": "#4A423B",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-skull-back": {
+      "id": "c-skull-back",
+      "name": "사기 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#14121A",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#14121A"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#8A7D72",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "사기",
+          "size": 12,
+          "weight": 700,
+          "color": "#8A7D72",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    },
+    "c-heart": {
+      "id": "c-heart",
+      "name": "두근! 토큰",
+      "size": {
+        "w": 25,
+        "h": 25,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "fill": "#C9738C",
+          "radius": 2
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 22,
+          "h": 22,
+          "fit": "cover",
+          "radius": 11,
+          "override": "image"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 22,
+          "h": 22,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 11
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 1,
+          "y": 8.5,
+          "w": 23,
+          "h": 8,
+          "size": 7,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
+          "override": "text"
+        }
+      ]
+    },
+    "c-villain": {
+      "id": "c-villain",
+      "name": "빌런 토큰",
+      "size": {
+        "w": 25,
+        "h": 25,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "fill": "#7D1F38",
+          "radius": 2
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 22,
+          "h": 22,
+          "fit": "cover",
+          "radius": 11,
+          "override": "image"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 22,
+          "h": 22,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 11
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 1,
+          "y": 8.5,
+          "w": 23,
+          "h": 8,
+          "size": 7,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
+          "override": "text"
+        }
+      ]
+    },
+    "c-encounter": {
+      "id": "c-encounter",
+      "name": "조우 토큰",
+      "size": {
+        "w": 35,
+        "h": 35,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 35,
+          "h": 35,
+          "fill": "#3D5A9E",
+          "radius": 2
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 32,
+          "h": 32,
+          "fit": "cover",
+          "radius": 16,
+          "override": "image"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 1.5,
+          "y": 1.5,
+          "w": 32,
+          "h": 32,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 16
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 1,
+          "y": 11.899999999999999,
+          "w": 33,
+          "h": 11.200000000000001,
+          "size": 8,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
+          "override": "text"
+        }
+      ]
+    },
+    "c-aid": {
+      "id": "c-aid",
+      "name": "요약 카드",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#FFFDFA"
+        },
+        {
+          "id": "band",
+          "name": "머리띠",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 12.32,
+          "fill": "#6D8F7A"
+        },
+        {
+          "id": "art",
+          "name": "그림",
+          "kind": "image",
+          "x": 0,
+          "y": 12.32,
+          "w": 63,
+          "h": 36.96,
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "title",
+          "name": "이름",
+          "kind": "text",
+          "x": 3,
+          "y": 51.04,
+          "w": 57,
+          "h": 10.559999999999999,
+          "size": 13,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "middle",
+          "shrink": true,
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 4,
+          "y": 62.48,
+          "w": 55,
+          "h": 19.36,
+          "size": 7.5,
+          "color": "#4A423B",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "override": "text"
+        },
+        {
+          "id": "foot",
+          "name": "덱 이름",
+          "kind": "text",
+          "x": 3,
+          "y": 82,
+          "w": 57,
+          "h": 4,
+          "text": "요 약",
+          "size": 5.5,
+          "color": "#6D8F7A",
+          "align": "center",
+          "letterSpacing": 0.6
+        }
+      ]
+    },
+    "c-aid-back": {
+      "id": "c-aid-back",
+      "name": "요약 카드 뒷면",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#6D8F7A",
+      "layers": [
+        {
+          "id": "bg",
+          "name": "바탕",
+          "kind": "rect",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "fill": "#6D8F7A"
+        },
+        {
+          "id": "ring",
+          "name": "테두리",
+          "kind": "rect",
+          "x": 5,
+          "y": 5,
+          "w": 53,
+          "h": 78,
+          "stroke": "#FFFDFA",
+          "strokeWidth": 0.4,
+          "radius": 2
+        },
+        {
+          "id": "label",
+          "name": "이름",
+          "kind": "text",
+          "x": 4,
+          "y": 38,
+          "w": 55,
+          "h": 12,
+          "text": "행동 5~8",
+          "size": 12,
+          "weight": 700,
+          "color": "#FFFDFA",
+          "align": "center",
+          "valign": "middle",
+          "letterSpacing": 1.2
+        }
+      ]
+    }
+  },
+  "decks": [
+    {
+      "id": "d-ability",
+      "name": "능력 카드",
+      "component": "c-ability",
+      "back": "c-ability-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 100,
+      "instances": [
+        {
+          "id": "card-001",
+          "qty": 10,
+          "values": {
+            "title": "검",
+            "body": "모략 · 마수폭주 대응 · 투기장"
+          }
+        },
+        {
+          "id": "card-002",
+          "qty": 40,
+          "values": {
+            "title": "매력",
+            "body": "만남에서 1장 소모 · 약혼 유지"
+          }
+        },
+        {
+          "id": "card-003",
+          "qty": 10,
+          "values": {
+            "title": "마법",
+            "body": "모략 · 마수폭주 대응"
+          }
+        },
+        {
+          "id": "card-004",
+          "qty": 10,
+          "values": {
+            "title": "선혈",
+            "body": "선혈의 비에서 이득"
+          }
+        },
+        {
+          "id": "card-005",
+          "qty": 10,
+          "values": {
+            "title": "신성",
+            "body": "모략 · 정화"
+          }
+        },
+        {
+          "id": "card-006",
+          "qty": 10,
+          "values": {
+            "title": "독약",
+            "body": "모략"
+          }
+        },
+        {
+          "id": "card-007",
+          "qty": 10,
+          "values": {
+            "title": "어둠",
+            "body": "모략 · 은신"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d-clue",
+      "name": "물건 · 단서",
+      "component": "c-clue",
+      "back": "c-clue-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 27,
+      "instances": [
+        {
+          "id": "card-008",
+          "qty": 1,
+          "values": {
+            "title": "유모의 일기",
+            "body": "샬롯"
+          }
+        },
+        {
+          "id": "card-009",
+          "qty": 2,
+          "values": {
+            "title": "황가의 팬던트",
+            "body": "샬롯 · 마리 · 제노비아"
+          }
+        },
+        {
+          "id": "card-00a",
+          "qty": 1,
+          "values": {
+            "title": "양녀증서",
+            "body": "샬롯"
+          }
+        },
+        {
+          "id": "card-00b",
+          "qty": 2,
+          "values": {
+            "title": "폐태자의 편지",
+            "body": "샬롯 · 제노비아 · 이레네"
+          }
+        },
+        {
+          "id": "card-00c",
+          "qty": 1,
+          "values": {
+            "title": "메모리 칩",
+            "body": "데이지"
+          }
+        },
+        {
+          "id": "card-00d",
+          "qty": 2,
+          "values": {
+            "title": "벨의 단검",
+            "body": "데이지 · 마리\n‘내 사랑하는 여동생 데이지를 생각하며’"
+          }
+        },
+        {
+          "id": "card-00e",
+          "qty": 2,
+          "values": {
+            "title": "교회 7094지부의 인명부",
+            "body": "데이지 · 마리"
+          }
+        },
+        {
+          "id": "card-00f",
+          "qty": 1,
+          "values": {
+            "title": "약간 남은 망각포션",
+            "body": "마리"
+          }
+        },
+        {
+          "id": "card-00g",
+          "qty": 2,
+          "values": {
+            "title": "교황칙서",
+            "body": "데이지 · 제노비아 · 이레네\n말살 — HAL, ZEN"
+          }
+        },
+        {
+          "id": "card-00h",
+          "qty": 1,
+          "values": {
+            "title": "요마변환기",
+            "body": "미호"
+          }
+        },
+        {
+          "id": "card-00i",
+          "qty": 1,
+          "values": {
+            "title": "호요족의 기록",
+            "body": "미호"
+          }
+        },
+        {
+          "id": "card-00j",
+          "qty": 2,
+          "values": {
+            "title": "용사전기",
+            "body": "미호 · 바토리 · 그레이스"
+          }
+        },
+        {
+          "id": "card-00k",
+          "qty": 2,
+          "values": {
+            "title": "백요잡서",
+            "body": "미호 · 바토리"
+          }
+        },
+        {
+          "id": "card-00l",
+          "qty": 1,
+          "values": {
+            "title": "진조의 전승",
+            "body": "바토리"
+          }
+        },
+        {
+          "id": "card-00m",
+          "qty": 2,
+          "values": {
+            "title": "영원의 관",
+            "body": "바토리 · 그레이스"
+          }
+        },
+        {
+          "id": "card-00n",
+          "qty": 2,
+          "values": {
+            "title": "이교의 계약서",
+            "body": "제노비아 · 이레네 · 그레이스"
+          }
+        },
+        {
+          "id": "card-00o",
+          "qty": 1,
+          "values": {
+            "title": "추기경서임서",
+            "body": "이레네"
+          }
+        },
+        {
+          "id": "card-00p",
+          "qty": 1,
+          "values": {
+            "title": "인어의비늘",
+            "body": "그레이스"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d-relic",
+      "name": "물건 · 유물",
+      "component": "c-relic",
+      "back": "c-relic-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 13,
+      "instances": [
+        {
+          "id": "card-00q",
+          "qty": 2,
+          "values": {
+            "title": "고대 연구소의 출입증",
+            "body": "진실의 축 1 — 고대 SF 문명"
+          }
+        },
+        {
+          "id": "card-00r",
+          "qty": 2,
+          "values": {
+            "title": "HAL의 코어 파편",
+            "body": "진실의 축 1 — 고대 SF 문명"
+          }
+        },
+        {
+          "id": "card-00s",
+          "qty": 2,
+          "values": {
+            "title": "승천의 문 설계도",
+            "body": "진실의 축 2 — 용사와 승천"
+          }
+        },
+        {
+          "id": "card-00t",
+          "qty": 2,
+          "values": {
+            "title": "승천자의 허물",
+            "body": "진실의 축 2 — 용사와 승천"
+          }
+        },
+        {
+          "id": "card-00u",
+          "qty": 2,
+          "values": {
+            "title": "이전 빙의자의 수기",
+            "body": "진실의 축 3 — 소설 메타 진실"
+          }
+        },
+        {
+          "id": "card-00v",
+          "qty": 3,
+          "values": {
+            "title": "엘릭서",
+            "body": "사용하면 빈사 에서 벗어난다"
+          }
+        }
+      ],
+      "note": "진실 물건 3장 이상 수집 → 승천의 문 토큰 (승천 엔딩)"
+    },
+    {
+      "id": "d-gold",
+      "name": "금화",
+      "component": "c-gold",
+      "back": "c-gold-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 60,
+      "instances": [
+        {
+          "id": "card-00w",
+          "qty": 60,
+          "values": {
+            "title": "금화"
+          }
+        }
+      ],
+      "note": "40장은 탐색 덱에 10장씩 · 20장은 세계은행연합"
+    },
+    {
+      "id": "d-fate",
+      "name": "운명 카드",
+      "component": "c-fate",
+      "back": "c-fate-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 48,
+      "instances": [
+        {
+          "id": "card-00x",
+          "qty": 2,
+          "values": {
+            "title": "어라... 이 힘은?",
+            "body": "초반부 · 주인공의 각성"
+          }
+        },
+        {
+          "id": "card-00y",
+          "qty": 4,
+          "values": {
+            "title": "내가 일을 하나 맡기려고 하는데",
+            "body": "초반부 · 악녀의 의뢰"
+          }
+        },
+        {
+          "id": "card-00z",
+          "qty": 1,
+          "values": {
+            "title": "충격! 대마법사 멀린의 사망",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-010",
+          "qty": 1,
+          "values": {
+            "title": "샬롯의 데뷔당트",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-011",
+          "qty": 1,
+          "values": {
+            "title": "깨어난 뱀파이어",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-012",
+          "qty": 1,
+          "values": {
+            "title": "제노비아, 쓸어버려",
+            "body": "초반부 · 루크레치아"
+          }
+        },
+        {
+          "id": "card-013",
+          "qty": 1,
+          "values": {
+            "title": "이레네, 이 자는 이교도야",
+            "body": "초반부 · 루크레치아"
+          }
+        },
+        {
+          "id": "card-014",
+          "qty": 1,
+          "values": {
+            "title": "데이지, 처리해",
+            "body": "초반부 · 메살리나"
+          }
+        },
+        {
+          "id": "card-015",
+          "qty": 1,
+          "values": {
+            "title": "제국의 해적소탕령",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-016",
+          "qty": 1,
+          "values": {
+            "title": "도망자 마리를 찾아",
+            "body": "초반부 · 로욱시나"
+          }
+        },
+        {
+          "id": "card-017",
+          "qty": 1,
+          "values": {
+            "title": "앗, 남주다!",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-018",
+          "qty": 1,
+          "values": {
+            "title": "주인공, 잔느 등장!",
+            "body": "초반부"
+          }
+        },
+        {
+          "id": "card-019",
+          "qty": 4,
+          "values": {
+            "title": "메인 악녀 공세",
+            "body": "중반부 · 각 악녀 1장"
+          }
+        },
+        {
+          "id": "card-01a",
+          "qty": 4,
+          "values": {
+            "title": "운명의 만남",
+            "body": "중반부 · 동일 카드"
+          }
+        },
+        {
+          "id": "card-01b",
+          "qty": 5,
+          "values": {
+            "title": "운명의 강제력",
+            "body": "중반부 시나리오"
+          }
+        },
+        {
+          "id": "card-01c",
+          "qty": 3,
+          "values": {
+            "title": "잔느 이벤트",
+            "body": "중반부"
+          }
+        },
+        {
+          "id": "card-01d",
+          "qty": 4,
+          "values": {
+            "title": "메인 빌런 토벌전",
+            "body": "후반부 · 각 지역 1장"
+          }
+        },
+        {
+          "id": "card-01e",
+          "qty": 7,
+          "values": {
+            "title": "엔딩 경로 개봉",
+            "body": "후반부"
+          }
+        },
+        {
+          "id": "card-01f",
+          "qty": 3,
+          "values": {
+            "title": "악령 관련",
+            "body": "후반부"
+          }
+        },
+        {
+          "id": "card-01g",
+          "qty": 1,
+          "values": {
+            "title": "잔느의 설득",
+            "body": "후반부"
+          }
+        },
+        {
+          "id": "card-01h",
+          "qty": 1,
+          "values": {
+            "title": "밝혀지는 과거",
+            "body": "후반부"
+          }
+        }
+      ],
+      "note": "초·중·후반부 각 16장 = 48장. 막당 2장씩 24막에 소진"
+    },
+    {
+      "id": "d-omen",
+      "name": "재앙 카드",
+      "component": "c-omen",
+      "back": "c-omen-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 10,
+      "instances": [
+        {
+          "id": "card-01i",
+          "qty": 1,
+          "values": {
+            "title": "선혈의 비",
+            "body": "국지 · 주사위로 정한 지역에 게임 끝까지 지속\n매 막 능력 카드 버림 (선혈 계열은 이득)"
+          }
+        },
+        {
+          "id": "card-01j",
+          "qty": 1,
+          "values": {
+            "title": "칼날 비",
+            "body": "전역 · 동서남북·아카데미 강타\n모든 물건 또는 두근! 1 (검 각성자 이득)"
+          }
+        },
+        {
+          "id": "card-01k",
+          "qty": 1,
+          "values": {
+            "title": "돌림병",
+            "body": "확산 · 막 종료마다 이웃으로 확산\n감염 지역 행동 1개 제한"
+          }
+        },
+        {
+          "id": "card-01l",
+          "qty": 1,
+          "values": {
+            "title": "흑암",
+            "body": "전역 · 이동·탐색 불가 (마리오네트 면역)"
+          }
+        },
+        {
+          "id": "card-01m",
+          "qty": 1,
+          "values": {
+            "title": "마력폭발",
+            "body": "전역 · 마법 카드/마도사 각성자가 폭발 피해"
+          }
+        },
+        {
+          "id": "card-01n",
+          "qty": 1,
+          "values": {
+            "title": "초태 몰살",
+            "body": "전역 · 장자(첫째) 캐릭터 확정 사망"
+          }
+        },
+        {
+          "id": "card-01o",
+          "qty": 1,
+          "values": {
+            "title": "마수폭주",
+            "body": "국지 · 매 막 검/마법 카드로 마수 상대\n없으면 두근! 1"
+          }
+        },
+        {
+          "id": "card-01p",
+          "qty": 1,
+          "values": {
+            "title": "파리",
+            "body": "이동 · 파리 떼가 매 막 주사위로 이동 (게임 끝까지)\n놓인 지역 물건 피해"
+          }
+        },
+        {
+          "id": "card-01q",
+          "qty": 1,
+          "values": {
+            "title": "소멸",
+            "body": "전역 · 무작위 지역 하나가 통째로 사라짐"
+          }
+        },
+        {
+          "id": "card-01r",
+          "qty": 1,
+          "values": {
+            "title": "종막",
+            "body": "메타 · 즉시 후반부 운명 카드 더미로 진행"
+          }
+        }
+      ],
+      "note": "뒷면이 운명 카드와 동일해야 한다 — 섞였을 때 구분되면 안 됨"
+    },
+    {
+      "id": "d-scenario",
+      "name": "시나리오 카드",
+      "component": "c-scenario",
+      "back": "c-scenario-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 3,
+      "instances": [
+        {
+          "id": "card-01s",
+          "qty": 1,
+          "values": {
+            "title": "초반부",
+            "body": "구간 덱 맨 위에 올린다 · 막을 소모하지 않는다"
+          }
+        },
+        {
+          "id": "card-01t",
+          "qty": 1,
+          "values": {
+            "title": "중반부",
+            "body": "구간 덱 맨 위에 올린다 · 막을 소모하지 않는다"
+          }
+        },
+        {
+          "id": "card-01u",
+          "qty": 1,
+          "values": {
+            "title": "후반부",
+            "body": "서막 «메인 악녀 선언» 부착"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d-taste",
+      "name": "남주 성향 카드",
+      "component": "c-taste",
+      "back": "c-taste-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 20,
+      "instances": [
+        {
+          "id": "card-01v",
+          "qty": 1,
+          "values": {
+            "title": "성향 1",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-01w",
+          "qty": 1,
+          "values": {
+            "title": "성향 2",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-01x",
+          "qty": 1,
+          "values": {
+            "title": "성향 3",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-01y",
+          "qty": 1,
+          "values": {
+            "title": "성향 4",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-01z",
+          "qty": 1,
+          "values": {
+            "title": "성향 5",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-020",
+          "qty": 1,
+          "values": {
+            "title": "성향 6",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-021",
+          "qty": 1,
+          "values": {
+            "title": "성향 7",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-022",
+          "qty": 1,
+          "values": {
+            "title": "성향 8",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-023",
+          "qty": 1,
+          "values": {
+            "title": "성향 9",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-024",
+          "qty": 1,
+          "values": {
+            "title": "성향 10",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-025",
+          "qty": 1,
+          "values": {
+            "title": "성향 11",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-026",
+          "qty": 1,
+          "values": {
+            "title": "성향 12",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-027",
+          "qty": 1,
+          "values": {
+            "title": "성향 13",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-028",
+          "qty": 1,
+          "values": {
+            "title": "성향 14",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-029",
+          "qty": 1,
+          "values": {
+            "title": "성향 15",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-02a",
+          "qty": 1,
+          "values": {
+            "title": "성향 16",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-02b",
+          "qty": 1,
+          "values": {
+            "title": "성향 17",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-02c",
+          "qty": 1,
+          "values": {
+            "title": "성향 18",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-02d",
+          "qty": 1,
+          "values": {
+            "title": "성향 19",
+            "body": "(문구 미정)"
+          }
+        },
+        {
+          "id": "card-02e",
+          "qty": 1,
+          "values": {
+            "title": "성향 20",
+            "body": "(문구 미정)"
+          }
+        }
+      ],
+      "note": "시작 시 각 남주에게 3장씩 뒷면으로 배치. 만남으로 오픈, 약혼에 사용"
+    },
+    {
+      "id": "d-pc",
+      "name": "캐릭터 · 플레이어",
+      "component": "c-pc",
+      "back": "c-pc-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 8,
+      "instances": [
+        {
+          "id": "card-02f",
+          "qty": 1,
+          "values": {
+            "title": "샬롯",
+            "body": "동부의 꽃 · 중부 시작"
+          }
+        },
+        {
+          "id": "card-02g",
+          "qty": 1,
+          "values": {
+            "title": "데이지",
+            "body": "어둠의 시녀 · 동부 시작"
+          }
+        },
+        {
+          "id": "card-02h",
+          "qty": 1,
+          "values": {
+            "title": "마리",
+            "body": "부두술사 · 서부 시작"
+          }
+        },
+        {
+          "id": "card-02i",
+          "qty": 1,
+          "values": {
+            "title": "미호",
+            "body": "호요족 · 극동 시작"
+          }
+        },
+        {
+          "id": "card-02j",
+          "qty": 1,
+          "values": {
+            "title": "바토리",
+            "body": "진조 · 북부 시작"
+          }
+        },
+        {
+          "id": "card-02k",
+          "qty": 1,
+          "values": {
+            "title": "제노비아",
+            "body": "황가의 그림자 · 동부 시작"
+          }
+        },
+        {
+          "id": "card-02l",
+          "qty": 1,
+          "values": {
+            "title": "이레네",
+            "body": "추기경 · 중부 시작"
+          }
+        },
+        {
+          "id": "card-02m",
+          "qty": 1,
+          "values": {
+            "title": "그레이스",
+            "body": "대해적 · 남부 시작"
+          }
+        }
+      ],
+      "note": "양면 — 뒷면은 악령 버전"
+    },
+    {
+      "id": "d-npc",
+      "name": "캐릭터 · NPC",
+      "component": "c-npc",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 9,
+      "instances": [
+        {
+          "id": "card-02n",
+          "qty": 1,
+          "values": {
+            "title": "잔느",
+            "body": "주인공"
+          }
+        },
+        {
+          "id": "card-02o",
+          "qty": 1,
+          "values": {
+            "title": "알렉",
+            "body": "남주 · 서부"
+          }
+        },
+        {
+          "id": "card-02p",
+          "qty": 1,
+          "values": {
+            "title": "가이우스",
+            "body": "남주 · 동부"
+          }
+        },
+        {
+          "id": "card-02q",
+          "qty": 1,
+          "values": {
+            "title": "조반니",
+            "body": "남주 · 남부"
+          }
+        },
+        {
+          "id": "card-02r",
+          "qty": 1,
+          "values": {
+            "title": "지크프리트",
+            "body": "남주 · 북부"
+          }
+        },
+        {
+          "id": "card-02s",
+          "qty": 1,
+          "values": {
+            "title": "루크레치아",
+            "body": "메인 악녀"
+          }
+        },
+        {
+          "id": "card-02t",
+          "qty": 1,
+          "values": {
+            "title": "메살리나",
+            "body": "메인 악녀"
+          }
+        },
+        {
+          "id": "card-02u",
+          "qty": 1,
+          "values": {
+            "title": "로욱시나",
+            "body": "메인 악녀"
+          }
+        },
+        {
+          "id": "card-02v",
+          "qty": 1,
+          "values": {
+            "title": "이제벨",
+            "body": "메인 악녀"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d-skull",
+      "name": "사기 카드",
+      "component": "c-skull",
+      "back": "c-skull-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 40,
+      "instances": [
+        {
+          "id": "card-02w",
+          "qty": 40,
+          "values": {
+            "title": "사기"
+          }
+        }
+      ],
+      "note": "악령 전용. 손패 상한 10장 × 최대 4인"
+    },
+    {
+      "id": "d-heart",
+      "name": "두근! 토큰",
+      "component": "c-heart",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 30,
+      "instances": [
+        {
+          "id": "card-02x",
+          "qty": 30,
+          "values": {
+            "title": "두근!"
+          }
+        }
+      ],
+      "note": "지름 25mm 원형 토큰 자리 — 지금은 같은 크기의 네모로 뽑는다. 규격만 «토큰 · 원형 25» 로 바꾸면 그대로 둥글어진다. 시작 개수는 난이도로 결정 (플레이어 5~1 · NPC 0~2)"
+    },
+    {
+      "id": "d-villain",
+      "name": "빌런 토큰",
+      "component": "c-villain",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 30,
+      "instances": [
+        {
+          "id": "card-02y",
+          "qty": 30,
+          "values": {
+            "title": "빌런"
+          }
+        }
+      ],
+      "note": "지름 25mm 원형 토큰 자리 — 지금은 네모. 암살 성공마다 1개 (운명 저항력 겸 승점)"
+    },
+    {
+      "id": "d-encounter",
+      "name": "조우 토큰",
+      "component": "c-encounter",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 36,
+      "instances": [
+        {
+          "id": "card-02z",
+          "qty": 4,
+          "values": {
+            "title": "잔느"
+          }
+        },
+        {
+          "id": "card-030",
+          "qty": 4,
+          "values": {
+            "title": "루크레치아"
+          }
+        },
+        {
+          "id": "card-031",
+          "qty": 4,
+          "values": {
+            "title": "메살리나"
+          }
+        },
+        {
+          "id": "card-032",
+          "qty": 4,
+          "values": {
+            "title": "로욱시나"
+          }
+        },
+        {
+          "id": "card-033",
+          "qty": 4,
+          "values": {
+            "title": "이제벨"
+          }
+        },
+        {
+          "id": "card-034",
+          "qty": 4,
+          "values": {
+            "title": "알렉"
+          }
+        },
+        {
+          "id": "card-035",
+          "qty": 4,
+          "values": {
+            "title": "가이우스"
+          }
+        },
+        {
+          "id": "card-036",
+          "qty": 4,
+          "values": {
+            "title": "조반니"
+          }
+        },
+        {
+          "id": "card-037",
+          "qty": 4,
+          "values": {
+            "title": "지크프리트"
+          }
+        }
+      ],
+      "note": "9종 각 4개 = 36개. 이름이 들어가야 해서 지름 35mm — 지금은 네모"
+    },
+    {
+      "id": "d-aid",
+      "name": "요약 카드",
+      "component": "c-aid",
+      "back": "c-aid-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 4,
+      "instances": [
+        {
+          "id": "card-038",
+          "qty": 4,
+          "values": {
+            "title": "행동 1~4",
+            "body": "이동 — 이웃 지역으로. 금화 1장\n탐색 — 주사위 1·2 능력 / 3~5 물건 / 6 물건 2\n수행 — 능력 2장 (아카데미 3장)\n각성 — 같은 능력 5장으로 고유 능력"
+          }
+        }
+      ],
+      "note": "양면. 뒷면은 행동 5~8 (만남·모략·거래·약혼)"
+    }
+  ],
+  "keywords": [
+    {
+      "id": "kw-heart",
+      "word": "두근!",
+      "style": "chip",
+      "bg": "#C9738C",
+      "color": "#FFFDFA"
+    },
+    {
+      "id": "kw-villain",
+      "word": "빌런 포인트",
+      "style": "chip",
+      "bg": "#7D1F38",
+      "color": "#FFFDFA"
+    },
+    {
+      "id": "kw-spirit",
+      "word": "악령",
+      "style": "chip",
+      "bg": "#14121A",
+      "color": "#B3893A"
+    },
+    {
+      "id": "kw-dying",
+      "word": "빈사",
+      "style": "outline",
+      "bg": "#7D1F38"
+    },
+    {
+      "id": "kw-kill",
+      "word": "암살",
+      "style": "bold",
+      "color": "#7D1F38"
+    },
+    {
+      "id": "kw-awake",
+      "word": "각성",
+      "style": "bold",
+      "color": "#3D5A9E"
+    },
+    {
+      "id": "kw-engage",
+      "word": "약혼",
+      "style": "bold",
+      "color": "#C9738C"
+    }
+  ],
+  "printGroups": [
+    {
+      "id": "pg-card",
+      "name": "카드 묶음 (63×88)",
+      "color": "#7D1F38",
+      "decks": [
+        "d-ability",
+        "d-clue",
+        "d-relic",
+        "d-gold",
+        "d-fate",
+        "d-omen",
+        "d-scenario",
+        "d-taste",
+        "d-pc",
+        "d-npc",
+        "d-skull",
+        "d-aid"
+      ]
+    },
+    {
+      "id": "pg-token",
+      "name": "토큰 묶음 (25×25)",
+      "color": "#1F4E79",
+      "decks": [
+        "d-heart",
+        "d-villain"
+      ]
+    }
+  ]
+}

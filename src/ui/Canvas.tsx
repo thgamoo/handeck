@@ -456,11 +456,23 @@ export function Canvas({ zoom, rulers = true }: { zoom: number; rulers?: boolean
       </div>
       </div>
 
-      {/* 판 = 카드 실물 크기. 딱 그것뿐이다 — 도련은 인쇄 화면에서 붙는다. */}
+      {/* 판 = 카드 실물 크기. 딱 그것뿐이다 — 도련은 인쇄 화면에서 붙는다.
+          크기를 누르면 오른쪽 «조각» 이 펼쳐진다 — 접혀 있어서 못 찾는다는 말이 있었다. */}
       <div className="dims">
-        <b>
-          {c.size.shape === 'circle' ? `지름 ${c.size.w}` : `${c.size.w} × ${c.size.h}`} mm
-        </b>
+        <button
+          className="sizebtn"
+          title="조각 크기·모양 바꾸기"
+          onClick={() => {
+            const el = document.getElementById('setup-piece') as HTMLDetailsElement | null
+            if (!el) return
+            el.open = true
+            el.scrollIntoView({ block: 'nearest' })
+            el.querySelector('select')?.focus()
+          }}
+        >
+          <b>{c.size.shape === 'circle' ? `지름 ${c.size.w}` : `${c.size.w} × ${c.size.h}`} mm</b>
+          <span className="caret">▾</span>
+        </button>
         <span className="q">판의 크기가 곧 카드의 크기입니다</span>
         <span className="q">· 투명한 곳을 눌러도 잡으려면 Ctrl + 클릭</span>
       </div>

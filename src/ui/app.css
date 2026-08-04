@@ -86,6 +86,7 @@ footer {
 }
 footer .sp { flex: 1; }
 footer b { color: var(--ink); }
+footer .trouble { color: #b3261e; font-weight: 700; }
 
 /* ── 좌: 덱·카드 ─────────────────────────────────── */
 .left {
@@ -387,6 +388,14 @@ h4 {
 .dims { margin-top: 10px; font-size: 11px; color: #8a7d72; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
 .dims b { color: #4a423b; font-size: 12px; margin-right: 2px; }
 .dims .q { color: #a2968b; }
+/* 판 아래 크기 표시는 누를 수 있다 — «조각» 이 접혀 있어 못 찾는 일이 있었다 */
+.dims .sizebtn {
+  display: inline-flex; align-items: center; gap: 3px;
+  border: 1px solid transparent; background: none; padding: 1px 5px; border-radius: 4px;
+  font-size: 11px; color: #8a7d72;
+}
+.dims .sizebtn:hover { border-color: var(--line); background: #fff; }
+.dims .sizebtn .caret { font-size: 8px; color: #a99c92; }
 .chk { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink-2, #8a7d72); cursor: pointer; }
 .chk input { margin: 0; }
 
@@ -394,14 +403,19 @@ h4 {
 .deck { display: flex; align-items: center; gap: 6px; }
 .deck .dim { font-size: 10px; color: #a2968b; }
 .deck .n { margin-left: auto; }
-.deck .del, .deck .mv { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; opacity: 0; }
-.deck:hover .del, .deck:hover .mv { opacity: 1; }
-.deck .del:hover, .deck .mv:hover { background: none; }
-.deck .del:hover { color: #b3261e; }
-.deck .mv { font-size: 8px; line-height: 1; }
-.deck .mv:hover { color: var(--wine); }
-/* 순서 이동은 목록 끝(장수) 다음에 온다 — 장수가 밀리지 않게 n 의 auto 여백을 그대로 둔다 */
-.deck .del:disabled, .deck .mv:disabled { opacity: 0 !important; }
+.deck .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; opacity: 0; }
+.deck:hover .del { opacity: 1; }
+.deck .del:hover { color: #b3261e; background: none; }
+.deck .del:disabled { opacity: 0 !important; }
+/* 끌어서 순서 바꾸기 — 레이어 목록과 같은 방식. 놓일 자리를 선으로 보여준다 */
+.deck .grip { color: #cfc4ba; font-size: 10px; cursor: grab; flex: none; }
+.deck.dragging { opacity: .45; }
+.decks .deck { position: relative; }
+.deck.drop-before::after, .deck.drop-after::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 2px; background: var(--wine);
+}
+.deck.drop-before::after { top: -1px; }
+.deck.drop-after::after { bottom: -1px; }
 .deck .rn { width: 100%; font-size: 12px; }
 /* 화면 실물 크기 맞추기 */
 .modal {
@@ -438,7 +452,9 @@ h4 {
 .fitem { display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-bottom: 1px solid #f2ece6; }
 .fitem:last-child { border-bottom: 0; }
 .fitem .sample { flex: 1; font-size: 14px; color: #4a423b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.fitem .fname { width: 88px; font-size: 10.5px; flex: none; }
+.fitem .fname { width: 78px; font-size: 10.5px; flex: none; }
+.fitem .fsynth { display: flex; align-items: center; gap: 3px; font-size: 10px; color: #8a7d72; flex: none; cursor: pointer; }
+.fitem .fsynth input { margin: 0; }
 .fitem .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; }
 .fitem .del:hover { color: #b3261e; background: none; }
 
@@ -463,9 +479,49 @@ h4 {
 .kwitem .kword { width: 96px; flex: none; }
 .kwitem select { width: 74px; flex: none; }
 .kwitem input[type='color'] { width: 26px; height: 22px; padding: 0; border: 1px solid #cfc4ba; border-radius: 4px; background: none; flex: none; }
-.kwsample { flex: 1; font-size: 11.5px; color: #4a423b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 견본은 두 줄로 둔다 — 칩이 줄간격을 밀면 여기서 바로 보여야 한다 */
+.kwsample { flex: 1; font-size: 11.5px; color: #4a423b; white-space: pre-line; line-height: 1.4; min-width: 0; }
 .kwitem .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; flex: none; }
 .kwitem .del:hover { color: #b3261e; background: none; }
+
+.dnote { min-height: 46px; font-size: 11px; line-height: 1.5; }
+.seg { display: flex; gap: 3px; flex: 1; }
+.seg button {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 3px 0; color: #8a7d72; border-radius: 3px;
+}
+.seg button.on { background: var(--wine); border-color: var(--wine); color: #fff; }
+.seg button.on:hover { color: #fff; }
+
+.jsonbox {
+  width: 100%; min-height: 150px; margin: 6px 0;
+  font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; line-height: 1.4;
+  white-space: pre; overflow-wrap: normal; overflow-x: auto;
+}
+
+/* 프린트묶기 — 아이콘 **자체가** 묶음 색을 띤다 (`stroke: currentColor`).
+   이모지는 색을 못 바꿔서 뒤에 색 칩을 깔아봤는데 잘 안 보였다.
+   지금 고른 덱과 같은 묶음이면 또렷하게(.on), 아니면 옅게 — 한눈에 «내 묶음» 이 보인다 */
+.pgmark { display: inline-flex; align-items: center; opacity: .38; flex: none; }
+.pgmark.on { opacity: 1; }
+.pgroup { display: inline-flex; align-items: center; gap: 4px; }
+.pgcolors { display: flex; gap: 3px; flex: none; }
+.pgcolors button { width: 13px; height: 13px; padding: 0; border-radius: 3px; border: 1px solid rgba(0,0,0,.15); }
+.pgcolors button.on { outline: 2px solid #241f1b; outline-offset: 1px; }
+.pbar .pgroup { font-size: 11px; color: #d8b976; }  /* 어두운 막대라 밝은 금색 고정 */
+.pgbox { border: 1px solid #e6ded6; border-radius: 5px; padding: 8px 10px; margin: 8px 0; background: #fbf8f4; }
+.pghead { display: flex; align-items: center; gap: 8px; }
+.pghead .pgname { flex: none; width: 150px; font-size: 12px; font-weight: 700; }
+.pghead .pgstat { flex: 1; font-size: 11px; color: #8a7d72; }
+.pghead .pgstat b { color: #6d8f7a; }
+.pghead .pgstat em { font-style: normal; color: #a99c92; }
+.pghead .del { border: 0; background: none; color: #cfc4ba; font-size: 11px; padding: 0 2px; }
+.pghead .del:hover { color: #b3261e; background: none; }
+.pgdecks { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 8px 0 4px; }
+.pgdeck { display: flex; align-items: center; gap: 4px; font-size: 11.5px; cursor: pointer; }
+.pgdeck input { margin: 0; }
+.pgdeck .sz { font-size: 9.5px; color: #a99c92; }
+.pgdeck.off { opacity: .38; cursor: not-allowed; }
 
 .newdeck { border: 1px solid #e6ded4; border-radius: 6px; padding: 8px; margin: 6px 0; background: #fbf8f4; }
 .newdeck input, .newdeck select { width: 100%; margin-bottom: 6px; }

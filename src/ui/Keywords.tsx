@@ -11,13 +11,22 @@ import { styleText } from '../core/render.tsx'
 import type { Keyword } from '../core/model.ts'
 
 const STYLES: { v: Keyword['style']; label: string }[] = [
-  { v: 'chip', label: '칩' },
+  { v: 'chip', label: '칩 (채움)' },
+  { v: 'outline', label: '칩 (테두리)' },
   { v: 'bold', label: '진하게' },
   { v: 'color', label: '색만' },
 ]
 
-/** 미리보기 문장 — 실제 렌더 코드로 그린다. 설명보다 이게 빠르다. */
-const SAMPLE = (word: string) => `이 카드를 낼 때 ${word || '…'} 효과를 받는다.`
+/** 칩이면 색이 둘 필요하다 (배경/테두리 + 글자) */
+const isChip = (s: Keyword['style']) => s === 'chip' || s === 'outline'
+
+/**
+ * 미리보기 문장 — 실제 렌더 코드로 그린다. 설명보다 이게 빠르다.
+ *
+ * **두 줄인 것이 중요하다.** 칩이 본문 줄보다 크면 그 줄만 밀려 줄간격이
+ * 어긋나는데, 한 줄짜리 견본으로는 그게 안 보인다.
+ */
+const SAMPLE = (word: string) => `이 카드를 낼 때 ${word || '…'} 효과를\n얻는다. 다음 차례까지 이어진다.`
 
 export function Keywords({ onClose }: { onClose: () => void }) {
   const s = useStore()
@@ -54,11 +63,11 @@ export function Keywords({ onClose }: { onClose: () => void }) {
                     </option>
                   ))}
                 </select>
-                {/* 칩은 배경색이 주인공이고, 나머지는 글자색이 주인공이다 */}
-                {k.style === 'chip' && (
+                {/* 칩은 배경(또는 테두리)색이 주인공이고, 나머지는 글자색이 주인공이다 */}
+                {isChip(k.style) && (
                   <input
                     type="color"
-                    title="칩 배경색"
+                    title={k.style === 'chip' ? '칩 배경색' : '테두리 색'}
                     value={k.bg ?? '#2E232A'}
                     onChange={(e) => s.patchKeyword(k.id, { bg: e.target.value })}
                   />
@@ -66,7 +75,7 @@ export function Keywords({ onClose }: { onClose: () => void }) {
                 <input
                   type="color"
                   title={k.style === 'chip' ? '칩 글자색' : '글자색'}
-                  value={k.color ?? (k.style === 'chip' ? '#FFFDFA' : '#7D1F38')}
+                  value={k.color ?? (k.style === 'chip' ? '#FFFDFA' : k.bg ?? '#2E232A')}
                   onChange={(e) => s.patchKeyword(k.id, { color: e.target.value })}
                 />
                 <span className="kwsample">{styleText(SAMPLE(k.word), [k])}</span>

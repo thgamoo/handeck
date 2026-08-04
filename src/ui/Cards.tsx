@@ -7,12 +7,14 @@
  */
 
 import { useState } from 'react'
-import { PIECE_PRESETS, totalPieces } from '../core/model.ts'
+import { groupColor, PIECE_PRESETS, totalPieces } from '../core/model.ts'
 import { Piece, fullSize } from '../core/render.tsx'
 import { useStore } from '../store/project.ts'
 import { assetUrl } from '../store/assets.ts'
 import { cssMmPx } from '../store/screen.ts'
 import { Keywords } from './Keywords.tsx'
+import { PrintGroups } from './PrintGroups.tsx'
+import { Printer } from './icons.tsx'
 
 export function Cards() {
   const s = useStore()
@@ -32,8 +34,23 @@ export function Cards() {
 
   const p = s.project
   const [adding, setAdding] = useState(false)
+  // 덱 순서는 끌어서 바꾼다 — 레이어 목록과 같은 방식 (화살표보다 몇 칸씩 옮기기 쉽다)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [overId, setOverId] = useState<string | null>(null)
+  const [after, setAfter] = useState(false)
+  const dropDeck = () => {
+    if (dragId && overId && dragId !== overId) {
+      const ids = p.decks.map((d) => d.id).filter((id) => id !== dragId)
+      ids.splice(ids.indexOf(overId) + (after ? 1 : 0), 0, dragId)
+      s.setDeckOrder(ids)
+    }
+    setDragId(null)
+    setOverId(null)
+  }
   const [keywords, setKeywords] = useState(false)
+  const [grouping, setGrouping] = useState(false)
   const kwCount = (p.keywords ?? []).filter((k) => k.word.trim()).length
+  const groupCount = (p.printGroups ?? []).filter((g) => g.decks.length > 1).length
   const [renaming, setRenaming] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [preset, setPreset] = useState(0)
@@ -57,13 +74,34 @@ export function Cards() {
           + 덱
         </button>
       </h4>
-      {s.project.decks.map((d, n) => (
+      <div className="decks" onDragEnd={() => (setDragId(null), setOverId(null))}>
+      {s.project.decks.map((d) => (
         <div
           key={d.id}
-          className={`deck${d.id === s.deckId ? ' on' : ''}`}
+          draggable={renaming !== d.id}
+          className={
+            `deck${d.id === s.deckId ? ' on' : ''}` +
+            `${dragId === d.id ? ' dragging' : ''}` +
+            `${overId === d.id ? (after ? ' drop-after' : ' drop-before') : ''}`
+          }
           onClick={() => s.selectDeck(d.id)}
           onDoubleClick={() => setRenaming(d.id)}
-          title="두 번 누르면 이름을 바꿉니다"
+          title="두 번 누르면 이름을 바꿉니다 · 끌어서 순서를 바꿉니다"
+          onDragStart={(e) => {
+            setDragId(d.id)
+            e.dataTransfer.effectAllowed = 'move'
+          }}
+          onDragOver={(e) => {
+            e.preventDefault()
+            if (!dragId || dragId === d.id) return
+            const r = e.currentTarget.getBoundingClientRect()
+            setOverId(d.id)
+            setAfter(e.clientY > r.top + r.height / 2)
+          }}
+          onDrop={(e) => {
+            e.preventDefault()
+            dropDeck()
+          }}
         >
           {renaming === d.id ? (
             <input
@@ -83,34 +121,29 @@ export function Cards() {
             />
           ) : (
             <>
+              <span className="grip" title="끌어서 순서 바꾸기">⠿</span>
               {d.name}
+              {/* 묶여 있으면 여기서 바로 보여야 한다 — 인쇄를 누르면 묶음 전체가 나오므로.
+                  묶음이 여럿이면 **색으로 구분**하고, 지금 고른 덱과 같은 묶음이면 진하게. */}
+              {(() => {
+                const gi = (p.printGroups ?? []).findIndex((x) => x.decks.includes(d.id))
+                if (gi < 0) return null
+                const g = p.printGroups![gi]!
+                const mine = g.decks.includes(s.deckId)
+                return (
+                  <span
+                    className={`pgmark${mine ? ' on' : ''}`}
+                    style={{ color: groupColor(g, gi) }}
+                    title={`«${g.name}» 에 묶임 (${g.decks.length}덱) — 인쇄하면 묶음 전체가 나옵니다`}
+                  >
+                    <Printer size={12} weight={mine ? 2.4 : 2} />
+                  </span>
+                )
+              })()}
               <span className="dim">
                 {p.components[d.component]?.size.w}×{p.components[d.component]?.size.h}
               </span>
               <span className="n">{totalPieces(d)}</span>
-              {/* 보이는 순서가 곧 작업 순서다 — 어느 덱을 먼저 보느냐가 중요하다 */}
-              <button
-                className="mv"
-                title="위로"
-                disabled={n === 0}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  s.moveDeck(d.id, -1)
-                }}
-              >
-                ▲
-              </button>
-              <button
-                className="mv"
-                title="아래로"
-                disabled={n === p.decks.length - 1}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  s.moveDeck(d.id, 1)
-                }}
-              >
-                ▼
-              </button>
               <button
                 className="del"
                 title="덱 삭제"
@@ -126,6 +159,7 @@ export function Cards() {
           )}
         </div>
       ))}
+      </div>
 
       {adding && (
         <div className="newdeck">
@@ -173,9 +207,18 @@ export function Cards() {
           키워드
           {kwCount > 0 && <span className="badge">{kwCount}</span>}
         </button>
+        {/* 여러 덱을 한 종이에 이어 깔아 종이를 아낀다 */}
+        <button
+          title="여러 덱을 한 종이에 이어서 인쇄합니다 — 마지막 장의 빈 칸을 다음 덱이 채웁니다"
+          onClick={() => setGrouping(true)}
+        >
+          프린트묶기
+          {groupCount > 0 && <span className="badge">{groupCount}</span>}
+        </button>
       </div>
 
       {keywords && <Keywords onClose={() => setKeywords(false)} />}
+      {grouping && <PrintGroups onClose={() => setGrouping(false)} />}
 
       <h4>
         카드

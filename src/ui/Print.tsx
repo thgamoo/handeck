@@ -13,11 +13,12 @@
 
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { impose, type Plan } from '../core/impose.ts'
+import { imposeDecks, type Plan } from '../core/impose.ts'
 import { edgesKey, expandForBleed, Piece, type Edges } from '../core/render.tsx'
-import { BLEED_ENABLED, type Component, type Keyword, type Project } from '../core/model.ts'
+import { BLEED_ENABLED, groupOf, printSet, type Component, type Keyword, type Project } from '../core/model.ts'
 import { assetUrl } from '../store/assets.ts'
 import { useStore } from '../store/project.ts'
+import { Printer } from './icons.tsx'
 
 const mm = (v: number): string => `${v}mm`
 
@@ -65,25 +66,21 @@ function CutMarks({ plan }: { plan: Plan }) {
 function Sheet({
   plan,
   page,
-  front,
-  back,
   keywords,
 }: {
   plan: Plan
   page: Plan['pages'][number]
-  front: Component
-  back?: Component
   keywords?: Keyword[]
 }) {
-  const c = page.side === 'back' ? (back ?? front) : front
-
   /**
    * 도련은 조각마다 «어느 변에 붙는지» 가 다르다 (덩어리 안쪽 이음매엔 안 붙는다).
-   * 그래서 변 조합마다 컴포넌트를 한 번씩만 만들어 돌려 쓴다 — 많아야 네댓 가지다.
+   * 그래서 **틀 × 변 조합**마다 한 번씩만 만들어 돌려 쓴다.
+   *
+   * 틀까지 열쇠에 넣는 이유: 묶어 인쇄하면 한 장 안에 여러 덱의 틀이 섞인다.
    */
   const variants = new Map<string, Component>()
-  const pieceFor = (edges: Edges): Component => {
-    const k = edgesKey(edges)
+  const pieceFor = (c: Component, edges: Edges): Component => {
+    const k = `${c.id}:${edgesKey(edges)}`
     let v = variants.get(k)
     if (!v) {
       v = expandForBleed(c, plan.bleed, edges)
@@ -94,26 +91,27 @@ function Sheet({
 
   return (
     <div className="psheet" style={{ width: mm(plan.sheet.w), height: mm(plan.sheet.h) }}>
-      {page.cells.map((cell, i) => (
-        // 조각의 좌표는 **재단** 기준이다. 도련이 붙은 변만큼 밖으로 밀어 그린다.
-        <div
-          key={i}
-          className="pcell"
-          style={{
-            left: mm(cell.x - (cell.edges.left ? plan.bleed : 0)),
-            top: mm(cell.y - (cell.edges.top ? plan.bleed : 0)),
-          }}
-        >
-          <Piece
-            component={pieceFor(cell.edges)}
-            instance={cell.instance}
-            opts={{ assetUrl, keywords }}
-          />
-        </div>
-      ))}
+      {page.cells.map((cell, i) => {
+        // 뒷면 장에서 뒷면 틀이 없는 칸은 비워 둔다 — 앞면을 또 찍으면 안 된다
+        const c = page.side === 'back' ? cell.back : cell.front
+        if (!c) return null
+        return (
+          // 조각의 좌표는 **재단** 기준이다. 도련이 붙은 변만큼 밖으로 밀어 그린다.
+          <div
+            key={i}
+            className="pcell"
+            style={{
+              left: mm(cell.x - (cell.edges.left ? plan.bleed : 0)),
+              top: mm(cell.y - (cell.edges.top ? plan.bleed : 0)),
+            }}
+          >
+            <Piece component={pieceFor(c, cell.edges)} instance={cell.instance} opts={{ assetUrl, keywords }} />
+          </div>
+        )
+      })}
       <CutMarks plan={plan} />
       <div className="pfoot">
-        {page.no}쪽 {page.side === 'back' ? '뒷면' : '앞면'} · {c.size.w}×{c.size.h}mm ·{' '}
+        {page.no}쪽 {page.side === 'back' ? '뒷면' : '앞면'} · {plan.piece.w}×{plan.piece.h}mm ·{' '}
         {plan.cols}×{plan.rows}
       </div>
     </div>
@@ -135,9 +133,10 @@ export function PrintView({
 }) {
   const patchSheet = useStore((st) => st.patchSheet)
   const deck = project.decks.find((d) => d.id === deckId)!
-  const front = project.components[deck.component]!
-  const back = deck.back ? project.components[deck.back] : undefined
-  const plan = impose(project, deck)
+  // 묶여 있으면 묶음 전체를 한 종이에 이어 깐다 (없으면 이 덱 하나)
+  const set = printSet(project, deckId)
+  const group = groupOf(project, deckId)
+  const plan = imposeDecks(project, set)
   usePageSize(plan.sheet.w, plan.sheet.h)
 
   useEffect(() => {
@@ -156,8 +155,15 @@ export function PrintView({
       <div className="pbar">
         <b>인쇄 미리보기</b>
         <span>
-          {deck.name} · {pieces}장 → 종이 {sheets}쪽
+          {group ? `${group.name} (${set.length}덱)` : deck.name} · {pieces}장 → 종이 {sheets}쪽
         </span>
+        {/* 여기서는 묶음 색을 안 쓴다 — 막대가 어두워서 진한 색이 묻힌다.
+            어차피 이 화면은 한 묶음만 보여주므로 색으로 구분할 일이 없다. */}
+        {group && (
+          <span className="pgroup" title={set.map((d) => d.name).join(' · ')}>
+            <Printer size={12} /> {set.map((d) => d.name).join(' · ')}
+          </span>
+        )}
         <span className="sp" />
         {/* 도련은 **여기서** 정한다. 카드에는 도련이 없다 —
             자를 때 밀리는 것에 대한 대비라서 인쇄물의 속성이다.
@@ -217,7 +223,7 @@ export function PrintView({
       ) : (
         <div className="psheets">
           {plan.pages.map((p, i) => (
-            <Sheet key={i} plan={plan} page={p} front={front} back={back} keywords={project.keywords} />
+            <Sheet key={i} plan={plan} page={p} keywords={project.keywords} />
           ))}
         </div>
       )}

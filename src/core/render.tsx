@@ -143,18 +143,81 @@ export interface RenderOpts {
 /** 정규식에서 특별한 뜻을 갖는 글자를 그냥 글자로 만든다 */
 const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
+/**
+ * ── 칩 손잡이 ──────────────────────────────────────────────
+ *
+ * **모든 값의 단위는 «본문 글씨 크기(em)» 다.** 칩 자신의 글씨가 아니다.
+ * 그래서 `size` 를 줄여도 **여백은 그대로 남는다** — 내보낼 때 `÷ size` 로
+ * 환산해 넣기 때문이다 (아래 `outer()`).
+ *
+ * 왜 이렇게까지 하나. 두 가지가 사람을 헷갈리게 만든다:
+ *
+ * **1. `em` 은 그 요소 «자신의» 글씨 기준이다.**
+ * `font-size: .8em` 인 칩에 `padding: .4em` 을 주면 실제 여백은 본문 기준 `.32em` 이다.
+ * 글씨를 줄이면 여백·모서리가 **같이** 줄어든다 — 크기만 줄이고 여백은 두는 게
+ * 구조적으로 불가능해진다.
+ *
+ * **2. `line-height` 로 높이를 만들면 위아래가 대칭으로 줄지 않는다.**
+ * `line-height` 가 만드는 여백(half-leading)은 위아래에 정확히 반씩 붙는다.
+ * 그런데 **글자상자 안에서 글리프는 가운데 있지 않다** — 상자는 글꼴의
+ * ascent+descent 로 정해지고 글자는 밑선 위에 앉으므로, 처음부터
+ * «글자 윗변~칩 윗변» 과 «글자 아랫변~칩 아랫변» 이 다르다.
+ * 거기서 높이를 줄이면 양쪽에서 똑같이 떼어가는데 **원래 좁던 쪽이 먼저 0에 닿는다.**
+ * 그래서 «위가 먼저 줄어든다» 로 보이고, 글꼴을 바꾸면 어느 쪽인지도 바뀐다.
+ *
+ * 그래서 높이는 `line-height` 가 아니라 **위아래 여백으로 직접** 만든다
+ * (`line-height: 1` 로 두면 글자상자 = 글씨 크기라 계산이 예측 가능해진다).
+ * 글꼴마다 다른 비대칭은 `padTop`/`padBottom` 을 따로 두어 눈으로 맞춘다 —
+ * 한 값으로는 어떤 글꼴에서도 맞출 수 없다.
+ *
+ * ⚠️ **줄간격을 밀지 않으려면** `size + padTop + padBottom < 본문 줄간격(보통 1.4)`.
+ */
+const CHIP_KNOBS = {
+  /** 칩 글씨 크기 */
+  size: 0.8,
+  /** 좌우 여백 */
+  padX: 0.34,
+  /** 위 여백 — 글자 위가 답답하면 키운다 */
+  padTop: 0.15,
+  /** 아래 여백 — 글꼴마다 밑선 아래 여유가 달라 위와 따로 둔다 */
+  padBottom: 0.1,
+  /** 모서리 둥글기. 칩 높이의 절반쯤이면 알약 모양 */
+  radius: 0.28,
+  /** 위아래 위치. 0 이면 칩 안 글자의 밑선이 본문 밑선에 앉는다 */
+  shift: 0.1,
+  /** 칩 안 글씨 굵기 */
+  weight: 700,
+}
+
+/** 본문 기준 값을 칩 자신의 `em` 으로 환산 — 이게 «크기와 여백의 분리» 다 */
+const outer = (v: number): string => `${+(v / CHIP_KNOBS.size).toFixed(4)}em`
+
+/** 칩 전체 높이 (본문 기준). 이 값이 줄간격보다 작아야 줄이 안 밀린다 */
+export const chipHeight = (): number => CHIP_KNOBS.size + CHIP_KNOBS.padTop + CHIP_KNOBS.padBottom
+
+const CHIP: CSSProperties = {
+  display: 'inline-block',
+  fontSize: `${CHIP_KNOBS.size}em`,
+  // 높이는 여백으로 만든다. 1 이면 글자상자가 곧 글씨 크기다.
+  lineHeight: 1,
+  padding: `${outer(CHIP_KNOBS.padTop)} ${outer(CHIP_KNOBS.padX)} ${outer(CHIP_KNOBS.padBottom)}`,
+  borderRadius: outer(CHIP_KNOBS.radius),
+  fontWeight: CHIP_KNOBS.weight,
+  // 밑선을 기준으로 두고 손잡이만큼 올리고 내린다
+  verticalAlign: outer(CHIP_KNOBS.shift),
+  // 칩이 줄바꿈으로 두 동강 나면 상자가 깨진다
+  whiteSpace: 'nowrap',
+}
+
 function keywordStyle(k: Keyword): CSSProperties {
   if (k.style === 'chip') {
-    return {
-      // 칸 크기는 글자 크기를 따라간다 (em). 카드마다 글씨가 달라도 칩 비율이 유지된다.
-      display: 'inline-block',
-      padding: '0 .4em',
-      borderRadius: '.35em',
-      background: k.bg ?? '#2E232A',
-      color: k.color ?? '#FFFDFA',
-      fontWeight: 700,
-      lineHeight: 1.3,
-    }
+    return { ...CHIP, background: k.bg ?? '#2E232A', color: k.color ?? '#FFFDFA' }
+  }
+  if (k.style === 'outline') {
+    // 테두리를 `border` 로 그리면 상자가 그만큼 커져 채운 칩과 높이가 달라진다.
+    // 안쪽 그림자로 그리면 크기가 그대로라 둘을 섞어 써도 줄이 안 흔들린다.
+    const line = k.bg ?? k.color ?? '#2E232A'
+    return { ...CHIP, color: k.color ?? line, boxShadow: `inset 0 0 0 .09em ${line}` }
   }
   if (k.style === 'bold') return { fontWeight: 800, color: k.color }
   return { color: k.color ?? '#7D1F38' }

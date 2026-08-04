@@ -11,8 +11,8 @@
 
 import type { ChangeEvent } from 'react'
 import { useRef, useState, useSyncExternalStore } from 'react'
-import type { ImageLayer, Layer, TextLayer, RectLayer, GradientLayer } from '../core/model.ts'
-import { BLEED_ENABLED, PIECE_PRESETS, usedColors } from '../core/model.ts'
+import type { Align, ImageLayer, Layer, TextLayer, RectLayer, GradientLayer, VAlign } from '../core/model.ts'
+import { BLEED_ENABLED, checkDeckJson, deckToJson, PIECE_PRESETS, totalPieces, usedColors } from '../core/model.ts'
 import { layout } from '../core/impose.ts'
 import { fontStack, gradientCss } from '../core/render.tsx'
 import {
@@ -22,13 +22,38 @@ import {
   importFont,
   removeFont,
   renameFont,
+  setFontSynth,
   subscribeFonts,
   type FontMeta,
 } from '../store/fonts.ts'
 import { useStore } from '../store/project.ts'
 import { assetUrl, putAsset, warmUrls } from '../store/assets.ts'
+import { AlignBottom, AlignCenter, AlignLeft, AlignMiddle, AlignRight, AlignTop, type IconFn } from './icons.tsx'
 
 const ICON: Record<Layer['kind'], string> = { image: '▣', text: 'T', rect: '▭', gradient: '▤' }
+
+/** 정렬 단추 — 값 · 아이콘 · 설명 */
+const HALIGN = [
+  ['left', AlignLeft, '왼쪽'],
+  ['center', AlignCenter, '가운데'],
+  ['right', AlignRight, '오른쪽'],
+] as const satisfies readonly (readonly [Align, IconFn, string])[]
+
+const VALIGN = [
+  ['top', AlignTop, '위'],
+  ['middle', AlignMiddle, '가운데'],
+  ['bottom', AlignBottom, '아래'],
+] as const satisfies readonly (readonly [VAlign, IconFn, string])[]
+
+/** CSS 표준 굵기. 숫자만 있으면 뭘 고르는지 모른다 */
+const WEIGHTS = [
+  { v: 300, label: '가늘게' },
+  { v: 400, label: '보통' },
+  { v: 500, label: '조금 굵게' },
+  { v: 700, label: '굵게' },
+  { v: 800, label: '더 굵게' },
+  { v: 900, label: '아주 굵게' },
+]
 
 /* ── 작은 입력들 ─────────────────────────────────────── */
 
@@ -258,6 +283,7 @@ export function Inspector() {
       )}
 
       <PieceSetup />
+      <DeckJsonEditor />
       <FontSetup />
 
       <h4>
@@ -328,6 +354,9 @@ export function Inspector() {
           <div className="rowbtn">
             <button onClick={() => s.moveLayer(layer.id, 1)}>앞으로</button>
             <button onClick={() => s.moveLayer(layer.id, -1)}>뒤로</button>
+            <button title="Ctrl+D" onClick={() => s.duplicateLayer(layer.id)}>
+              복제
+            </button>
             <button className="danger" onClick={() => s.removeLayer(layer.id)}>
               삭제
             </button>
@@ -351,9 +380,15 @@ function PieceSetup() {
   // 조판과 같은 계산을 쓴다 — 규칙이 두 벌이면 «미리보기와 인쇄가 다르다» 가 생긴다
   const g = layout(c.size, d.sheet)
   const circle = c.size.shape === 'circle'
+  // 지금 크기와 똑같은 프리셋이 있으면 그걸 고른 것으로 보여준다
+  const matched = String(
+    PIECE_PRESETS.findIndex(
+      (x) => x.size.w === c.size.w && x.size.h === c.size.h && x.size.shape === c.size.shape
+    )
+  ).replace('-1', '')
 
   return (
-    <details className="setup">
+    <details className="setup" id="setup-piece">
       <summary>
         조각
         <span className="allcards">
@@ -361,17 +396,19 @@ function PieceSetup() {
         </span>
       </summary>
 
+      {/* 지금 규격이 어느 프리셋인지 보여준다. 안 맞으면 «자유 크기» 다 —
+          예전에는 늘 «직접 입력» 이라 지금 뭘 쓰는지 알 수 없었다. */}
       <label className="f">
         <span>규격</span>
         <select
-          value=""
+          value={matched}
           onChange={(e) => {
             const i = Number(e.target.value)
             if (Number.isNaN(i) || !PIECE_PRESETS[i]) return
             s.patchSize({ ...PIECE_PRESETS[i]!.size })
           }}
         >
-          <option value="">직접 입력</option>
+          <option value="">자유 크기 — 아래에서 직접</option>
           {PIECE_PRESETS.map((x, i) => (
             <option key={x.name} value={i}>
               {x.name}
@@ -504,6 +541,49 @@ function PieceSetup() {
       </p>
       </>
       )}
+      {/* 기대 장수 — 규칙 문서가 정한 수를 적어두면 실제와 어긋날 때 빨갛게 알려준다.
+          **값을 넣을 자리가 없던 것이 문제였다.** 한 번 박히면 못 고쳐서
+          «카드를 지웠는데 옛날 수가 계속 남는» 것처럼 보였다. */}
+      <label className="f">
+        <span>기대 장수</span>
+        <input
+          type="number"
+          min={0}
+          placeholder="안 씀"
+          value={d.expect ?? ''}
+          onChange={(e) =>
+            s.setDeckExpect(d.id, e.target.value === '' ? undefined : Number(e.target.value))
+          }
+        />
+      </label>
+      <div className="rowbtn tight">
+        <button
+          disabled={d.expect === totalPieces(d)}
+          title="지금 실제 장수를 기대 장수로 삼습니다"
+          onClick={() => s.setDeckExpect(d.id, totalPieces(d))}
+        >
+          지금 수({totalPieces(d)})로 맞추기
+        </button>
+        <button disabled={d.expect === undefined} onClick={() => s.setDeckExpect(d.id, undefined)}>
+          대조 끄기
+        </button>
+      </div>
+      <p className="hint sm nopad">
+        문서가 정한 장수를 적어두면 실제와 <b>어긋날 때 빨갛게</b> 알려줍니다 («16 / 48»).
+        일부러 늘리거나 줄였다면 «지금 수로 맞추기» 를, 안 셀 거면 «대조 끄기» 를 누르세요.
+      </p>
+
+      {/* 규칙 문서에는 있지만 카드에는 안 적히는 이유들 — 나중에 반드시 잊어버린다 */}
+      <label className="f col">
+        <span>메모</span>
+        <textarea
+          className="dnote"
+          value={d.note ?? ''}
+          placeholder="이 덱에 대해 잊으면 안 되는 것 (예: 뒷면이 운명 카드와 같아야 한다)"
+          onChange={(e) => s.setDeckNote(d.id, e.target.value)}
+        />
+      </label>
+
       <p className="hint sm nopad">
         <b>
           한 장에 {g.cols} × {g.rows} = {g.cols * g.rows}개
@@ -644,6 +724,108 @@ function InstanceValue({ layer }: { layer: Layer }) {
 const SWATCHES = ['#571026', '#7D1F38', '#B3893A', '#D8B976', '#C9738C', '#2E232A', '#FFFDFA']
 
 /**
+ * 덱 JSON — 구조를 통째로 주고받는다.
+ *
+ * **다른 프로젝트에서 레이어 구조를 그대로 가져오려고** 있다. 카드 한 종류를 잘 짜두면
+ * 그 틀은 다음 게임에서도 쓸 만한데, 지금까지는 손으로 다시 그려야 했다.
+ *
+ * 붙여넣을 때 **덱과 틀의 id 는 그대로 두고 내용만 갈아끼운다** — 그래야 이 덱을
+ * 가리키던 인쇄 묶음이 안 깨진다.
+ */
+function DeckJsonEditor() {
+  const s = useStore()
+  const deck = s.deck()
+  const current = JSON.stringify(deckToJson(s.project, deck), null, 2)
+
+  const [draft, setDraft] = useState<string | null>(null)
+  const [withCards, setWithCards] = useState(true)
+  const [msg, setMsg] = useState<{ bad?: boolean; text: string } | null>(null)
+  const text = draft ?? current
+
+  const apply = () => {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(text)
+    } catch (e) {
+      setMsg({ bad: true, text: `JSON 을 읽지 못했습니다: ${e instanceof Error ? e.message : e}` })
+      return
+    }
+    const r = checkDeckJson(parsed)
+    if (!r.ok) {
+      setMsg({ bad: true, text: r.why })
+      return
+    }
+    s.applyDeckJson(deck.id, r.value, withCards)
+    setDraft(null)
+    setMsg({
+      text: withCards
+        ? '적용했습니다. 되돌리기(Ctrl+Z)로 돌아갈 수 있습니다.'
+        : '틀만 적용했습니다. 카드의 «카드마다 다르게» 값은 레이어 id 로 묶여 있어, 레이어가 바뀌었다면 비어 보일 수 있습니다.',
+    })
+  }
+
+  return (
+    <details className="setup">
+      <summary>
+        JSON
+        <span className="allcards">{deck.name}</span>
+      </summary>
+
+      <p className="hint sm nopad">
+        이 덱의 <b>틀·레이어·카드</b>를 그대로 담은 JSON 입니다. 복사해서 다른 프로젝트에
+        붙여넣으면 구조가 옮겨집니다. 덱 id 는 유지되므로 <b>프린트묶기는 안 깨집니다</b>.
+      </p>
+
+      <textarea
+        className="jsonbox"
+        spellCheck={false}
+        value={text}
+        onChange={(e) => {
+          setDraft(e.target.value)
+          setMsg(null)
+        }}
+      />
+
+      <label className="toggle sm">
+        <input type="checkbox" checked={withCards} onChange={(e) => setWithCards(e.target.checked)} />
+        <span>
+          <b>카드 내용까지 가져오기</b>
+          <em>끄면 틀(레이어)만 바뀌고 지금 카드가 남습니다</em>
+        </span>
+      </label>
+
+      <div className="rowbtn tight">
+        <button
+          onClick={() => {
+            void navigator.clipboard?.writeText(current)
+            setMsg({ text: '복사했습니다.' })
+          }}
+        >
+          복사
+        </button>
+        <button className="go" disabled={draft === null} onClick={apply}>
+          적용
+        </button>
+        <button
+          disabled={draft === null}
+          onClick={() => {
+            setDraft(null)
+            setMsg(null)
+          }}
+        >
+          되돌림
+        </button>
+      </div>
+
+      {msg && <p className={`hint sm nopad${msg.bad ? ' warn' : ''}`}>{msg.text}</p>}
+      <p className="hint sm nopad">
+        ⚠️ 그림은 안 들어갑니다 — 에셋 id 만 남으므로, 그림까지 옮기려면 «저장»(묶음)을 쓰세요.
+      </p>
+    </details>
+  )
+}
+
+/**
  * 글꼴 한 줄.
  *
  * 이름은 **다 치고 나서** 반영한다. 글자 하나 칠 때마다 반영하면 그때마다
@@ -678,6 +860,16 @@ function FontItem({ f }: { f: FontMeta }) {
           if (e.key === 'Escape') setDraft(f.family)
         }}
       />
+      {/* 글꼴 파일 하나에는 보통 굵기가 하나뿐이다. 흉내를 켜두면 굵기 조절이 먹는다.
+          Regular·Bold 를 따로 넣었다면 꺼야 한다 — 안 그러면 Bold 에 또 얹혀 뭉개진다. */}
+      <label className="fsynth" title="이 글꼴에 굵게를 흉내냅니다. 굵기 조절이 안 먹으면 켜세요. 진짜 Bold 파일을 따로 넣었다면 끄세요.">
+        <input
+          type="checkbox"
+          checked={f.synth !== false}
+          onChange={(e) => void setFontSynth(f.id, e.target.checked)}
+        />
+        굵게
+      </label>
       <button
         className="del"
         title="이 글꼴을 지웁니다. 쓰던 글자는 기본 글꼴로 돌아갑니다."
@@ -803,31 +995,65 @@ function TextProps({ l }: { l: TextLayer }) {
       </label>
       <div className="grid2">
         <Num label="크기" value={l.size} min={1} onChange={(v) => p({ size: v }, `sz:${l.id}`)} />
-        <Num label="굵기" value={l.weight} min={100} step={100} onChange={(v) => p({ weight: v }, `w:${l.id}`)} />
+        <label className="f">
+          <span>굵기</span>
+          <select value={l.weight ?? 400} onChange={(e) => p({ weight: Number(e.target.value) })}>
+            {WEIGHTS.map((w) => (
+              <option key={w.v} value={w.v}>
+                {w.v} {w.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
+      {/* 정렬은 글꼴 바로 아래. 고르는 목록보다 **눌러서 바로 바뀌는** 편이 빠르고,
+          지금 무엇이 켜져 있는지도 한눈에 보인다. */}
+      <label className="f">
+        <span>가로</span>
+        <span className="seg">
+          {HALIGN.map(([v, Icon, label]) => (
+            <button
+              key={v}
+              type="button"
+              title={label}
+              aria-pressed={(l.align ?? 'center') === v}
+              className={(l.align ?? 'center') === v ? 'on' : undefined}
+              onClick={() => p({ align: v })}
+            >
+              <Icon />
+            </button>
+          ))}
+        </span>
+      </label>
+      <label className="f">
+        <span>세로</span>
+        <span className="seg">
+          {VALIGN.map(([v, Icon, label]) => (
+            <button
+              key={v}
+              type="button"
+              title={label}
+              aria-pressed={(l.valign ?? 'middle') === v}
+              className={(l.valign ?? 'middle') === v ? 'on' : undefined}
+              onClick={() => p({ valign: v })}
+            >
+              <Icon />
+            </button>
+          ))}
+        </span>
+      </label>
+
+      {/* 불러온 글꼴은 보통 굵기가 하나뿐이라, 흉내를 꺼두면 이 값이 안 먹는다 */}
+      {l.font && !l.font.startsWith('var(') && fonts().find((f) => f.family === l.font)?.synth === false && (
+        <p className="hint sm nopad">
+          «{l.font}» 은 굵게 흉내가 꺼져 있어 굵기가 안 바뀝니다 — 위 «글꼴» 에서 켜세요.
+        </p>
+      )}
       <Color label="색" value={l.color} onChange={(v) => p({ color: v }, `c:${l.id}`)} />
       <div className="sw">
         {SWATCHES.map((c) => (
           <button key={c} style={{ background: c }} onClick={() => p({ color: c })} />
         ))}
-      </div>
-      <div className="grid2">
-        <label className="f">
-          <span>가로</span>
-          <select value={l.align ?? 'center'} onChange={(e) => p({ align: e.target.value as never })}>
-            <option value="left">왼쪽</option>
-            <option value="center">가운데</option>
-            <option value="right">오른쪽</option>
-          </select>
-        </label>
-        <label className="f">
-          <span>세로</span>
-          <select value={l.valign ?? 'middle'} onChange={(e) => p({ valign: e.target.value as never })}>
-            <option value="top">위</option>
-            <option value="middle">가운데</option>
-            <option value="bottom">아래</option>
-          </select>
-        </label>
       </div>
       <label className="toggle sm">
         <input type="checkbox" checked={!!l.shrink} onChange={(e) => p({ shrink: e.target.checked })} />

@@ -40,7 +40,11 @@ export function migrate(p: Project): Project {
   return p
 }
 
+/** 마지막으로 저장한 내용. 창이 닫힐 때 이걸 즉시 밀어 넣는다. */
+let latest: Project | null = null
+
 export function saveLocal(p: Project): void {
+  latest = p
   try {
     localStorage.setItem(KEY, JSON.stringify(p))
   } catch (err) {
@@ -49,14 +53,71 @@ export function saveLocal(p: Project): void {
   }
 }
 
+/** 아직 저장 안 된 게 있으면 지금 저장한다 */
+export function flushLocal(p: Project): void {
+  if (latest === p) return
+  saveLocal(p)
+}
+
+/**
+ * 창이 닫히거나 숨을 때 **밀린 저장을 끝낸다.**
+ *
+ * 자동 저장은 0.4초 미뤄서 한다 (타이핑마다 쓰면 느리다). 그런데 그 0.4초 안에
+ * 새로고침하면 **마지막 편집이 통째로 날아간다.** «간헐적으로 글자가 사라진다» 가
+ * 정확히 이것이었다 — 고치고 바로 새로고침했느냐 아니냐의 차이다.
+ *
+ * `beforeunload` 만으로는 모자란다. 모바일·탭 전환에서는 안 오는 경우가 있어
+ * `pagehide` 와 «숨김» 상태 전환도 같이 듣는다.
+ */
+export function watchUnload(get: () => Project): () => void {
+  const flush = () => flushLocal(get())
+  const onHide = () => {
+    if (document.visibilityState === 'hidden') flush()
+  }
+  window.addEventListener('beforeunload', flush)
+  window.addEventListener('pagehide', flush)
+  document.addEventListener('visibilitychange', onHide)
+  return () => {
+    window.removeEventListener('beforeunload', flush)
+    window.removeEventListener('pagehide', flush)
+    document.removeEventListener('visibilitychange', onHide)
+  }
+}
+
+/**
+ * 불러오다 실패했으면 그 이유. **있으면 자동 저장을 멈춰야 한다.**
+ *
+ * 예전에는 못 읽으면 조용히 `null` 을 돌려줬고, 그러면 화면에는 **예제**가 뜬 채로
+ * 자동 저장이 0.4초 뒤에 **그 예제로 저장된 작업을 덮어썼다.** 못 읽은 것뿐인데
+ * 원본까지 없애버리는 셈이다. 그래서 실패를 밖으로 알린다.
+ */
+let loadError: string | null = null
+export const loadFailed = (): string | null => loadError
+
 export function loadLocal(): Project | null {
+  loadError = null
+  let raw: string | null = null
   try {
-    const raw = localStorage.getItem(KEY)
-    if (!raw) return null
+    raw = localStorage.getItem(KEY)
+  } catch (e) {
+    loadError = '이 브라우저에서 저장소를 쓸 수 없습니다'
+    return null
+  }
+  if (!raw) return null // 처음 켠 것 — 실패가 아니다
+
+  try {
     const p = JSON.parse(raw) as Project
-    if (p?.handeck !== 1 || !p.components || !p.decks) return null
+    if (p?.handeck !== 1 || !p.components || !p.decks) throw new Error('형식이 아닙니다')
     return migrate(p)
-  } catch {
+  } catch (e) {
+    // 못 읽은 내용을 **따로 치워둔다.** 덮어써서 영영 잃는 것보다 낫다.
+    try {
+      localStorage.setItem(`${KEY}:broken`, raw)
+    } catch {
+      // 치워둘 자리도 없으면 어쩔 수 없다
+    }
+    loadError = `저장된 작업을 읽지 못했습니다 (${e instanceof Error ? e.message : e}). ` +
+      `덮어쓰지 않도록 자동 저장을 멈췄습니다 — 원본은 handeck:project:broken 에 남겨뒀습니다.`
     return null
   }
 }
