@@ -262,25 +262,42 @@ export function Canvas({ zoom, rulers = true }: { zoom: number; rulers?: boolean
   return (
     <div className="stage" onMouseDown={() => s.selectLayer(null)}>
       {/* 앞면/뒷면 — 덱마다 틀이 둘일 수 있는데 화면은 하나다.
-          여기가 그 둘 사이를 오가는 유일한 자리라 판 바로 위에 붙인다. */}
+          여기가 그 둘 사이를 오가는 유일한 자리라 판 바로 위에 붙인다.
+          **보드에는 뒷면이 없다** — 판을 뒤집어 쓰는 물건이 아니라서 줄째로 없앤다. */}
       <div className="sides" onMouseDown={(e) => e.stopPropagation()}>
-        <button className={s.side === 'front' ? 'on' : ''} onClick={() => s.selectSide('front')}>
-          앞면
-        </button>
-        {deck.back ? (
-          <button className={s.side === 'back' ? 'on' : ''} onClick={() => s.selectSide('back')}>
-            뒷면
-          </button>
+        {s.mode === 'board' ? (
+          <span className="who">{s.board()?.name ?? '보드 없음'}</span>
+        ) : s.mode === 'book' ? (
+          // 룰북에도 앞뒤가 없다 — 쪽 하나가 종이 한 면이다.
+          // 대신 지금 보고 있는 쪽이 몇 쪽인지 늘 보여준다.
+          <span className="who">
+            {s.rulebook()
+              ? `${s.rulebook()!.name} · ${
+                  s.rulebook()!.pages.findIndex((p) => p.id === s.page()?.id) + 1
+                }/${s.rulebook()!.pages.length}쪽`
+              : '룰북 없음'}
+          </span>
         ) : (
-          <button
-            className="add"
-            title="이 덱에 공통 뒷면을 만듭니다. 앞면과 같은 규격으로 시작합니다."
-            onClick={() => s.setBack('new')}
-          >
-            + 뒷면
-          </button>
+          <>
+            <button className={s.side === 'front' ? 'on' : ''} onClick={() => s.selectSide('front')}>
+              앞면
+            </button>
+            {deck.back ? (
+              <button className={s.side === 'back' ? 'on' : ''} onClick={() => s.selectSide('back')}>
+                뒷면
+              </button>
+            ) : (
+              <button
+                className="add"
+                title="이 덱에 공통 뒷면을 만듭니다. 앞면과 같은 규격으로 시작합니다."
+                onClick={() => s.setBack('new')}
+              >
+                + 뒷면
+              </button>
+            )}
+            <span className="who">{deck.name}</span>
+          </>
         )}
-        <span className="who">{deck.name}</span>
       </div>
 
       <input

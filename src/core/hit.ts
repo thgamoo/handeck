@@ -278,6 +278,12 @@ export function hitLayer(l: Layer, p: Point, inst: Instance | undefined, probe: 
       return imageAlpha(l, px, py, map) > MIN_ALPHA
     }
 
+    // 룰북 본문 — 글이 흐르는 **덩어리**라 줄 상자를 따로 재지 않는다.
+    // 쪽의 대부분을 차지하는 상자이고 그 위에 다른 것을 얹는 일이 드물어,
+    // «상자 안이면 집힌다» 가 실제 편집에서 훨씬 덜 답답하다.
+    case 'md':
+      return true
+
     case 'text': {
       if (!resolveText(l, inst).trim()) return true // 빈 글자 자리도 집을 수 있어야 한다
       const boxes = probe.textBoxes?.(l.id)

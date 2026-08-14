@@ -88,7 +88,34 @@ export interface GradientLayer extends LayerBase {
   radius?: number
 }
 
-export type Layer = ImageLayer | TextLayer | RectLayer | GradientLayer
+/**
+ * 글 덩어리 — **룰북 본문.**
+ *
+ * 글자 레이어(`text`)와 무엇이 다른가. 저쪽은 «한 줄짜리 제목·문장» 이라
+ * 상자 하나에 한 가지 모양만 들어간다. 룰북 본문은 소제목·목록·표가 섞인
+ * **문서 한 덩어리**라, 그걸 레이어로 쪼개면 문장 하나 고칠 때마다
+ * 아래 상자를 전부 다시 잡아야 한다.
+ *
+ * 그래서 내용은 **마크다운 원문 그대로** 두고 (`text`, 인스턴스마다 다름),
+ * 소제목·목록·표는 그릴 때 해석한다 (`core/markdown.ts`).
+ */
+export interface MarkdownLayer extends LayerBase {
+  kind: 'md'
+  /** 마크다운 원문. override 가 있으면 쪽(인스턴스) 값이 우선 */
+  text?: string
+  font?: string
+  /** pt — 본문 기준 크기. 소제목은 여기에 배수로 붙는다 */
+  size?: number
+  color?: string
+  lineHeight?: number
+  align?: Align
+  /** 단 수. 2 면 두 단으로 흐른다 (룰북에서 흔하다) */
+  columns?: number
+  /** mm. 단 사이 간격 */
+  gap?: number
+}
+
+export type Layer = ImageLayer | TextLayer | RectLayer | GradientLayer | MarkdownLayer
 
 export interface PieceSize {
   /** 재단 크기 (mm). **카드는 이게 전부다 — 도련은 여기 없다.** */
@@ -153,6 +180,18 @@ export interface Deck {
   back?: string
   sheet: SheetSpec
   duplex: false | 'long' | 'short'
+  /**
+   * 뒷면 격자를 **좌우로 뒤집을지.** 없으면 뒤집는다(`true`).
+   *
+   * 뒤집는 것이 맞다 — 세로 종이를 긴 쪽(책장 넘기듯)으로 넘기면 앞면 왼쪽 칸이
+   * 뒷면에서는 오른쪽에 오기 때문이다. 그래서 기본값이 «뒤집기» 다.
+   *
+   * **그런데 이걸 끌 수 있어야 한다.** 드라이버·기종마다 뒤집는 축이 다르고
+   * (특히 수동 양면에서 종이를 손으로 다시 넣을 때는 넣는 방향이 곧 축이다),
+   * 어긋났을 때 원인을 알아내는 것보다 **반대 버전을 한 장 뽑아 대보는 편이 빠르다.**
+   * 자로 재는 것보다 실물 두 장이 확실하다.
+   */
+  mirrorBack?: boolean
   /** 기대 장수. 어긋나면 경고. */
   expect?: number
   /**
@@ -205,11 +244,99 @@ export interface Keyword {
   bg?: string
 }
 
+/**
+ * 보드 — **한 장짜리 큰 인쇄물.** 판, 참조표, 점수판 같은 것.
+ *
+ * 덱과 무엇이 다른가:
+ *   덱은 «작은 조각 여러 장» 이라 한 종이에 격자로 깔고 잘라낸다.
+ *   보드는 «한 장이 종이만큼, 또는 종이보다 크다» — 격자가 없고 자르는 대신
+ *   **모자라면 여러 장에 나눠 깔아 이어 붙인다.**
+ *
+ * 그래서 인스턴스가 없다. 보드는 틀이 곧 결과물이다 —
+ * «같은 틀로 100장» 이 필요한 물건이 아니다.
+ */
+export interface Board {
+  id: string
+  name: string
+  /** 이 보드의 틀. 틀의 `size` 가 곧 보드의 실물 크기다 */
+  component: string
+  /** 어떤 종이에 뽑을지 */
+  sheet: SheetSpec
+  /**
+   * 종이에 어떻게 앉힐지.
+   *
+   *  `single` — **한 장에 그대로.** A3 보드를 A3 종이에 뽑는 길이다.
+   *             종이보다 크면 삐져나가므로 미리보기가 경고한다.
+   *  `tile`   — **여러 장에 나눠 깔고 이어 붙인다.** 집 프린터가 A4 뿐일 때.
+   *
+   * 없으면 `single`.
+   */
+  tiling?: 'single' | 'tile'
+  /**
+   * 타일링할 때 이웃 장과 **겹치는 폭** (mm). 풀칠 여유다.
+   *
+   * 딱 맞게 자르면 종이 두께만큼 틈이 벌어지고 밀리면 흰 줄이 생긴다.
+   * 겹쳐 두면 위에 얹어 붙일 자리가 생기고, 조금 밀려도 티가 안 난다.
+   * 없으면 10mm.
+   */
+  overlap?: number
+  /** 이 보드에 대한 메모 (덱의 `note` 와 같은 자리) */
+  note?: string
+}
+
+/**
+ * 룰북 — **여러 쪽짜리 인쇄물.**
+ *
+ * 덱·보드와 무엇이 다른가:
+ *   덱은 «작은 조각 여러 장» 이라 한 종이에 격자로 깔고 **잘라낸다**.
+ *   보드는 «한 장이 종이만큼 크다» 라 나눠 뽑아 **이어 붙인다**.
+ *   룰북은 «작은 쪽이 순서대로 여러 장» 이라 **접거나 스테이플러로 묶는다** —
+ *   그래서 쪽 **순서**와 **앞뒤 짝**이 전부다. 자를 것도 이어 붙일 것도 없다.
+ *
+ * 구조는 덱과 같다. 쪽 하나가 인스턴스 하나이고, 틀(`component`)은 모든 쪽이 공유한다 —
+ * 머리말·쪽번호·여백을 한 번만 잡으면 20쪽이 같이 따라온다는 뜻이다.
+ * 다른 점은 **수량(`qty`)이 늘 1** 이라는 것뿐이다. 룰북 3쪽을 «2장» 찍을 일은 없다.
+ */
+export interface Rulebook {
+  id: string
+  name: string
+  /** 쪽 틀. 이 틀의 `size` 가 곧 **한 쪽의 크기**다 (종이 크기가 아니다) */
+  component: string
+  /** 어느 종이에 뽑을지 */
+  sheet: SheetSpec
+  /**
+   * 어떻게 묶을지. **이게 종이에 쪽을 앉히는 방식을 정한다.**
+   *
+   *  `saddle` — **접어서 중철.** 종이 한 면에 두 쪽이 나란히 눕고, 반으로 접어
+   *             겹친 뒤 접힌 등에 스테이플러를 박는다. 쪽 순서가 뒤집혀 깔리므로
+   *             (마지막 쪽이 첫 쪽 왼쪽에 온다) **총 쪽수가 4의 배수**여야 한다.
+   *  `staple` — **모서리 스테이플.** 한 면에 한 쪽씩, 차례대로. 쪽 크기와 종이가
+   *             같을 때 쓴다. 왼쪽 위를 한 번 박으면 끝이라 시제품에 가장 편하다.
+   *
+   * 없으면 `saddle`. A5 룰북을 A4 에 접어 뽑는 것이 집에서 가장 흔한 길이다.
+   */
+  binding?: 'saddle' | 'staple'
+  /**
+   * 양면으로 뽑을지. `false` 면 **한 면만** 쓴다 (뒷장이 빈 채로 나온다).
+   *
+   * 중철은 사실상 양면이 전제다 — 단면으로 접으면 속이 백지가 된다.
+   * 그래도 «일단 앞면만 뽑아 확인» 하는 경우가 있어 끌 수 있게 둔다.
+   */
+  duplex?: false | 'long' | 'short'
+  note?: string
+  /** 쪽. 순서가 곧 읽는 순서다 */
+  pages: Instance[]
+}
+
 export interface Project {
   handeck: 1
   name: string
   components: Record<string, Component>
   decks: Deck[]
+  /** 한 장짜리 큰 인쇄물. 없으면 빈 목록으로 본다 */
+  boards?: Board[]
+  /** 여러 쪽짜리 인쇄물 (룰북·설명서). 없으면 빈 목록으로 본다 */
+  rulebooks?: Rulebook[]
   fonts?: FontRef[]
   keywords?: Keyword[]
   printGroups?: PrintGroup[]
@@ -281,8 +408,53 @@ export function printSet(p: Project, deckId: string): Deck[] {
 // ---------------------------------------------------------------------------
 
 export const A4: SheetSpec = { w: 210, h: 297, margin: 10, gap: 0, marks: 'crop', bleed: 3, bleedMode: 'none' }
-// Letter 규격은 속성 패널의 «종이» 목록에서 직접 고른다 (215.9 × 279.4).
-// 상수를 따로 두면 두 곳이 갈릴 수 있어 A4 하나만 남긴다.
+/** 보드의 기본 종이. 판은 A4 한 장으로는 대개 모자라다 */
+export const A3: SheetSpec = { ...A4, w: 297, h: 420 }
+
+/**
+ * 고를 수 있는 종이.
+ *
+ * **한 곳에만 적는다.** 전에는 속성 패널의 `<option>` 에 직접 박아둬서
+ * 보드 쪽에 A3 를 넣으려면 같은 목록을 또 적어야 했다.
+ *
+ * A 계열은 반씩 접힌다 — A3 를 반 접으면 A4 다. 그래서 A3 판을
+ * A4 두 장에 나눠 뽑는 것이 (`tiling: 'tile'`) 딱 맞아떨어진다.
+ */
+export const SHEET_PRESETS: { name: string; w: number; h: number }[] = [
+  { name: 'A4 세로 (210×297)', w: 210, h: 297 },
+  { name: 'A4 가로 (297×210)', w: 297, h: 210 },
+  { name: 'A3 세로 (297×420)', w: 297, h: 420 },
+  { name: 'A3 가로 (420×297)', w: 420, h: 297 },
+  { name: 'Letter 세로 (215.9×279.4)', w: 215.9, h: 279.4 },
+  { name: 'Letter 가로 (279.4×215.9)', w: 279.4, h: 215.9 },
+]
+
+/**
+ * 보드 **판 자체**의 크기 프리셋. 종이 목록과 다른 자리다 —
+ * 「A3 판을 A4 두 장에 뽑기」 처럼 판과 종이가 갈릴 수 있기 때문이다.
+ */
+export const BOARD_PRESETS: { name: string; size: PieceSize }[] = [
+  { name: '판 · A4 세로 210×297', size: { w: 210, h: 297, shape: 'rect' } },
+  { name: '판 · A4 가로 297×210', size: { w: 297, h: 210, shape: 'rect' } },
+  { name: '판 · A3 세로 297×420', size: { w: 297, h: 420, shape: 'rect' } },
+  { name: '판 · A3 가로 420×297', size: { w: 420, h: 297, shape: 'rect' } },
+  { name: '판 · A2 가로 594×420', size: { w: 594, h: 420, shape: 'rect' } },
+  { name: '판 · 정사각 300×300', size: { w: 300, h: 300, shape: 'rect' } },
+]
+
+/**
+ * 룰북 **한 쪽**의 크기 프리셋.
+ *
+ * A 계열이 반씩 접히는 것이 여기서 그대로 쓸모가 된다 —
+ * A5 쪽 두 개가 A4 한 장이고, A6 두 개가 A5 한 장이다. 중철이 딱 맞아떨어진다.
+ * 목록의 «(A4 에 접어서)» 는 그 쪽 크기의 **중철 짝**을 알려주는 말이다.
+ */
+export const PAGE_PRESETS: { name: string; size: PieceSize; sheet: { w: number; h: number } }[] = [
+  { name: 'A5 세로 148×210 (A4 가로에 접어서)', size: { w: 148, h: 210, shape: 'rect' }, sheet: { w: 297, h: 210 } },
+  { name: 'A6 세로 105×148 (A5 가로에 접어서)', size: { w: 105, h: 148, shape: 'rect' }, sheet: { w: 210, h: 148 } },
+  { name: 'A4 세로 210×297 (한 면에 한 쪽)', size: { w: 210, h: 297, shape: 'rect' }, sheet: { w: 210, h: 297 } },
+  { name: '정사각 140×140 (280×140 에 접어서)', size: { w: 140, h: 140, shape: 'rect' }, sheet: { w: 280, h: 140 } },
+]
 
 /** 자주 쓰는 조각 규격. 없는 건 직접 입력하면 된다. */
 export const PIECE_PRESETS: { name: string; size: PieceSize }[] = [
@@ -355,7 +527,7 @@ export function sheetBleed(sheet: SheetSpec): number {
 }
 
 /** 인스턴스가 실제로 쓸 값 — 오버라이드가 있으면 인스턴스 값, 없으면 컴포넌트 값. */
-export function resolveText(layer: TextLayer, inst?: Instance): string {
+export function resolveText(layer: TextLayer | MarkdownLayer, inst?: Instance): string {
   if (layer.override === 'text' && inst) return inst.values[layer.id] ?? layer.text ?? ''
   return layer.text ?? ''
 }
@@ -389,7 +561,7 @@ export function usedColors(p: Project): string[] {
   for (const c of Object.values(p.components)) {
     add(c.background)
     for (const l of c.layers) {
-      if (l.kind === 'text') add(l.color)
+      if (l.kind === 'text' || l.kind === 'md') add(l.color)
       else if (l.kind === 'rect') {
         add(l.fill)
         add(l.stroke)

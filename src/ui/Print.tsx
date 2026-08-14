@@ -29,7 +29,7 @@ const mm = (v: number): string => `${v}mm`
  * 여백 0 으로 두고 우리가 종이 안에서 직접 배치한다 — 브라우저 기본 여백에
  * 맡기면 브라우저·프린터마다 달라진다.
  */
-function usePageSize(w: number, h: number) {
+export function usePageSize(w: number, h: number) {
   useEffect(() => {
     const el = document.createElement('style')
     el.textContent = `@page { size: ${w}mm ${h}mm; margin: 0; }`
@@ -132,6 +132,7 @@ export function PrintView({
   onClose: () => void
 }) {
   const patchSheet = useStore((st) => st.patchSheet)
+  const setMirrorBack = useStore((st) => st.setMirrorBack)
   const deck = project.decks.find((d) => d.id === deckId)!
   // 묶여 있으면 묶음 전체를 한 종이에 이어 깐다 (없으면 이 덱 하나)
   const set = printSet(project, deckId)
@@ -190,6 +191,21 @@ export function PrintView({
             )}
           </label>
         )}
+        {/* 뒷면 좌우 뒤집기 — 뒷면이 있는 덱에서만 의미가 있다.
+            기본은 켬(뒤집기)이 맞지만, 드라이버·기종마다 뒤집는 축이 달라서
+            **반대 버전을 한 장 뽑아 대보는 것**이 원인을 캐는 것보다 빠르다. */}
+        {plan.pages.some((p) => p.side === 'back') && (
+          <label className="pbleed" title="끄면 앞면과 같은 자리에 뒷면을 깝니다 — 앞뒤가 어긋날 때 대보는 용도입니다">
+            <input
+              type="checkbox"
+              /* 조판이 따르는 건 «묶음의 첫 덱» 이다. 고른 덱을 읽으면
+                 묶어 인쇄할 때 체크박스가 실제와 다른 말을 하게 된다. */
+              checked={set[0]!.mirrorBack !== false}
+              onChange={(e) => setMirrorBack(e.target.checked, set[0]!.id)}
+            />
+            뒷면 좌우 뒤집기
+          </label>
+        )}
         {/* 글꼴이 다 붙기 전에 인쇄하면 첫 장이 대체 글꼴로 나간다.
             불러온 글꼴은 이미 로드해서 등록하지만, 여기서 한 번 더 확인하고 넘어간다. */}
         <button
@@ -207,6 +223,13 @@ export function PrintView({
       <div className="pnote">
         인쇄 대화상자에서 <b>여백 = 없음</b>, <b>배경 그래픽 = 켬</b> 을 확인하세요. 크기 조정은{' '}
         <b>100%</b> 여야 합니다 — «페이지에 맞춤» 이면 카드가 작아집니다.
+        {plan.pages.some((p) => p.side === 'back') && (
+          <>
+            {' '}양면은 <b>대화상자의 넘김 설정과 위 «넘김» 이 같아야</b> 합니다 — 프린터는 종이를
+            뒤집을 뿐 칸이 맞물리는지는 모릅니다. 어긋나면 <b>«뒷면 좌우 뒤집기»</b> 를 끈 것도 한 장
+            뽑아 대보세요.
+          </>
+        )}
       </div>
       <div className="pnote sub">
         {plan.bleedMode === 'none'

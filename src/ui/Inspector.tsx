@@ -11,9 +11,31 @@
 
 import type { ChangeEvent } from 'react'
 import { useRef, useState, useSyncExternalStore } from 'react'
-import type { Align, ImageLayer, Layer, TextLayer, RectLayer, GradientLayer, VAlign } from '../core/model.ts'
-import { BLEED_ENABLED, checkDeckJson, deckToJson, PIECE_PRESETS, totalPieces, usedColors } from '../core/model.ts'
+import type {
+  Align,
+  ImageLayer,
+  Layer,
+  MarkdownLayer,
+  TextLayer,
+  RectLayer,
+  GradientLayer,
+  VAlign,
+} from '../core/model.ts'
+import {
+  BLEED_ENABLED,
+  BOARD_PRESETS,
+  checkDeckJson,
+  deckToJson,
+  PAGE_PRESETS,
+  PIECE_PRESETS,
+  SHEET_PRESETS,
+  totalPieces,
+  usedColors,
+} from '../core/model.ts'
 import { layout } from '../core/impose.ts'
+import { tileBoard } from '../core/tile.ts'
+import { planBook } from '../core/booklet.ts'
+import { bodyFit } from '../core/rulebook.ts'
 import { fontStack, gradientCss } from '../core/render.tsx'
 import {
   fonts,
@@ -30,7 +52,7 @@ import { useStore } from '../store/project.ts'
 import { assetUrl, putAsset, warmUrls } from '../store/assets.ts'
 import { AlignBottom, AlignCenter, AlignLeft, AlignMiddle, AlignRight, AlignTop, type IconFn } from './icons.tsx'
 
-const ICON: Record<Layer['kind'], string> = { image: '▣', text: 'T', rect: '▭', gradient: '▤' }
+const ICON: Record<Layer['kind'], string> = { image: '▣', text: 'T', rect: '▭', gradient: '▤', md: '¶' }
 
 /** 정렬 단추 — 값 · 아이콘 · 설명 */
 const HALIGN = [
@@ -255,10 +277,28 @@ export function Inspector() {
   const s = useStore()
   const layer = s.layer()
   const inst = s.instance()
+  const boardMode = s.mode === 'board'
+  const bookMode = s.mode === 'book'
+  const book = s.rulebook()
 
   return (
     <aside className="right">
-      {inst && (
+      {/* 룰북에서는 «수량» 이 없다. 쪽을 두 장 찍을 일이 없기 때문이다 —
+          대신 지금 몇 쪽인지와 앞뒤로 옮기는 단추를 둔다. 쪽은 순서가 곧 내용이다. */}
+      {inst && bookMode && book && (
+        <div className="instbar">
+          <span>
+            {book.pages.findIndex((i) => i.id === inst.id) + 1} / {book.pages.length}쪽
+          </span>
+          <button title="앞으로 (한 쪽 당기기)" onClick={() => s.movePage(inst.id, -1)}>
+            ↑
+          </button>
+          <button title="뒤로 (한 쪽 밀기)" onClick={() => s.movePage(inst.id, 1)}>
+            ↓
+          </button>
+        </div>
+      )}
+      {inst && !bookMode && (
         <div className="instbar">
           <span>카드 {s.deck().instances.findIndex((i) => i.id === inst.id) + 1}</span>
           <label>
@@ -282,8 +322,10 @@ export function Inspector() {
         </div>
       )}
 
-      <PieceSetup />
-      <DeckJsonEditor />
+      {/* 보드·룰북에는 뒷면이 없다 — 조각/덱 설정 대신 그쪽 설정을 보여준다.
+          레이어 편집부터 아래는 완전히 같다 (셋 다 결국 틀 하나를 그리는 일이다) */}
+      {boardMode ? <BoardSetup /> : bookMode ? <BookSetup /> : <PieceSetup />}
+      {!boardMode && !bookMode && <DeckJsonEditor />}
       <FontSetup />
 
       <h4>
@@ -298,6 +340,10 @@ export function Inspector() {
         <button onClick={() => s.addLayer('image')}>+ 이미지</button>
         <button onClick={() => s.addLayer('rect')}>+ 도형</button>
         <button onClick={() => s.addLayer('gradient')}>+ 그늘</button>
+        {/* 글이 흐르는 상자. 룰북에서 주로 쓰지만 카드 뒷면의 «규칙 요약» 에도 쓸모가 있다 */}
+        <button onClick={() => s.addLayer('md')} title="소제목·목록·표가 섞인 글 덩어리 (마크다운)">
+          + 본문
+        </button>
       </div>
 
       {!layer ? (
@@ -323,7 +369,7 @@ export function Inspector() {
             <input
               type="checkbox"
               checked={!!layer.override}
-              disabled={layer.kind !== 'text' && layer.kind !== 'image'}
+              disabled={layer.kind === 'rect' || layer.kind === 'gradient'}
               onChange={(e) =>
                 s.patchLayer(layer.id, {
                   override: e.target.checked ? (layer.kind === 'image' ? 'image' : 'text') : undefined,
@@ -331,11 +377,13 @@ export function Inspector() {
               }
             />
             <span>
-              <b>카드마다 다르게</b>
+              <b>{bookMode ? '쪽마다 다르게' : '카드마다 다르게'}</b>
               <em>
-                {layer.kind === 'text' || layer.kind === 'image'
-                  ? '켜면 카드별로 값을 넣을 수 있습니다'
-                  : '글자·이미지 레이어만 가능합니다'}
+                {layer.kind === 'rect' || layer.kind === 'gradient'
+                  ? '글자·본문·이미지 레이어만 가능합니다'
+                  : bookMode
+                    ? '켜면 쪽별로 값을 넣을 수 있습니다'
+                    : '켜면 카드별로 값을 넣을 수 있습니다'}
               </em>
             </span>
           </label>
@@ -347,6 +395,7 @@ export function Inspector() {
           </h4>
           <Txt label="이름" value={layer.name} onChange={(v) => s.patchLayer(layer.id, { name: v }, `nm:${layer.id}`)} />
           {layer.kind === 'text' && <TextProps l={layer} />}
+          {layer.kind === 'md' && <MdProps l={layer} />}
           {layer.kind === 'image' && <ImageProps l={layer} />}
           {layer.kind === 'rect' && <RectProps l={layer} />}
           {layer.kind === 'gradient' && <GradProps l={layer} />}
@@ -373,6 +422,270 @@ export function Inspector() {
  * 자주 건드리는 게 아니라 접어둔다. 그래도 «지금 63×88 이다» 는 늘 보여야 해서
  * 접힌 상태의 제목에 규격을 적어둔다.
  */
+/**
+ * 보드 설정 — 판 크기 · 종이 · 앉히는 방식.
+ *
+ * 덱의 «조각» 패널과 자리가 같지만 내용이 다르다.
+ * 여기서 답해야 하는 질문은 하나다 — **이 판을 어느 종이에 어떻게 앉히나.**
+ */
+function BoardSetup() {
+  const s = useStore()
+  const b = s.board()
+  const c = s.component()
+  if (!b) return null
+
+  const plan = tileBoard(c.size, b.sheet, b)
+  const tiled = (b.tiling ?? 'single') === 'tile'
+  const matched = String(
+    BOARD_PRESETS.findIndex((x) => x.size.w === c.size.w && x.size.h === c.size.h)
+  ).replace('-1', '')
+
+  return (
+    <details className="setup" id="setup-board" open>
+      <summary>
+        보드
+        <span className="allcards">
+          {c.size.w} × {c.size.h} mm
+        </span>
+      </summary>
+
+      <label className="f">
+        <span>판 크기</span>
+        <select
+          value={matched}
+          onChange={(e) => {
+            const i = Number(e.target.value)
+            if (Number.isNaN(i) || !BOARD_PRESETS[i]) return
+            s.patchSize({ ...BOARD_PRESETS[i]!.size })
+          }}
+        >
+          <option value="">자유 크기 — 아래에서 직접</option>
+          {BOARD_PRESETS.map((x, i) => (
+            <option key={x.name} value={i}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="grid2">
+        <Num label="가로" value={c.size.w} min={10} onChange={(v) => s.patchSize({ w: v })} />
+        <Num label="세로" value={c.size.h} min={10} onChange={(v) => s.patchSize({ h: v })} />
+      </div>
+
+      <h5>인쇄</h5>
+      <label className="f">
+        <span>종이</span>
+        <select
+          value={`${b.sheet.w}x${b.sheet.h}`}
+          onChange={(e) => {
+            const [w, h] = e.target.value.split('x').map(Number)
+            s.patchBoardSheet({ w: w!, h: h! })
+          }}
+        >
+          {SHEET_PRESETS.map((x) => (
+            <option key={x.name} value={`${x.w}x${x.h}`}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* **판과 종이는 별개다.** A3 판을 A3 종이에 통째로 뽑을 수도, A4 여러 장에
+          나눠 뽑아 이어 붙일 수도 있다. 집 프린터는 대개 A4 까지라 둘 다 필요하다. */}
+      <label className="f">
+        <span>앉히기</span>
+        <select
+          value={b.tiling ?? 'single'}
+          onChange={(e) => s.patchBoard({ tiling: e.target.value as 'single' | 'tile' })}
+        >
+          <option value="single">한 장에 그대로</option>
+          <option value="tile">나눠 뽑아 이어 붙이기</option>
+        </select>
+      </label>
+
+      {tiled && (
+        <>
+          <Num
+            label="겹침"
+            value={b.overlap ?? 10}
+            min={0}
+            onChange={(v) => s.patchBoard({ overlap: v })}
+          />
+          <p className="hint sm nopad">
+            이웃 장과 이만큼 겹쳐 찍습니다 — 풀칠할 자리입니다. 딱 맞게 자르면
+            조금만 밀려도 흰 줄이 생기지만, 겹쳐 두면 위에 얹어 붙일 수 있습니다.
+          </p>
+        </>
+      )}
+
+      {/* 여백은 **나눠 뽑을 때만** 쓴다. 한 장에 그대로 뽑으면 판을 종이 가운데
+          앉히므로 여백이 관여하지 않는다 — 관여하게 두면 종이와 같은 크기의 판이
+          여백만큼 잘려 나간다. 그래서 그때는 칸 자체를 안 보여준다. */}
+      {tiled && (
+        <Num label="여백" value={b.sheet.margin} min={0} onChange={(v) => s.patchBoardSheet({ margin: v })} />
+      )}
+
+      <p className={`hint sm nopad${plan.overflow ? ' warn' : ''}`}>
+        {plan.overflow
+          ? `판이 종이보다 큽니다 — 이대로 뽑으면 사방이 고르게 잘립니다. 큰 종이를 고르거나 «나눠 뽑기» 로 바꾸세요.`
+          : plan.pages.length > 1
+            ? `종이 ${plan.rows}×${plan.cols} = ${plan.pages.length}장. 가로 ${Math.round(plan.overlapX * 10) / 10}mm · 세로 ${Math.round(plan.overlapY * 10) / 10}mm 씩 겹칩니다.`
+            : plan.single
+              ? `종이 한 장 가운데에 들어갑니다 (${b.sheet.w}×${b.sheet.h}mm).`
+              : `종이 한 장에 가운데로 앉지만 여백(${b.sheet.margin}mm) 안쪽을 넘습니다 — «가장자리 없음» 으로 인쇄하세요.`}
+      </p>
+
+      <label className="f col">
+        <span>메모</span>
+        <textarea
+          className="dnote"
+          value={b.note ?? ''}
+          placeholder="나중에 잊어버릴 이유 (예: 접는 판이라 가운데 이음매는 비워둔다)"
+          onChange={(e) => s.setBoardNote(b.id, e.target.value)}
+        />
+      </label>
+    </details>
+  )
+}
+
+/**
+ * 룰북 설정 — 쪽 크기 · 종이 · 제본.
+ *
+ * 여기서 답해야 하는 질문은 하나다 — **이걸 어떻게 묶나.**
+ * 그 답이 종이에 쪽을 앉히는 방식을 통째로 정한다 (중철이면 한 면에 두 쪽).
+ */
+function BookSetup() {
+  const s = useStore()
+  const b = s.rulebook()
+  const c = s.component()
+  if (!b) return null
+
+  const plan = planBook(c.size, b.sheet, b)
+  const matched = String(
+    PAGE_PRESETS.findIndex((x) => x.size.w === c.size.w && x.size.h === c.size.h)
+  ).replace('-1', '')
+  const over = b.pages.filter((pg) => bodyFit(c, pg)?.over).length
+
+  return (
+    <details className="setup" id="setup-book" open>
+      <summary>
+        룰북
+        <span className="allcards">
+          {c.size.w} × {c.size.h} mm · {b.pages.length}쪽
+        </span>
+      </summary>
+
+      <label className="f">
+        <span>쪽 크기</span>
+        <select
+          value={matched}
+          onChange={(e) => {
+            const preset = PAGE_PRESETS[Number(e.target.value)]
+            if (!preset) return
+            s.patchSize({ ...preset.size })
+            // 쪽이 커지면 종이도 같이 커져야 한다. 안 맞추면 다음 인쇄에서
+            // «두 쪽이 안 들어감» 경고부터 보게 된다.
+            s.patchRulebookSheet({ w: preset.sheet.w, h: preset.sheet.h })
+          }}
+        >
+          {matched === '' && <option value="">직접 입력</option>}
+          {PAGE_PRESETS.map((x, i) => (
+            <option key={x.name} value={i}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="grid2">
+        <Num label="폭" value={c.size.w} min={10} onChange={(v) => s.patchSize({ w: v })} />
+        <Num label="높이" value={c.size.h} min={10} onChange={(v) => s.patchSize({ h: v })} />
+      </div>
+
+      <label className="f">
+        <span>제본</span>
+        <select
+          value={b.binding ?? 'saddle'}
+          onChange={(e) => s.patchRulebook({ binding: e.target.value as 'saddle' | 'staple' })}
+        >
+          <option value="saddle">접어서 중철 (한 면에 두 쪽)</option>
+          <option value="staple">모서리 스테이플 (한 면에 한 쪽)</option>
+        </select>
+      </label>
+
+      <label className="f">
+        <span>종이</span>
+        <select
+          value={`${b.sheet.w}x${b.sheet.h}`}
+          onChange={(e) => {
+            const [w, h] = e.target.value.split('x').map(Number)
+            s.patchRulebookSheet({ w: w!, h: h! })
+          }}
+        >
+          {!SHEET_PRESETS.some((x) => x.w === b.sheet.w && x.h === b.sheet.h) && (
+            <option value={`${b.sheet.w}x${b.sheet.h}`}>
+              {b.sheet.w}×{b.sheet.h}mm
+            </option>
+          )}
+          {SHEET_PRESETS.map((x) => (
+            <option key={x.name} value={`${x.w}x${x.h}`}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="f">
+        <span>넘김</span>
+        <select
+          value={b.duplex === false ? 'off' : (b.duplex ?? 'short')}
+          onChange={(e) =>
+            s.patchRulebook({
+              duplex: e.target.value === 'off' ? false : (e.target.value as 'long' | 'short'),
+            })
+          }
+        >
+          <option value="short">양면 · 짧은 쪽</option>
+          <option value="long">양면 · 긴 쪽</option>
+          <option value="off">단면만</option>
+        </select>
+      </label>
+
+      <p className={`hint sm nopad${plan.overflow ? ' warn' : ''}`}>
+        {plan.overflow ? (
+          <>
+            ⚠ 쪽 {plan.perSide}개가 종이에 안 들어갑니다. 종이를 키우거나 제본을 바꾸세요.
+          </>
+        ) : (
+          <>
+            종이 <b>{plan.sheets.length}면</b>
+            {plan.binding === 'saddle' && (
+              <> · 접어서 {plan.sheets.length / (plan.duplex ? 2 : 1)}장</>
+            )}
+            {plan.padded > plan.count && <> · 백지 {plan.padded - plan.count}쪽</>}
+          </>
+        )}
+      </p>
+      {over > 0 && (
+        <p className="hint sm nopad warn">
+          ⚠ 본문이 넘치는 쪽이 <b>{over}쪽</b> 있습니다 — 왼쪽 목록에 «넘침» 으로 표시했습니다.
+          넘친 글은 <b>종이에서 잘려 나갑니다.</b>
+        </p>
+      )}
+
+      <label className="f col">
+        <span>메모</span>
+        <textarea
+          className="dnote"
+          value={b.note ?? ''}
+          placeholder="«매끈한 종이(스노우지)에 뽑는다» 처럼 나중에 잊어버릴 것"
+          onChange={(e) => s.setRulebookNote(b.id, e.target.value)}
+        />
+      </label>
+    </details>
+  )
+}
+
 function PieceSetup() {
   const s = useStore()
   const c = s.component()
@@ -495,10 +808,11 @@ function PieceSetup() {
             s.patchSheet({ w: w!, h: h! })
           }}
         >
-          <option value="210x297">A4 세로</option>
-          <option value="297x210">A4 가로</option>
-          <option value="215.9x279.4">Letter 세로</option>
-          <option value="279.4x215.9">Letter 가로</option>
+          {SHEET_PRESETS.map((x) => (
+            <option key={x.name} value={`${x.w}x${x.h}`}>
+              {x.name}
+            </option>
+          ))}
         </select>
       </label>
 
@@ -685,7 +999,14 @@ function LayerList() {
 function InstanceValue({ layer }: { layer: Layer }) {
   const s = useStore()
   const inst = s.instance()!
-  const n = s.deck().instances.findIndex((i) => i.id === inst.id) + 1
+  const book = s.mode === 'book' ? s.rulebook() : undefined
+  const n = book
+    ? book.pages.findIndex((i) => i.id === inst.id) + 1
+    : s.deck().instances.findIndex((i) => i.id === inst.id) + 1
+  const unit = book ? '쪽' : '카드'
+  // 룰북 본문은 문서 한 덩어리라 두 줄짜리 칸으로는 못 고친다.
+  // 여기가 실질적으로 «원고를 쓰는 자리» 가 된다.
+  const rows = layer.kind === 'md' ? 16 : layer.h > 14 ? 5 : 2
 
   const pick = async (f: File) => {
     const meta = await putAsset(f)
@@ -696,8 +1017,10 @@ function InstanceValue({ layer }: { layer: Layer }) {
   return (
     <div className="instval">
       <h4>
-        이 카드의 {layer.name}
-        <span className="only">카드 {n} 에만</span>
+        이 {unit}의 {layer.name}
+        <span className="only">
+          {unit} {n} 에만
+        </span>
       </h4>
       {layer.override === 'image' ? (
         <ImagePicker
@@ -709,9 +1032,9 @@ function InstanceValue({ layer }: { layer: Layer }) {
       ) : (
         <textarea
           className="big"
-          rows={layer.h > 14 ? 5 : 2}
+          rows={rows}
           value={inst.values[layer.id] ?? ''}
-          placeholder="이 카드에 들어갈 내용"
+          placeholder={layer.kind === 'md' ? '## 소제목\n\n본문을 마크다운으로' : `이 ${unit}에 들어갈 내용`}
           onChange={(e) => s.setValue(inst.id, layer.id, e.target.value)}
         />
       )}
@@ -1059,6 +1382,75 @@ function TextProps({ l }: { l: TextLayer }) {
         <input type="checkbox" checked={!!l.shrink} onChange={(e) => p({ shrink: e.target.checked })} />
         <span>넘치면 글자 줄이기</span>
       </label>
+    </>
+  )
+}
+
+/**
+ * 본문(마크다운) 속성.
+ *
+ * 손잡이가 적은 것이 요점이다. **크기 하나로 전체가 같이 줄고 늘어난다** —
+ * 소제목·여백·표가 전부 본문 글씨 기준(em)이라 그렇다 (`render.tsx` 참조).
+ * 쪽이 넘칠 때 사람이 만질 곳이 하나면 «어디를 건드려야 하지» 가 없어진다.
+ */
+function MdProps({ l }: { l: MarkdownLayer }) {
+  const s = useStore()
+  const p = (v: Partial<MarkdownLayer>, k?: string) => s.patchLayer(l.id, v as Partial<Layer>, k)
+  return (
+    <>
+      {!l.override && (
+        <label className="f col">
+          <span>본문</span>
+          <textarea
+            rows={10}
+            value={l.text ?? ''}
+            placeholder="## 소제목&#10;&#10;본문. **굵게** · 목록 · 표 · 인용을 씁니다"
+            onChange={(e) => p({ text: e.target.value }, `t:${l.id}`)}
+          />
+        </label>
+      )}
+      <label className="f">
+        <span>글꼴</span>
+        <select value={l.font ?? 'var(--hd-sans)'} onChange={(e) => p({ font: e.target.value })}>
+          <option value="var(--hd-sans)">고딕</option>
+          <option value="var(--hd-serif)">명조</option>
+          {fonts().map((f) => (
+            <option key={f.id} value={f.family}>
+              {f.family}
+            </option>
+          ))}
+          {l.font && !l.font.startsWith('var(') && !fonts().some((f) => f.family === l.font) && (
+            <option value={l.font}>{l.font} (없음)</option>
+          )}
+        </select>
+      </label>
+      <div className="grid2">
+        <Num label="크기" value={l.size} min={3} step={0.5} onChange={(v) => p({ size: v }, `sz:${l.id}`)} />
+        <Num
+          label="줄간격"
+          value={l.lineHeight ?? 1.5}
+          min={1}
+          step={0.05}
+          onChange={(v) => p({ lineHeight: v }, `lh:${l.id}`)}
+        />
+      </div>
+      <div className="grid2">
+        <label className="f">
+          <span>단</span>
+          <select value={l.columns ?? 1} onChange={(e) => p({ columns: Number(e.target.value) })}>
+            <option value={1}>한 단</option>
+            <option value={2}>두 단</option>
+            <option value={3}>세 단</option>
+          </select>
+        </label>
+        <Num label="단 간격" value={l.gap ?? 6} min={0} step={0.5} onChange={(v) => p({ gap: v }, `gp:${l.id}`)} />
+      </div>
+      <Color label="색" value={l.color} onChange={(v) => p({ color: v }, `c:${l.id}`)} />
+      <p className="hint sm nopad">
+        <b># 소제목</b> · <b>- 목록</b> · <b>| 표 |</b> · <b>&gt; 인용</b> ·{' '}
+        <b>**굵게**</b> 를 알아봅니다. 상자를 넘친 글은 <b>인쇄에서 잘립니다</b> —
+        크기를 줄이거나 쪽을 나누세요.
+      </p>
     </>
   )
 }

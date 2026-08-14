@@ -223,6 +223,9 @@ export function imposeDecks(project: Project, decks: Deck[]): Plan {
   const duplex = first.duplex
   const anyBack = items.some((it) => it.back)
   const flipY = duplex === 'short'
+  // 뒤집는 것이 기본이다. 끌 수 있는 이유는 `Deck.mirrorBack` 주석 참조 —
+  // 어긋났을 때 반대 버전을 뽑아 대보는 것이 원인을 캐는 것보다 빠르다.
+  const mirror = first.mirrorBack !== false
   let no = 0
 
   for (let start = 0; start < items.length; start += per) {
@@ -252,7 +255,10 @@ export function imposeDecks(project: Project, decks: Deck[]): Plan {
         cells: place(
           slice.map((_, i) => {
             const { col, row } = at(i)
-            return { col: g.cols - 1 - col, row: flipY ? g.rows - 1 - row : row }
+            return {
+              col: mirror ? g.cols - 1 - col : col,
+              row: flipY ? g.rows - 1 - row : row,
+            }
           })
         ),
       })

@@ -13,9 +13,11 @@ import {
   type Instance,
   type Keyword,
   type Layer,
+  type MarkdownLayer,
   resolveAsset,
   resolveText,
 } from './model.ts'
+import { type MdBlock, parseInline, parseMarkdown } from './markdown.ts'
 
 const mm = (v: number): string => `${v}mm`
 
@@ -250,6 +252,210 @@ export function styleText(text: string, keywords?: Keyword[]): ReactNode {
   })
 }
 
+/* ── 룰북 본문 ─────────────────────────────────────────────
+ *
+ * 모든 치수가 **본문 글씨 기준(em)** 이다. 그래서 레이어의 `size` 하나만 줄이면
+ * 소제목·여백·표까지 통째로 같은 비율로 줄어든다 — 쪽이 넘칠 때 사람이 만질
+ * 손잡이가 «크기» 하나면 된다는 뜻이다.
+ */
+
+/** 인라인 — 굵게·기울임·코드. 그 안의 평범한 글에는 키워드 칠이 그대로 먹는다 */
+function inlineNodes(text: string, keywords?: Keyword[]): ReactNode {
+  return parseInline(text).map((r, i) => {
+    const body = r.code ? r.text : styleText(r.text, keywords)
+    if (!r.bold && !r.italic && !r.code) return <span key={i}>{body}</span>
+    return (
+      <span
+        key={i}
+        style={{
+          fontWeight: r.bold ? 800 : undefined,
+          fontStyle: r.italic ? 'italic' : undefined,
+          ...(r.code
+            ? {
+                fontFamily: 'ui-monospace, Menlo, Consolas, monospace',
+                fontSize: '.92em',
+                background: 'rgba(0,0,0,.06)',
+                padding: '0 .2em',
+                borderRadius: '.2em',
+              }
+            : {}),
+        }}
+      >
+        {body}
+      </span>
+    )
+  })
+}
+
+/** 소제목 크기 — 본문의 몇 배인가. 1단계는 쪽 제목급이라 크게 벌린다 */
+const H_SIZE = [1.7, 1.34, 1.12, 1, 0.95, 0.9]
+
+function blockNode(b: MdBlock, i: number, keywords?: Keyword[]): ReactElement {
+  // 소제목·표가 단 사이에서 두 동강 나면 읽는 흐름이 끊긴다
+  const keep: CSSProperties = { breakInside: 'avoid' }
+
+  switch (b.kind) {
+    case 'h': {
+      const lv = Math.min(6, Math.max(1, b.level))
+      return (
+        <div
+          key={i}
+          style={{
+            ...keep,
+            fontSize: `${H_SIZE[lv - 1]}em`,
+            fontWeight: lv <= 2 ? 800 : 700,
+            lineHeight: 1.25,
+            margin: `${lv <= 2 ? 0.9 : 0.7}em 0 ${lv <= 2 ? 0.35 : 0.25}em`,
+            // 첫 줄이 위 여백 때문에 상자에서 밀려나면 «비뚤어 보인다»
+            marginTop: i === 0 ? 0 : undefined,
+          }}
+        >
+          {inlineNodes(b.text, keywords)}
+        </div>
+      )
+    }
+
+    case 'p':
+      return (
+        <p key={i} style={{ margin: '0 0 .5em', whiteSpace: 'pre-wrap' }}>
+          {inlineNodes(b.text, keywords)}
+        </p>
+      )
+
+    case 'list': {
+      const Tag = b.ordered ? 'ol' : 'ul'
+      return (
+        <Tag key={i} style={{ margin: '0 0 .5em', paddingLeft: '1.15em' }}>
+          {b.items.map((it, j) => (
+            <li key={j} style={{ marginLeft: `${it.depth * 1.1}em`, marginBottom: '.12em' }}>
+              {inlineNodes(it.text, keywords)}
+            </li>
+          ))}
+        </Tag>
+      )
+    }
+
+    case 'quote':
+      return (
+        <div
+          key={i}
+          style={{
+            ...keep,
+            margin: '0 0 .55em',
+            paddingLeft: '.6em',
+            borderLeft: '.4mm solid currentColor',
+            opacity: 0.82,
+          }}
+        >
+          {b.lines.map((l, j) => (
+            <p key={j} style={{ margin: 0 }}>
+              {inlineNodes(l, keywords)}
+            </p>
+          ))}
+        </div>
+      )
+
+    case 'table':
+      return (
+        <table
+          key={i}
+          style={{
+            ...keep,
+            width: '100%',
+            borderCollapse: 'collapse',
+            margin: '0 0 .6em',
+            fontSize: '.95em',
+          }}
+        >
+          <thead>
+            <tr>
+              {b.head.map((h, j) => (
+                <th
+                  key={j}
+                  style={{
+                    textAlign: b.align[j] ?? 'left',
+                    border: '.15mm solid currentColor',
+                    padding: '.2em .3em',
+                    background: 'rgba(0,0,0,.06)',
+                    fontWeight: 700,
+                  }}
+                >
+                  {inlineNodes(h, keywords)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {b.rows.map((r, j) => (
+              <tr key={j}>
+                {b.head.map((_, k) => (
+                  <td
+                    key={k}
+                    style={{
+                      textAlign: b.align[k] ?? 'left',
+                      border: '.15mm solid currentColor',
+                      padding: '.2em .3em',
+                      verticalAlign: 'top',
+                    }}
+                  >
+                    {inlineNodes(r[k] ?? '', keywords)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )
+
+    case 'hr':
+      return (
+        <hr
+          key={i}
+          style={{ border: 0, borderTop: '.3mm solid currentColor', opacity: 0.35, margin: '.7em 0' }}
+        />
+      )
+  }
+}
+
+/** 마크다운 한 덩어리를 그린다. 룰북 본문 레이어와 미리보기가 같이 쓴다 */
+export function MarkdownBody({
+  source,
+  keywords,
+}: {
+  source: string
+  keywords?: Keyword[]
+}): ReactElement {
+  return <>{parseMarkdown(source).map((b, i) => blockNode(b, i, keywords))}</>
+}
+
+function mdNode(l: MarkdownLayer, inst: Instance | undefined, o: RenderOpts): ReactElement {
+  const cols = Math.max(1, Math.round(l.columns ?? 1))
+  return (
+    <div
+      key={l.id}
+      data-layer={l.id}
+      data-text="1"
+      style={{
+        ...boxStyle(l),
+        fontFamily: fontStack(l.font),
+        fontSize: `${l.size ?? 9}pt`,
+        color: l.color ?? '#2E232A',
+        lineHeight: l.lineHeight ?? 1.5,
+        textAlign: l.align ?? 'left',
+        columnCount: cols > 1 ? cols : undefined,
+        columnGap: cols > 1 ? mm(l.gap ?? 6) : undefined,
+        wordBreak: 'keep-all',
+        overflowWrap: 'anywhere',
+        // 넘치는 건 **잘라서 보여준다.** 스크롤이 생기면 화면에서는 다 보이는데
+        // 종이에서는 잘리는, 가장 나쁜 종류의 «화면과 인쇄가 다름» 이 된다.
+        overflow: 'hidden',
+      }}
+    >
+      <MarkdownBody source={resolveText(l, inst)} keywords={o.keywords} />
+    </div>
+  )
+}
+
 function layerNode(l: Layer, inst: Instance | undefined, o: RenderOpts): ReactElement | null {
   if (l.hidden) return null
   const base = boxStyle(l)
@@ -345,6 +551,9 @@ function layerNode(l: Layer, inst: Instance | undefined, o: RenderOpts): ReactEl
         </div>
       )
     }
+
+    case 'md':
+      return mdNode(l, inst, o)
   }
 }
 

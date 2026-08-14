@@ -67,6 +67,18 @@ header .file:hover { border-color: #4a423b; }
 header .file:focus { border-color: #d8b976; background: #191512; outline: none; }
 header .dirty { color: #d8b976; font-size: 12px; margin-left: -4px; }
 header .sp { flex: 1; }
+/* 덱 / 보드 — 만드는 물건의 종류를 가르는 탭. 다른 단추들과 섞이면 «기능» 으로
+   보이므로 한 덩어리로 묶어 «지금 어느 쪽인지» 가 먼저 읽히게 한다 */
+.modes { display: flex; gap: 2px; margin-left: 6px; padding: 2px; border-radius: 7px; background: rgba(0,0,0,.28); }
+.modes button {
+  border: 0 !important; background: transparent; color: #cbbdae;
+  border-radius: 5px; padding: 4px 14px; font-size: 12px; cursor: pointer;
+}
+.modes button:hover:not(.on) { background: rgba(255,255,255,.1); color: #fff; }
+.modes button.on { background: #d8b976; color: #4a1020; font-weight: 700; }
+.modes .badge {
+  margin-left: 5px; font-size: 10px; opacity: .75;
+}
 header button {
   background: transparent; color: var(--paper);
   border-color: rgba(255, 255, 255, 0.32);
@@ -571,6 +583,19 @@ h4 {
 .cut.h { border-top: 0.2mm solid #444; }
 .pfoot { position: absolute; left: 3mm; bottom: 1mm; font-size: 6pt; color: #b9aca1; }
 
+/* 보드 목록의 미리보기 — 판은 카드보다 커서 폭을 고정하고 높이를 따라가게 한다 */
+.bprev { padding: 4px 10px 10px; }
+.bprev > div { overflow: hidden; border: 1px solid var(--line); border-radius: 3px; }
+
+/* 보드 — 판 전체를 그려놓고 이 창으로 «잘라 본다». 장마다 다시 그리지 않는다 */
+.bwin { position: absolute; overflow: hidden; }
+/* 붙일 자리. 재단선(`.cut`)과 달리 **실선이 아니라 점선**이다 —
+   자르는 선이 아니라 겹치는 경계라서, 헷갈리면 판을 잘라버린다 */
+.glue { position: absolute; pointer-events: none; }
+.glue.v { border-left: 0.2mm dashed #7d1f38; }
+.glue.h { border-top: 0.2mm dashed #7d1f38; }
+.pnote.trouble { background: #fdeceb; border-color: #e4a9a2; color: #7d1f38; }
+
 @media print {
   /* 인쇄할 때는 종이만 남긴다.
      body 기본 여백이 남아 있으면 종이가 297mm 를 넘겨 **빈 쪽이 하나 더** 나온다. */
@@ -595,3 +620,50 @@ h4 {
 .sides button.on { background: #241f1b; border-color: #241f1b; color: #f2ece4; font-weight: 700; }
 .sides button.add { border-style: dashed; color: #7d1f38; }
 .sides .who { margin-left: 8px; font-size: 11px; color: #8a7d72; }
+
+/* ── 룰북 ─────────────────────────────────────────────────
+   쪽 목록은 **순서 그 자체**다. 그래서 번호를 왼쪽에 붙박아 두고,
+   넘치는 쪽은 목록에서 바로 보이게 한다 (인쇄하고 나서 알면 늦다). */
+.pages { display: flex; flex-direction: column; margin: 4px 0 2px; }
+.pageitem {
+  position: relative; display: flex; align-items: center; gap: 6px;
+  padding: 4px 6px; font-size: 12px; color: #4a423b; cursor: pointer;
+  border-left: 2px solid transparent; border-radius: 3px;
+}
+.pageitem:hover { background: #f6f1ea; }
+.pageitem.on { background: #fff; border-left-color: var(--wine, #7d1f38); font-weight: 700; }
+.pageitem .pno {
+  flex: none; width: 18px; text-align: right; font-size: 10.5px; color: #a2968b; font-weight: 400;
+}
+.pageitem .ptitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pageitem .over {
+  flex: none; font-size: 9.5px; font-weight: 700; color: #fff;
+  background: #b3261e; border-radius: 7px; padding: 0 5px;
+}
+.pageitem .del { border: 0; background: none; color: #cfc4ba; padding: 0 2px; font-size: 11px; opacity: 0; }
+.pageitem:hover .del { opacity: 1; }
+.pageitem .del:hover { color: #b3261e; background: none; }
+.pageitem.dragging { opacity: .45; }
+.pageitem.drop-before::after, .pageitem.drop-after::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 2px; background: var(--wine);
+}
+.pageitem.drop-before::after { top: -1px; }
+.pageitem.drop-after::after { bottom: -1px; }
+
+/* 원고 가져오기 — 붙여넣는 칸이 커야 «원고» 처럼 보인다 */
+.sheetbox.wide { max-width: min(760px, 94vw); }
+.mdin { width: 100%; min-height: 200px; font-family: ui-monospace, Consolas, monospace; font-size: 11.5px; margin: 6px 0; }
+
+/* 중철에서 접는 자리. 자르는 선(실선)과 반드시 달라 보여야 한다 */
+.fold { position: absolute; top: 0; bottom: 0; width: 0; border-left: .25mm dashed #7d1f38; opacity: .55; }
+/* 백지 쪽 — 자리는 차지하되 «비었다» 가 보여야 한다 */
+.pblank {
+  border: .3mm dashed #d8cec3; display: flex; align-items: center; justify-content: center;
+  color: #cfc4ba; font-size: 9pt; box-sizing: border-box;
+}
+/* 이 자리에 몇 쪽이 오는지 — 중철은 순서가 뒤죽박죽이라 이게 없으면 확인이 안 된다 */
+.pslot {
+  position: absolute; left: 2mm; top: 2mm; font-size: 7pt; color: #b9aca1;
+  background: rgba(255,255,255,.75); border-radius: 2mm; padding: 0 1.4mm;
+}
+@media print { .pslot, .pblank { display: none; } }

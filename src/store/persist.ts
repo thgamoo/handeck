@@ -37,6 +37,22 @@ export function migrate(p: Project): Project {
     // 예전 `each` 는 그대로 두고, `none` 이던 것도 그대로 둔다.
     // 도련을 켤지는 이제 인쇄할 때 고르는 것이라 마음대로 켜주지 않는다.
   }
+  // 보드가 없던 시절의 파일. 빈 목록으로 채워 «있는데 비어 있음» 으로 만든다 —
+  // 읽는 쪽마다 `?? []` 를 적지 않아도 되게.
+  if (!Array.isArray(p.boards)) p.boards = []
+  // 룰북이 없던 시절의 파일. 같은 이유로 빈 목록을 채워둔다.
+  if (!Array.isArray(p.rulebooks)) p.rulebooks = []
+  // 쪽은 «한 장씩» 이 전제다. 손으로 고친 파일에서 `qty` 가 빠졌거나 0 이면
+  // 조판이 그 쪽을 통째로 건너뛴다 — 그건 «쪽이 사라졌다» 로 보인다.
+  for (const b of p.rulebooks ?? []) for (const pg of b.pages ?? []) if (!pg.qty) pg.qty = 1
+
+  // **뒷면은 있는데 `duplex` 가 꺼진 덱** — 조용히 단면으로 나간다.
+  // 조판은 `anyBack && duplex` 일 때만 뒷면 쪽을 만드는데(`impose.ts`),
+  // 속성 패널의 «넘김» 은 `false` 를 «긴 쪽» 으로 **표시만** 해서
+  // 화면에는 양면이라고 적혀 있고 인쇄는 단면인 상태가 된다.
+  // UI 로 뒷면을 붙이면 `duplex` 도 같이 켜지므로, 이 상태는 덱 JSON 을
+  // 가져왔을 때만 생긴다. 표시된 대로 맞춰준다.
+  for (const d of p.decks ?? []) if (d.back && !d.duplex) d.duplex = 'long'
   return p
 }
 

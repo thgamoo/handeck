@@ -8,6 +8,7 @@
 
 import { create } from 'zustand'
 import {
+  type Board,
   type Component,
   type Deck,
   type DeckJson,
@@ -18,17 +19,35 @@ import {
   type Layer,
   type PieceSize,
   type Project,
+  type Rulebook,
   type SheetSpec,
+  A3,
   A4,
   uid,
 } from '../core/model.ts'
+import { buildRulebook, FOLIO_LAYER, type BuildOpts, type RulebookDoc } from '../core/rulebook.ts'
 import { sampleProject } from '../core/sample.ts'
 
 const LIMIT = 60
 
 interface State {
   project: Project
+  /**
+   * 지금 무엇을 만들고 있는지 — **덱이냐 보드냐 룰북이냐.**
+   *
+   * 머리말의 탭이 이 값을 바꾸고, 왼쪽 목록·오른쪽 속성·인쇄가 전부 여기에 따라 갈린다.
+   * 캔버스와 레이어 편집은 **갈리지 않는다** — 셋 다 결국 틀 하나를 그리는 일이라
+   * 같은 화면을 그대로 쓴다. 차이는 «인스턴스가 무엇인가» 와 «종이에 앉히는 방식» 뿐이다.
+   * (덱 = 카드 여러 장 / 보드 = 없음 / 룰북 = 쪽 여러 장)
+   */
+  mode: 'deck' | 'board' | 'book'
   deckId: string
+  /** 지금 고른 보드 (`mode: 'board'` 일 때만 쓴다) */
+  boardId: string
+  /** 지금 고른 룰북 (`mode: 'book'` 일 때만 쓴다) */
+  bookId: string
+  /** 지금 고른 쪽. 룰북에서 인스턴스 자리를 대신한다 */
+  pageId: string | null
   /**
    * 지금 앞면을 편집 중인지 뒷면인지.
    *
@@ -48,13 +67,23 @@ interface State {
   lastAt: number
 
   deck: () => Deck
-  /** 지금 편집 중인 틀의 id (앞/뒤에 따라 갈린다) */
+  /** 지금 고른 보드. 보드가 하나도 없으면 `undefined` */
+  board: () => Board | undefined
+  /** 지금 고른 룰북. 없으면 `undefined` */
+  rulebook: () => Rulebook | undefined
+  /** 지금 고른 쪽 (룰북) */
+  page: () => Instance | undefined
+  /** 지금 편집 중인 틀의 id (덱이면 앞/뒤, 보드면 그 보드의 틀) */
   componentId: () => string
   component: () => Component
   instance: () => Instance | undefined
   layer: () => Layer | undefined
 
+  setMode: (mode: 'deck' | 'board' | 'book') => void
   selectDeck: (id: string) => void
+  selectBoard: (id: string) => void
+  selectRulebook: (id: string) => void
+  selectPage: (id: string | null) => void
   selectSide: (side: 'front' | 'back') => void
   selectInstance: (id: string | null) => void
   selectLayer: (id: string | null) => void
@@ -95,6 +124,13 @@ interface State {
   /** 뒷면 틀을 붙이거나 뗀다. `'new'` 면 앞면과 같은 규격의 빈 틀을 만든다. */
   setBack: (idOrNew: string | 'new' | undefined) => void
   setDuplex: (v: false | 'long' | 'short') => void
+  /**
+   * 뒷면 격자를 좌우로 뒤집을지. 기본은 뒤집기.
+   *
+   * 묶어 인쇄하면 조판이 **묶음의 첫 덱** 설정을 따르므로, 고른 덱이 아니라
+   * 그 덱을 지정할 수 있어야 한다 (`deckId` 를 주면 그쪽을 고친다).
+   */
+  setMirrorBack: (v: boolean, deckId?: string) => void
 
   addDeck: (name: string, size: PieceSize) => void
   renameDeck: (id: string, name: string) => void
@@ -133,6 +169,46 @@ interface State {
   removeKeyword: (id: string) => void
   duplicateDeck: (id: string) => void
   removeDeck: (id: string) => void
+
+  /** 보드 — 한 장짜리 큰 인쇄물 (판·참조표) */
+  addBoard: (name: string, size: PieceSize) => void
+  renameBoard: (id: string, name: string) => void
+  setBoardOrder: (ids: string[]) => void
+  setBoardNote: (id: string, note: string) => void
+  duplicateBoard: (id: string) => void
+  removeBoard: (id: string) => void
+  /** 지금 고른 보드의 종이·타일링 설정 */
+  patchBoard: (patch: Partial<Pick<Board, 'tiling' | 'overlap'>>) => void
+  patchBoardSheet: (patch: Partial<SheetSpec>) => void
+
+  /** 룰북 — 여러 쪽짜리 인쇄물 */
+  addRulebook: (name: string, size: PieceSize, sheet: SheetSpec) => void
+  /**
+   * 원고(마크다운·JSON)에서 룰북을 통째로 만든다.
+   *
+   * **가져오기가 곧 첫 편집이다.** 20쪽짜리 문서를 상자부터 놓아 만들게 하면
+   * 이 도구가 없애려던 루프가 그대로 돌아온다.
+   */
+  importRulebook: (doc: RulebookDoc, opts: BuildOpts) => void
+  renameRulebook: (id: string, name: string) => void
+  setRulebookOrder: (ids: string[]) => void
+  setRulebookNote: (id: string, note: string) => void
+  duplicateRulebook: (id: string) => void
+  removeRulebook: (id: string) => void
+  /** 지금 고른 룰북의 제본·양면 설정 */
+  patchRulebook: (patch: Partial<Pick<Rulebook, 'binding' | 'duplex'>>) => void
+  patchRulebookSheet: (patch: Partial<SheetSpec>) => void
+
+  /** 쪽 — 룰북 안에서 인스턴스 자리 */
+  addPage: () => void
+  duplicatePage: (id: string) => void
+  removePage: (id: string) => void
+  /** 끌어서 순서를 바꿨을 때. 화면에 보이는 순서 그대로의 id 목록 */
+  setPageOrder: (ids: string[]) => void
+  /** 한 칸 앞뒤로. 쪽은 순서가 곧 내용이라 목록에서 자주 옮긴다 */
+  movePage: (id: string, dir: -1 | 1) => void
+  /** 쪽번호 값을 지금 순서대로 다시 매긴다 (표지는 비운다) */
+  renumberPages: () => void
   /** 조각 크기·모양 */
   patchSize: (patch: Partial<PieceSize>) => void
   patchSheet: (patch: Partial<SheetSpec>) => void
@@ -150,7 +226,11 @@ const clone = <T,>(v: T): T => JSON.parse(JSON.stringify(v)) as T
 
 export const useStore = create<State>((set, get) => ({
   project: sampleProject(),
+  mode: 'deck',
   deckId: 'omens',
+  boardId: '',
+  bookId: '',
+  pageId: null,
   side: 'front',
   instanceId: 'i1',
   layerId: null,
@@ -165,8 +245,34 @@ export const useStore = create<State>((set, get) => ({
     const s = get()
     return s.project.decks.find((d) => d.id === s.deckId) ?? s.project.decks[0]!
   },
+  board: () => {
+    const s = get()
+    const bs = s.project.boards ?? []
+    return bs.find((b) => b.id === s.boardId) ?? bs[0]
+  },
+  rulebook: () => {
+    const s = get()
+    const bs = s.project.rulebooks ?? []
+    return bs.find((b) => b.id === s.bookId) ?? bs[0]
+  },
+  page: () => {
+    const s = get()
+    const b = s.rulebook()
+    if (!b) return undefined
+    return b.pages.find((p) => p.id === s.pageId) ?? b.pages[0]
+  },
   componentId: () => {
     const s = get()
+    // 보드·룰북에는 앞뒤가 없다 — 틀이 하나뿐이다.
+    // 탭은 눌렀는데 만든 것이 없으면 덱 쪽으로 떨어뜨린다 (빈 화면 방지)
+    if (s.mode === 'board') {
+      const b = s.board()
+      if (b) return b.component
+    }
+    if (s.mode === 'book') {
+      const b = s.rulebook()
+      if (b) return b.component
+    }
     const d = s.deck()
     // 뒷면을 보고 있는데 뒷면이 없어졌으면 앞면으로 되돌린다 (빈 화면 방지)
     return s.side === 'back' && d.back ? d.back : d.component
@@ -177,6 +283,11 @@ export const useStore = create<State>((set, get) => ({
   },
   instance: () => {
     const s = get()
+    // 보드는 «같은 틀로 여러 장» 이 아니라서 인스턴스가 없다
+    if (s.mode === 'board') return undefined
+    // 룰북에서는 **쪽이 곧 인스턴스**다. 캔버스·PNG·속성 패널이 이걸 그대로 쓴다 —
+    // 그래서 «쪽마다 다른 본문» 이 카드의 «카드마다 다르게» 와 같은 길로 흐른다.
+    if (s.mode === 'book') return s.page()
     return s.deck().instances.find((i) => i.id === s.instanceId)
   },
   layer: () => {
@@ -184,7 +295,31 @@ export const useStore = create<State>((set, get) => ({
     return s.component().layers.find((l) => l.id === s.layerId)
   },
 
-  selectDeck: (id) => set({ deckId: id, side: 'front', instanceId: null, layerId: null }),
+  setMode: (mode) =>
+    set((s) => {
+      if (mode === 'board') {
+        const bs = s.project.boards ?? []
+        // 보드가 하나도 없으면 탭만 바꾸고 목록에서 만들게 둔다 (자동 생성 안 함 —
+        // 탭을 눌러본 것만으로 프로젝트가 바뀌면 되돌리기가 놀란다)
+        const b = bs.find((x) => x.id === s.boardId) ?? bs[0]
+        return { mode, boardId: b?.id ?? '', instanceId: null, layerId: null }
+      }
+      if (mode === 'book') {
+        const bs = s.project.rulebooks ?? []
+        const b = bs.find((x) => x.id === s.bookId) ?? bs[0]
+        return { mode, bookId: b?.id ?? '', pageId: b?.pages[0]?.id ?? null, instanceId: null, layerId: null }
+      }
+      return { mode, side: 'front', layerId: null }
+    }),
+
+  selectDeck: (id) => set({ deckId: id, mode: 'deck', side: 'front', instanceId: null, layerId: null }),
+  selectBoard: (id) => set({ boardId: id, mode: 'board', instanceId: null, layerId: null }),
+  selectRulebook: (id) =>
+    set((s) => {
+      const b = (s.project.rulebooks ?? []).find((x) => x.id === id)
+      return { bookId: id, mode: 'book' as const, pageId: b?.pages[0]?.id ?? null, instanceId: null, layerId: null }
+    }),
+  selectPage: (id) => set({ pageId: id }),
   selectSide: (side) => set({ side, layerId: null }),
   selectInstance: (id) => set({ instanceId: id }),
   selectLayer: (id) => set({ layerId: id }),
@@ -274,6 +409,23 @@ export const useStore = create<State>((set, get) => ({
     const layer: Layer =
       kind === 'text'
         ? { ...common, kind: 'text', name: '새 글자', text: '글자', size: 12, weight: 700, color: '#2E232A', align: 'center' }
+        : kind === 'md'
+          ? {
+              ...common,
+              kind: 'md',
+              name: '새 본문',
+              // 글이 흐르는 상자라 처음부터 넓어야 쓸모가 있다.
+              // 좁게 만들어 놓으면 «글이 안 보인다» 부터 겪는다.
+              x: Math.max(4, c.size.w * 0.1),
+              y: Math.max(4, c.size.h * 0.15),
+              w: c.size.w * 0.8,
+              h: c.size.h * 0.6,
+              text: '## 소제목\n\n본문을 **마크다운**으로 씁니다.\n\n- 목록\n- 표 · 인용도 됩니다',
+              size: 9,
+              color: '#2E232A',
+              lineHeight: 1.5,
+              align: 'left',
+            }
         : kind === 'image'
           ? { ...common, kind: 'image', name: '새 이미지', w: 30, h: 30, fit: 'cover' }
           : kind === 'rect'
@@ -317,6 +469,14 @@ export const useStore = create<State>((set, get) => ({
           if (v !== undefined) inst.values[copyId] = v
         }
       }
+      // 룰북의 쪽도 같은 규칙이다 — 쪽이 곧 인스턴스다
+      for (const b of p.rulebooks ?? []) {
+        if (b.component !== cid) continue
+        for (const pg of b.pages) {
+          const v = pg.values[id]
+          if (v !== undefined) pg.values[copyId] = v
+        }
+      }
     })
     set({ layerId: copyId })
   },
@@ -327,6 +487,7 @@ export const useStore = create<State>((set, get) => ({
       c.layers = c.layers.filter((l) => l.id !== id)
       // 이 레이어를 덮어쓰던 인스턴스 값도 같이 지운다
       for (const d of p.decks) for (const i of d.instances) delete i.values[id]
+      for (const b of p.rulebooks ?? []) for (const pg of b.pages) delete pg.values[id]
     })
     set({ layerId: null })
   },
@@ -394,6 +555,16 @@ export const useStore = create<State>((set, get) => ({
   setDuplex: (v) =>
     get().edit((p) => {
       p.decks.find((x) => x.id === get().deckId)!.duplex = v
+    }),
+
+  setMirrorBack: (v, deckId) =>
+    get().edit((p) => {
+      const d = p.decks.find((x) => x.id === (deckId ?? get().deckId))
+      if (!d) return
+      // 기본값(뒤집기)이면 아예 안 적는다 — 저장 파일에 «기본과 같은 값» 이 쌓이면
+      // 나중에 기본을 바꿀 때 옛 파일만 안 따라온다
+      if (v) delete d.mirrorBack
+      else d.mirrorBack = false
     }),
 
   addDeck: (name, size) => {
@@ -634,8 +805,11 @@ export const useStore = create<State>((set, get) => ({
     get().edit((p) => {
       const d = p.decks.find((x) => x.id === id)
       p.decks = p.decks.filter((x) => x.id !== id)
-      // 아무도 안 쓰는 틀은 같이 지운다 (앞면·뒷면 둘 다)
-      const used = (cid: string) => p.decks.some((x) => x.component === cid || x.back === cid)
+      // 아무도 안 쓰는 틀은 같이 지운다 (앞면·뒷면 둘 다).
+      // 보드도 같이 본다 — 보드가 쓰고 있는 틀을 덱을 지웠다고 없애면 안 된다.
+      const used = (cid: string) =>
+        p.decks.some((x) => x.component === cid || x.back === cid) ||
+        (p.boards ?? []).some((b) => b.component === cid)
       if (d && !used(d.component)) delete p.components[d.component]
       if (d?.back && !used(d.back)) delete p.components[d.back]
     })
@@ -644,6 +818,278 @@ export const useStore = create<State>((set, get) => ({
       set({ deckId: next.id, side: 'front', instanceId: next.instances[0]?.id ?? null, layerId: null })
     }
   },
+
+  // ── 보드 ────────────────────────────────────────────────────────────────
+  // 덱과 같은 모양으로 맞춰 뒀다. 다른 건 «인스턴스가 없다» 는 것뿐이다.
+
+  addBoard: (name, size) => {
+    const cid = uid('c')
+    const bid = uid('board')
+    get().edit((p) => {
+      p.components[cid] = {
+        id: cid,
+        name,
+        size,
+        background: '#FFFDFA',
+        // 덱과 달리 «카드마다 다르게» 가 없다. 바탕 그림 한 장을 공통으로 깔아둔다.
+        layers: [
+          { id: uid('image'), name: '바탕 그림', kind: 'image', x: 0, y: 0, w: size.w, h: size.h, fit: 'cover' },
+        ],
+      }
+      if (!p.boards) p.boards = []
+      p.boards.push({
+        id: bid,
+        name,
+        component: cid,
+        // A4 한 장에 들어가는 판이면 A4, 아니면 A3 부터 보여준다.
+        // 어차피 속성에서 바꾸지만 «열자마자 잘려 보이는» 첫인상을 피한다.
+        sheet: size.w <= 190 && size.h <= 277 ? { ...A4 } : { ...A3 },
+        tiling: 'single',
+        overlap: 10,
+      })
+    })
+    set({ mode: 'board', boardId: bid, instanceId: null, layerId: null })
+  },
+
+  renameBoard: (id, name) =>
+    get().edit((p) => {
+      const b = p.boards?.find((x) => x.id === id)
+      if (!b) return
+      b.name = name
+      // 틀을 이 보드만 쓰고 있으면 이름을 같이 맞춘다 (덱과 같은 규칙)
+      const c = p.components[b.component]
+      if (c && (p.boards ?? []).filter((x) => x.component === b.component).length === 1) c.name = name
+    }, `bn:${id}`),
+
+  setBoardOrder: (ids) =>
+    get().edit((p) => {
+      const bs = p.boards ?? []
+      const byId = new Map(bs.map((b) => [b.id, b]))
+      const next = ids.map((id) => byId.get(id)).filter((b): b is Board => !!b)
+      if (next.length !== bs.length) return // 빠진 게 있으면 순서를 안 건드린다
+      p.boards = next
+    }),
+
+  setBoardNote: (id, note) =>
+    get().edit((p) => {
+      const b = p.boards?.find((x) => x.id === id)
+      if (!b) return
+      if (note.trim()) b.note = note
+      else delete b.note
+    }, `bnote:${id}`),
+
+  duplicateBoard: (id) => {
+    const cid = uid('c')
+    const bid = uid('board')
+    get().edit((p) => {
+      const src = p.boards?.find((x) => x.id === id)
+      const sc = src && p.components[src.component]
+      if (!src || !sc) return
+      // 틀까지 복사한다 — 원본을 고쳐도 사본이 안 따라가는 게 기대에 맞다 (덱과 같다)
+      p.components[cid] = structuredClone({ ...sc, id: cid, name: `${sc.name} 사본` })
+      p.boards!.push(structuredClone({ ...src, id: bid, name: `${src.name} 사본`, component: cid }))
+    })
+    if ((get().project.boards ?? []).some((b) => b.id === bid))
+      set({ mode: 'board', boardId: bid, layerId: null })
+  },
+
+  removeBoard: (id) => {
+    get().edit((p) => {
+      const b = p.boards?.find((x) => x.id === id)
+      p.boards = (p.boards ?? []).filter((x) => x.id !== id)
+      // 아무도 안 쓰는 틀은 같이 지운다. 덱이 쓰고 있으면 남긴다.
+      const used = (cid: string) =>
+        p.decks.some((d) => d.component === cid || d.back === cid) ||
+        (p.boards ?? []).some((x) => x.component === cid)
+      if (b && !used(b.component)) delete p.components[b.component]
+    })
+    // 덱과 달리 **마지막 하나도 지울 수 있다.** 보드는 없어도 되는 구성품이고,
+    // 빈 목록에서 «+ 보드» 로 다시 만들면 그만이다.
+    if (get().boardId === id) set({ boardId: get().project.boards?.[0]?.id ?? '', layerId: null })
+  },
+
+  patchBoard: (patch) =>
+    get().edit((p) => {
+      const b = p.boards?.find((x) => x.id === get().boardId)
+      if (b) Object.assign(b, patch)
+    }, `b:${get().boardId}`),
+
+  patchBoardSheet: (patch) =>
+    get().edit((p) => {
+      const b = p.boards?.find((x) => x.id === get().boardId)
+      if (b) b.sheet = { ...b.sheet, ...patch }
+    }, `bsh:${get().boardId}`),
+
+  // ── 룰북 ────────────────────────────────────────────────────────────────
+  // 덱과 같은 모양이다. 다른 건 «인스턴스가 쪽이고, 수량이 늘 1» 이라는 것뿐.
+
+  addRulebook: (name, size, sheet) => {
+    const doc: RulebookDoc = {
+      title: name,
+      // 빈 룰북에서 시작하면 무엇을 해야 할지 모른다. 표지 + 첫 쪽을 깔아둔다.
+      pages: [
+        { title: name, body: '> 한 줄 소개\n\n2~4인 · 만 14세 이상 · 약 60분' },
+        { title: '준비물', body: '| 구성품 | 개수 |\n| --- | ---: |\n| 카드 | 0 |\n| 토큰 | 0 |' },
+      ],
+      warnings: [],
+    }
+    get().importRulebook(doc, { size, sheet, name })
+  },
+
+  importRulebook: (doc, opts) => {
+    const built = buildRulebook(doc, opts)
+    get().edit((p) => {
+      p.components[built.component.id] = built.component
+      if (!p.rulebooks) p.rulebooks = []
+      p.rulebooks.push(built.rulebook)
+    })
+    set({
+      mode: 'book',
+      bookId: built.rulebook.id,
+      pageId: built.rulebook.pages[0]?.id ?? null,
+      instanceId: null,
+      layerId: null,
+    })
+  },
+
+  renameRulebook: (id, name) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === id)
+      if (!b) return
+      b.name = name
+      const c = p.components[b.component]
+      // 틀을 이 룰북만 쓰고 있으면 이름을 같이 맞춘다 (덱·보드와 같은 규칙)
+      if (c && (p.rulebooks ?? []).filter((x) => x.component === b.component).length === 1) c.name = `${name} 쪽`
+    }, `rn:${id}`),
+
+  setRulebookOrder: (ids) =>
+    get().edit((p) => {
+      const bs = p.rulebooks ?? []
+      const byId = new Map(bs.map((b) => [b.id, b]))
+      const next = ids.map((id) => byId.get(id)).filter((b): b is Rulebook => !!b)
+      if (next.length !== bs.length) return
+      p.rulebooks = next
+    }),
+
+  setRulebookNote: (id, note) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === id)
+      if (!b) return
+      if (note.trim()) b.note = note
+      else delete b.note
+    }, `rnote:${id}`),
+
+  duplicateRulebook: (id) => {
+    const cid = uid('c')
+    const bid = uid('book')
+    get().edit((p) => {
+      const src = p.rulebooks?.find((x) => x.id === id)
+      const sc = src && p.components[src.component]
+      if (!src || !sc) return
+      p.components[cid] = structuredClone({ ...sc, id: cid, name: `${sc.name} 사본` })
+      p.rulebooks!.push(
+        structuredClone({
+          ...src,
+          id: bid,
+          name: `${src.name} 사본`,
+          component: cid,
+          pages: src.pages.map((pg) => ({ ...pg, id: uid('page'), values: { ...pg.values } })),
+        })
+      )
+    })
+    const made = (get().project.rulebooks ?? []).find((b) => b.id === bid)
+    if (made) set({ mode: 'book', bookId: bid, pageId: made.pages[0]?.id ?? null, layerId: null })
+  },
+
+  removeRulebook: (id) => {
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === id)
+      p.rulebooks = (p.rulebooks ?? []).filter((x) => x.id !== id)
+      // 아무도 안 쓰는 틀은 같이 지운다 (덱·보드가 쓰고 있으면 남긴다)
+      const used = (cid: string) =>
+        p.decks.some((d) => d.component === cid || d.back === cid) ||
+        (p.boards ?? []).some((x) => x.component === cid) ||
+        (p.rulebooks ?? []).some((x) => x.component === cid)
+      if (b && !used(b.component)) delete p.components[b.component]
+    })
+    if (get().bookId === id) {
+      const next = get().project.rulebooks?.[0]
+      set({ bookId: next?.id ?? '', pageId: next?.pages[0]?.id ?? null, layerId: null })
+    }
+  },
+
+  patchRulebook: (patch) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (b) Object.assign(b, patch)
+    }, `rb:${get().bookId}`),
+
+  patchRulebookSheet: (patch) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (b) b.sheet = { ...b.sheet, ...patch }
+    }, `rbsh:${get().bookId}`),
+
+  addPage: () => {
+    const id = uid('page')
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (b) b.pages.push({ id, qty: 1, values: {} })
+    })
+    set({ pageId: id })
+  },
+
+  duplicatePage: (src) => {
+    const id = uid('page')
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      const i = b?.pages.findIndex((x) => x.id === src) ?? -1
+      if (!b || i < 0) return
+      b.pages.splice(i + 1, 0, { ...clone(b.pages[i]!), id })
+    })
+    set({ pageId: id })
+  },
+
+  removePage: (id) => {
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (b) b.pages = b.pages.filter((x) => x.id !== id)
+    })
+    if (get().pageId === id) set({ pageId: get().rulebook()?.pages[0]?.id ?? null })
+  },
+
+  setPageOrder: (ids) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (!b) return
+      const byId = new Map(b.pages.map((pg) => [pg.id, pg]))
+      const next = ids.map((id) => byId.get(id)).filter((pg): pg is Instance => !!pg)
+      if (next.length !== b.pages.length) return // 빠진 게 있으면 순서를 안 건드린다
+      b.pages = next
+    }),
+
+  movePage: (id, dir) =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (!b) return
+      const i = b.pages.findIndex((x) => x.id === id)
+      const j = i + dir
+      if (i < 0 || j < 0 || j >= b.pages.length) return
+      ;[b.pages[i], b.pages[j]] = [b.pages[j]!, b.pages[i]!]
+    }),
+
+  renumberPages: () =>
+    get().edit((p) => {
+      const b = p.rulebooks?.find((x) => x.id === get().bookId)
+      if (!b) return
+      // **쪽번호 레이어가 있을 때만** 손댄다. 이름이 다르면 사용자가 자기 방식으로
+      // 만든 것이므로 마음대로 덮어쓰지 않는다.
+      const c = p.components[b.component]
+      if (!c?.layers.some((l) => l.id === FOLIO_LAYER && l.override === 'text')) return
+      b.pages.forEach((pg, i) => {
+        pg.values[FOLIO_LAYER] = i === 0 ? '' : String(i + 1)
+      })
+    }),
 
   patchSize: (patch) =>
     get().edit((p) => {
@@ -694,6 +1140,14 @@ export const useStore = create<State>((set, get) => ({
   setValue: (instanceId, layerId, value) =>
     get().edit(
       (p) => {
+        // 룰북에서는 쪽이 인스턴스 자리를 대신한다. 부르는 쪽(속성 패널)은
+        // 둘을 구분하지 않아도 되도록 여기서 갈라준다.
+        if (get().mode === 'book') {
+          const b = p.rulebooks?.find((x) => x.id === get().bookId)
+          const pg = b?.pages.find((x) => x.id === instanceId)
+          if (pg) pg.values[layerId] = value
+          return
+        }
         const d = p.decks.find((x) => x.id === get().deckId)!
         const i = d.instances.find((x) => x.id === instanceId)
         if (i) i.values[layerId] = value
@@ -705,7 +1159,12 @@ export const useStore = create<State>((set, get) => ({
   load: (p) =>
     set({
       project: p,
+      // 불러오면 늘 덱부터 보여준다. 보드는 있는 프로젝트가 더 드물다.
+      mode: 'deck',
       deckId: p.decks[0]?.id ?? '',
+      boardId: p.boards?.[0]?.id ?? '',
+      bookId: p.rulebooks?.[0]?.id ?? '',
+      pageId: p.rulebooks?.[0]?.pages[0]?.id ?? null,
       instanceId: p.decks[0]?.instances[0]?.id ?? null,
       layerId: null,
       past: [],
@@ -738,6 +1197,14 @@ export function usedAssets(p: Project): Set<string> {
   for (const d of p.decks) {
     for (const i of d.instances) {
       for (const [layerId, v] of Object.entries(i.values)) {
+        if (v && imageLayerIds.has(layerId)) out.add(v)
+      }
+    }
+  }
+  // 룰북의 쪽도 같은 규칙 — 표지 그림이 여기 들어간다
+  for (const b of p.rulebooks ?? []) {
+    for (const pg of b.pages) {
+      for (const [layerId, v] of Object.entries(pg.values)) {
         if (v && imageLayerIds.has(layerId)) out.add(v)
       }
     }

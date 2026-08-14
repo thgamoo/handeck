@@ -35,14 +35,25 @@ import { readFileSync } from 'node:fs'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { colorAlpha, gradientAlpha, hitLayer, pickLayer } from '../src/core/hit.ts'
 import { impose, imposeDecks, layout, sameSize } from '../src/core/impose.ts'
-import { chipHeight, expandForBleed, fontStack, gradientCss, styleText } from '../src/core/render.tsx'
+import { chipHeight, expandForBleed, fontStack, gradientCss, Piece, styleText } from '../src/core/render.tsx'
 import { buildSvg } from '../src/core/png.ts'
 import { crc32, unzip, zipBytes } from '../src/core/zip.ts'
 import { buildBundleBytes, looksLikeZip, parseBundle } from '../src/core/bundle.ts'
 import { faceWeight } from '../src/store/fonts.ts'
 import { Ruler } from '../src/ui/Ruler.tsx'
 import { useStore } from '../src/store/project.ts'
-import { A4, BLEED_ENABLED, checkDeckJson, deckToJson, groupColor, printSet, totalPieces, type Component, type Keyword, type Layer, type Project, type SheetSpec } from '../src/core/model.ts'
+import { tileBoard } from '../src/core/tile.ts'
+import { planBook, suggestSheet } from '../src/core/booklet.ts'
+import { parseInline, parseMarkdown } from '../src/core/markdown.ts'
+import {
+  BODY_LAYER,
+  bodyFit,
+  buildRulebook,
+  FOLIO_LAYER,
+  parseRulebookSource,
+  TITLE_LAYER,
+} from '../src/core/rulebook.ts'
+import { A3, A4, BLEED_ENABLED, checkDeckJson, deckToJson, groupColor, printSet, SHEET_PRESETS, totalPieces, type Board, type Component, type Keyword, type Layer, type PieceSize, type Project, type SheetSpec } from '../src/core/model.ts'
 
 let fail = 0
 let pass = 0
@@ -135,6 +146,93 @@ const grown = expandForBleed(c1, 3, { left: true, top: true, right: false, botto
 ok('지정한 변만 늘어난다', grown.size.w === 66 && grown.size.h === 91)
 ok('가장자리에 닿은 레이어가 늘어난다', grown.layers[0]!.w === 66 && grown.layers[0]!.x === 0)
 ok('도련 0 이면 원본 그대로', expandForBleed(c1, 0, { left: true, top: true, right: true, bottom: true }) === c1)
+
+// 양면 — 뒷면 격자를 좌우로 뒤집는다. 끌 수도 있어야 한다 (드라이버가 제각각이라)
+{
+  const dup = (mirrorBack?: boolean): Project => {
+    const base = proj(4)
+    return {
+      ...base,
+      components: {
+        ...base.components,
+        c2: { id: 'c2', name: 'b', size, background: '#000', layers: [] },
+      },
+      decks: [{ ...base.decks[0]!, back: 'c2', duplex: 'long', ...(mirrorBack === undefined ? {} : { mirrorBack }) }],
+    }
+  }
+  const colsOf = (p: Project) =>
+    impose(p, p.decks[0]!)
+      .pages.filter((x) => x.side === 'back')[0]!
+      .cells.map((c) => c.col)
+  // A4 에 63×88 이면 3열이다. 앞면 0,1,2,0 → 뒷면 2,1,0,2
+  ok('기본은 좌우 뒤집기', JSON.stringify(colsOf(dup())) === JSON.stringify([2, 1, 0, 2]), colsOf(dup()))
+  ok('끄면 앞면과 같은 자리', JSON.stringify(colsOf(dup(false))) === JSON.stringify([0, 1, 2, 0]), colsOf(dup(false)))
+  ok('켜면 기본과 같다', JSON.stringify(colsOf(dup(true))) === JSON.stringify(colsOf(dup())))
+}
+
+// ─────────────────────────────────────────── 보드 조판
+group('보드 — A3 는 A3 로, 안 되면 나눠 뽑는다')
+{
+  const board = (o: Partial<Board> = {}): Board => ({
+    id: 'b',
+    name: 'b',
+    component: 'c1',
+    sheet: { ...A3 },
+    tiling: 'single',
+    overlap: 10,
+    ...o,
+  })
+  const A3size = { w: 297, h: 420, shape: 'rect' as const }
+  const A4size = { w: 210, h: 297, shape: 'rect' as const }
+
+  // ① 한 장에 그대로 — A3 판을 A3 종이에
+  const t1 = tileBoard(A3size, { ...A3 }, board())
+  ok('A3 판 + A3 종이 = 한 쪽', t1.pages.length === 1, t1.pages.length)
+  ok('A3 를 A3 로 뽑으면 종이도 A3', t1.sheet.w === 297 && t1.sheet.h === 420)
+  // 여백(10mm) 안쪽에는 안 들어가지만 종이 밖으로 나가지도 않는다 —
+  // 가장자리까지 못 찍는 프린터를 위해 경고만 하고 막지는 않는다
+  ok('여백을 넘지만 잘리지는 않는다', t1.single === false && t1.overflow === false, t1)
+  // ⚠️ 여기서 실제로 틀렸었다 — 여백 자리에서 시작하는 바람에 A3 판을 A3 종이에
+  // 뽑으면 오른쪽·아래가 10mm 씩 잘려 나갔다. 판은 **가운데** 앉혀야 한다.
+  ok('종이와 같은 크기면 딱 맞게 앉는다 (여백에 밀리지 않는다)', t1.pages[0]!.px === 0 && t1.pages[0]!.py === 0, t1.pages[0])
+
+  const t1b = tileBoard({ w: 200, h: 300, shape: 'rect' }, { ...A3 }, board())
+  ok('작은 판은 가운데로', near(t1b.pages[0]!.px, (297 - 200) / 2) && near(t1b.pages[0]!.py, (420 - 300) / 2))
+
+  // ② 종이보다 큰 판을 한 장에 = 잘린다. 이건 반드시 경고여야 한다
+  const t2 = tileBoard(A3size, { ...A4 }, board({ sheet: { ...A4 } }))
+  ok('A3 판을 A4 한 장에 = 잘림 경고', t2.overflow === true)
+  ok('넘칠 때는 사방이 고르게 넘친다', t2.pages[0]!.px < 0 && t2.pages[0]!.py < 0, t2.pages[0])
+  // 300×300 은 A3 짧은 변(297)보다 3mm 크다 — 돌려도 안 들어간다. 실제로 부딪힌 경우다
+  ok('300×300 은 A3 어느 방향으로도 안 들어간다', tileBoard({ w: 300, h: 300, shape: 'rect' }, { ...A3, w: 420, h: 297 }, board()).overflow === true)
+
+  // ③ 나눠 뽑기 — A3 판을 A4 로
+  const t3 = tileBoard(A3size, { ...A4 }, board({ sheet: { ...A4 }, tiling: 'tile' }))
+  ok('A3 판 → A4 여러 장', t3.pages.length > 1, t3.pages.length)
+  ok('나눠 뽑을 땐 잘림 경고가 없다', t3.overflow === false)
+  // 빠짐없이 덮는가 — 마지막 장의 오른쪽·아래가 판 끝에 닿아야 한다
+  const last = t3.pages.at(-1)!
+  ok('가로를 끝까지 덮는다', last.x + t3.spanW >= A3size.w - 1e-9, { x: last.x, span: t3.spanW })
+  ok('세로를 끝까지 덮는다', last.y + t3.spanH >= A3size.h - 1e-9, { y: last.y, span: t3.spanH })
+  ok('요청한 겹침 이상으로 겹친다', t3.overlapX >= 10 - 1e-9 && t3.overlapY >= 10 - 1e-9, {
+    x: t3.overlapX,
+    y: t3.overlapY,
+  })
+  // 이웃이 있는 변에만 풀칠 표시가 붙는다 (첫 장은 왼쪽·위가 바깥이다)
+  const first = t3.pages[0]!
+  ok('첫 장은 왼쪽·위에 이웃이 없다', !first.edges.left && !first.edges.top)
+  // 나눠 뽑을 때는 반대로 **여백 자리에서** 시작한다 (프린터가 못 찍는 가장자리를 피한다)
+  ok('나눠 뽑으면 여백 자리에서 시작한다', first.px === A4.margin && first.py === A4.margin)
+  ok('마지막 장은 오른쪽·아래에 이웃이 없다', !last.edges.right && !last.edges.bottom)
+
+  // ④ 나눠 뽑기를 켰지만 실은 한 장에 들어가는 경우 — 쓸데없이 나누지 않는다
+  const t4 = tileBoard({ w: 150, h: 200, shape: 'rect' }, { ...A4 }, board({ sheet: { ...A4 }, tiling: 'tile' }))
+  ok('들어가면 안 나눈다', t4.pages.length === 1 && t4.single === true)
+
+  // ⑤ 겹침이 종이보다 크면 아무리 깔아도 안 나아간다 — 절반에서 막는다
+  const t5 = tileBoard(A4size, { ...A4, w: 100, h: 100 }, board({ sheet: { ...A4, w: 100, h: 100 }, tiling: 'tile', overlap: 999 }))
+  ok('말도 안 되는 겹침에도 끝난다', t5.pages.length > 0 && t5.pages.length < 100, t5.pages.length)
+}
 
 // ─────────────────────────────────────────── 그늘
 group('그늘 — 고치는 중에 사라지지 않는다')
@@ -289,6 +387,43 @@ s().setDeckOrder([ordered[1]!, ordered[0]!, ...ordered.slice(2)])
 ok('끌어 놓은 순서대로 바뀐다', s().project.decks[0]!.id === ordered[1])
 s().setDeckOrder([ordered[0]!])
 ok('덱이 빠진 목록은 무시한다 (덱을 잃지 않는다)', s().project.decks.length === ordered.length)
+
+// 보드 — 덱과 같은 프로젝트 안에 살지만 서로를 건드리면 안 된다
+{
+  const deckCount = s().project.decks.length
+  s().addBoard('본판', { w: 297, h: 420, shape: 'rect' })
+  const b = s().board()!
+  ok('보드를 만들면 보드 탭으로 간다', s().mode === 'board' && s().boardId === b.id)
+  ok('덱은 그대로다', s().project.decks.length === deckCount)
+  ok('보드 틀이 곧 편집 대상이다', s().componentId() === b.component)
+  ok('보드에는 인스턴스가 없다', s().instance() === undefined)
+  ok('A4 에 안 들어가는 판은 A3 종이로 시작한다', b.sheet.w === 297 && b.sheet.h === 420)
+
+  // 판 크기는 덱과 같은 `patchSize` 로 고친다 — 편집 경로가 하나여야 한다
+  s().patchSize({ w: 400 })
+  ok('판 크기를 고치면 보드 틀이 바뀐다', s().project.components[b.component]!.size.w === 400)
+
+  s().patchBoard({ tiling: 'tile', overlap: 12 })
+  ok('앉히기·겹침이 보드에 남는다', s().board()!.tiling === 'tile' && s().board()!.overlap === 12)
+
+  // 덱 탭으로 돌아가면 편집 대상도 덱으로 돌아가야 한다 (둘이 안 섞인다)
+  const boardComp = b.component
+  s().setMode('deck')
+  ok('덱 탭으로 돌아오면 덱 틀을 본다', s().componentId() !== boardComp)
+
+  s().duplicateBoard(b.id)
+  const dup = s().board()!
+  ok('보드 복제 — 틀을 공유하지 않는다', dup.component !== boardComp)
+  s().removeBoard(dup.id)
+  ok('사본을 지우면 그 틀도 같이 사라진다', s().project.components[dup.component] === undefined)
+  ok('원본 보드는 남는다', (s().project.boards ?? []).some((x) => x.id === b.id))
+
+  // **마지막 보드도 지울 수 있다** — 덱과 다른 점이다. 없어도 되는 구성품이라서.
+  s().removeBoard(b.id)
+  ok('보드는 하나 남았어도 지워진다', (s().project.boards ?? []).length === 0)
+  ok('보드를 다 지워도 덱은 멀쩡하다', s().project.decks.length === deckCount)
+  s().setMode('deck')
+}
 
 // 덱 JSON — 다른 프로젝트에서 구조 가져오기
 const packDeck = s().project.decks[0]!
@@ -465,51 +600,236 @@ const kinds = new Set(merged.pages[0]!.cells.map((c) => c.front.id))
 ok('한 장 안에 두 덱의 틀이 섞인다', kinds.size === 2, [...kinds])
 ok('묶음이 둘이다 (카드 · 토큰)', (ex.printGroups ?? []).length === 2)
 ok('묶음마다 색이 다르다', new Set((ex.printGroups ?? []).map((g, i) => groupColor(g, i))).size === 2)
-// 규격이 다른 덱이 한 묶음에 섞이면 한 격자에 못 깐다 — 절대 생기면 안 되는 상태
+// 규격이 다른 덱이 한 묶음에 섞이면 한 격자에 못 깐다 — 절대 생기면 안 되는 상태.
+// 없는 덱을 가리키는 것도 마찬가지다 (덱을 지웠는데 묶음에 남으면 조용히 빠진다)
 for (const g of ex.printGroups ?? []) {
   const ds = g.decks.map((id) => ex.decks.find((d) => d.id === id)!)
+  ok(`«${g.name}» 이 가리키는 덱이 전부 있다`, ds.every(Boolean), g.decks)
   ok(`«${g.name}» 은 규격이 다 같다`, ds.every((d) => sameSize(ex, ds[0]!, d)))
-  const apart = ds.reduce((n, d) => n + imposeDecks(ex, [d]).pages.length, 0)
-  ok(`«${g.name}» 을 묶으면 종이가 준다`, imposeDecks(ex, ds).pages.length < apart)
+  const apartN = ds.reduce((n, d) => n + imposeDecks(ex, [d]).pages.length, 0)
+  ok(`«${g.name}» 을 묶으면 종이가 준다`, imposeDecks(ex, ds).pages.length < apartN)
 }
-ok('63×88 덱은 전부 묶였다', ex.decks.every((d) => {
-  const c = ex.components[d.component]!
-  return c.size.w !== 63 || c.size.h !== 88 || !!printSet(ex, d.id).find((x) => x.id !== d.id)
-}))
-ok('묶인 덱을 인쇄하면 묶음 전체가 나온다', printSet(ex, heart.id).length === 2)
-// 조우 토큰만 35×35 라 아무 묶음에도 못 들어간다 — 혼자 나와야 한다
-ok('안 묶인 덱은 자기 혼자', printSet(ex, deckByName('조우 토큰').id).length === 1)
-ok('묶인 덱은 묶음 전체 (카드 12덱)', printSet(ex, deckByName('능력 카드').id).length === 12)
+ok(
+  '63×88 덱은 전부 묶였다',
+  ex.decks.every((d) => {
+    const c = ex.components[d.component]!
+    return c.size.w !== 63 || c.size.h !== 88 || !!printSet(ex, d.id).find((x) => x.id !== d.id)
+  })
+)
+ok('묶인 덱을 인쇄하면 묶음 전체가 나온다 (토큰 3덱)', printSet(ex, heart.id).length === 3)
 // 뒷면이 덱마다 달라도 칸이 자기 것을 들고 간다
-const mixed = imposeDecks(ex, [deckByName('운명 카드'), deckByName('재앙 카드')])
+const mixed = imposeDecks(ex, [deckByName('운명 카드-초'), deckByName('재앙')])
 const backIds = new Set(mixed.pages[0]!.cells.map((c) => c.back?.id))
 ok('칸마다 자기 뒷면을 들고 간다', backIds.size >= 1 && [...backIds].every(Boolean))
 
 // tokens.md 가 정한 장수 — 여기가 이 예제의 «정답지» 다
-const qtyOf = (name: string) => totalPieces(ex.decks.find((d) => d.name === name)!)
+const qtyOf = (name: string) => totalPieces(deckByName(name))
 ok('능력 100장 (tokens.md §2)', qtyOf('능력 카드') === 100, qtyOf('능력 카드'))
 ok('단서 27장 (§3.1)', qtyOf('물건 · 단서') === 27, qtyOf('물건 · 단서'))
 ok('유물 13장 = 진실 10 + 엘릭서 3 (§3.2)', qtyOf('물건 · 유물') === 13, qtyOf('물건 · 유물'))
 ok('금화 60장 (§12)', qtyOf('금화') === 60)
-ok('운명 48장 (§5)', qtyOf('운명 카드') === 48, qtyOf('운명 카드'))
-ok('재앙 10장 (§4)', qtyOf('재앙 카드') === 10)
-ok('성향 20장 (§7)', qtyOf('남주 성향 카드') === 20)
-ok('사기 40장 (§8)', qtyOf('사기 카드') === 40)
+// 운명 카드는 구간별로 덱이 나뉘어 있다. 합이 48이어야 막당 2장씩 24막에 맞는다
+const fate = ['운명 카드-초', '운명 카드-중', '운명 카드-후']
+ok('운명 48장 = 세 구간 × 16 (§5)', fate.reduce((n, x) => n + qtyOf(x), 0) === 48, fate.map(qtyOf))
+ok('구간마다 16장씩', fate.every((x) => qtyOf(x) === 16), fate.map(qtyOf))
+ok('재앙 10장 (§4)', qtyOf('재앙') === 10)
+ok('성향 20장 (§7)', qtyOf('남주성향') === 20)
+ok('해골(사기) 40장 (§8)', qtyOf('해골 카드') === 40)
 ok('조우 36개 = 9종 × 4 (§11)', qtyOf('조우 토큰') === 36)
-ok('플레이어 캐릭터 8장 (§1)', qtyOf('캐릭터 · 플레이어') === 8)
+ok('플레이어 캐릭터 8장 (§1)', qtyOf('캐릭터-플레이어') === 8)
 
 // 재앙 뒷면은 운명 뒷면과 **똑같아야** 한다 (섞였을 때 구분되면 안 된다)
 const backOf = (name: string) => {
-  const d = ex.decks.find((x) => x.name === name)!
+  const d = deckByName(name)
   return d.back ? ex.components[d.back]! : null
 }
-const fateBack = backOf('운명 카드')
-const omenBack = backOf('재앙 카드')
+const bare = (c: Component | null) => JSON.stringify({ ...c, id: '', name: '' })
+const fateBack = backOf('운명 카드-초')
+const omenBack = backOf('재앙')
 ok('운명·재앙 둘 다 뒷면이 있다', !!fateBack && !!omenBack)
-ok(
-  '재앙 뒷면이 운명 뒷면과 똑같다 (§4 — 섞이면 구분되면 안 된다)',
-  JSON.stringify({ ...fateBack, id: '', name: '' }) === JSON.stringify({ ...omenBack, id: '', name: '' })
+ok('재앙 뒷면이 운명 뒷면과 똑같다 (§4 — 섞이면 구분되면 안 된다)', bare(fateBack) === bare(omenBack))
+// 구간이 나뉘어도 뒷면은 하나여야 한다 — 초·중·후가 구분되면 다음 카드가 예측된다
+for (const x of fate.slice(1)) ok(`«${x}» 뒷면도 운명 뒷면과 같다`, bare(backOf(x)) === bare(fateBack))
+
+// ─────────────────────────────────────────── 마크다운
+group('마크다운 — 룰북 본문')
+
+// 그리는 데까지 가봐야 안다 — 파서는 멀쩡한데 렌더에서 터지는 일이 흔하다
+const mdPage: Component = {
+  id: 'mc',
+  name: '쪽',
+  size: { w: 148, h: 210, shape: 'rect' },
+  background: '#FFFDFA',
+  layers: [
+    {
+      id: 'body',
+      name: '본문',
+      kind: 'md',
+      x: 14,
+      y: 30,
+      w: 120,
+      h: 160,
+      columns: 2,
+      size: 8.6,
+      override: 'text',
+    },
+  ],
+}
+const mdHtml = renderToStaticMarkup(
+  <Piece
+    component={mdPage}
+    instance={{ id: 'p1', qty: 1, values: { body: '## 소제목\n\n**두근!** 을 잃는다\n\n| 가 | 나 |\n| --- | --- |\n| 1 | 2 |' } }}
+    opts={{ assetUrl: () => undefined, keywords: [{ id: 'k', word: '두근!', style: 'chip' }] }}
+  />
 )
+ok('소제목이 그려진다', mdHtml.includes('소제목'))
+ok('표가 <table> 로 나온다', mdHtml.includes('<table'))
+ok('두 단으로 흐른다', mdHtml.includes('column-count:2'), mdHtml.slice(0, 200))
+// 본문 안에서도 키워드 칠이 먹어야 한다 — 카드와 룰북이 같은 낱말을 쓴다
+ok('키워드가 본문 안에서도 칠해진다', mdHtml.includes('border-radius') && mdHtml.includes('두근!'))
+ok('넘쳐도 스크롤이 아니라 잘린다', mdHtml.includes('overflow:hidden'))
+
+const md = parseMarkdown(
+  '# 제목\n\n첫 문단\n둘째 줄\n\n- 하나\n- 둘\n  - 안쪽\n\n| a | b |\n| --- | ---: |\n| 1 | 2 |\n\n> 인용\n\n---\n'
+)
+ok('블록 종류를 순서대로 가른다', md.map((b) => b.kind).join(',') === 'h,p,list,table,quote,hr', md.map((b) => b.kind))
+ok('헤딩 단계를 읽는다', md[0]!.kind === 'h' && (md[0] as { level: number }).level === 1)
+ok('한 문단 안의 줄바꿈은 살린다', (md[1] as { text: string }).text.includes('\n'))
+const mdList = md[2] as { items: { text: string; depth: number }[] }
+ok('목록 세 항목', mdList.items.length === 3, mdList.items.length)
+ok('들여쓴 항목은 깊이가 있다', mdList.items[2]!.depth === 1, mdList.items[2]!.depth)
+const mdTable = md[3] as { head: string[]; align: string[]; rows: string[][] }
+ok('표 머리와 본문을 가른다', mdTable.head.length === 2 && mdTable.rows.length === 1)
+ok('오른쪽 정렬을 읽는다', mdTable.align[1] === 'right', mdTable.align)
+// 구분선이 없으면 그냥 «|» 가 든 문장이다 — 표로 잘못 읽으면 문장이 사라진다
+ok('구분선 없는 |는 표가 아니다', parseMarkdown('a | b\nc | d')[0]!.kind === 'p')
+const runs = parseInline('평범 **굵게** 그리고 `코드`')
+ok('굵게·코드를 가른다', runs.some((r) => r.bold) && runs.some((r) => r.code), runs)
+ok('굵게 안의 글자가 남는다', runs.find((r) => r.bold)?.text === '굵게')
+ok('별표가 없으면 한 덩어리', parseInline('그냥 글').length === 1)
+
+// ─────────────────────────────────────────── 룰북
+group('룰북 — 원고에서 쪽으로')
+const bookSrc = readFileSync('example/rulebook.md', 'utf8')
+const doc = parseRulebookSource(bookSrc)
+ok('예제 원고가 여러 쪽으로 나뉜다', doc.pages.length >= 10, doc.pages.length)
+ok('쪽수가 4의 배수다 (중철)', doc.pages.length % 4 === 0, doc.pages.length)
+ok('첫 쪽 제목이 곧 룰북 이름', doc.title === doc.pages[0]!.title && !!doc.title, doc.title)
+ok('경고가 없다', doc.warnings.length === 0, doc.warnings)
+ok('제목은 본문에서 빠진다', !doc.pages[1]!.body.startsWith('#'), doc.pages[1]!.body.slice(0, 20))
+// 주석이 새면 «원고에 남긴 메모» 가 그대로 인쇄된다
+ok('HTML 주석이 걷힌다', !doc.pages.some((p) => p.body.includes('<!--') || p.body.includes('원고 가져오기')))
+// 표의 구분선(`| --- |`)을 쪽 나눔으로 읽으면 표가 두 쪽으로 찢어진다
+ok('표가 쪽 나눔에 안 찢긴다', doc.pages.some((p) => p.body.includes('| --- |') && p.body.includes('| 능력 카드')))
+
+const j = parseRulebookSource('{"title":"J","pages":[{"title":"가","body":"본문"},"## 나\\n둘째"]}')
+ok('JSON 원고도 읽는다', j.title === 'J' && j.pages.length === 2, j.pages)
+ok('JSON 안의 마크다운 문자열도 제목을 뽑는다', j.pages[1]!.title === '나')
+ok('못 읽는 JSON 은 이유를 말한다', parseRulebookSource('{ 망가짐').warnings.length > 0)
+ok('## 마다 나누기도 된다', parseRulebookSource('# 표지\n\n글\n\n## 가\n\n글\n\n## 나\n\n글', 'h2').pages.length === 3)
+
+const madeBook = buildRulebook(doc, {
+  size: { w: 148, h: 210, shape: 'rect' },
+  sheet: { w: 297, h: 210, margin: 0, gap: 0, marks: 'none' },
+  binding: 'saddle',
+})
+ok('쪽마다 인스턴스가 하나씩', madeBook.rulebook.pages.length === doc.pages.length)
+ok('쪽 수량은 늘 1', madeBook.rulebook.pages.every((p) => p.qty === 1))
+ok('본문 레이어가 마크다운이다', madeBook.component.layers.some((l) => l.id === BODY_LAYER && l.kind === 'md'))
+ok(
+  '제목·본문·쪽번호가 쪽마다 다르다',
+  [TITLE_LAYER, BODY_LAYER, FOLIO_LAYER].every((id) => madeBook.component.layers.find((l) => l.id === id)?.override === 'text')
+)
+ok('표지에는 쪽번호가 없다', madeBook.rulebook.pages[0]!.values[FOLIO_LAYER] === '')
+ok('둘째 쪽은 2번', madeBook.rulebook.pages[1]!.values[FOLIO_LAYER] === '2')
+ok(
+  '레이어가 쪽 안에 들어간다',
+  madeBook.component.layers.every((l) => l.x >= 0 && l.y >= 0 && l.x + l.w <= 148.01 && l.y + l.h <= 210.01)
+)
+
+// 넘침 — 화면에서는 «안 보일» 뿐이라 여기서 잡아야 한다
+const long = {
+  ...madeBook.rulebook.pages[0]!,
+  values: { ...madeBook.rulebook.pages[0]!.values, [BODY_LAYER]: '가나다라마바사'.repeat(400) },
+}
+ok('넘치는 쪽을 짚어낸다', bodyFit(madeBook.component, long)!.over)
+ok(
+  '예제 원고는 넘치는 쪽이 없다',
+  madeBook.rulebook.pages.every((p) => !bodyFit(madeBook.component, p)!.over),
+  madeBook.rulebook.pages.map((p, i) => (bodyFit(madeBook.component, p)!.over ? i + 1 : 0)).filter(Boolean)
+)
+
+// ─────────────────────────────────────────── 중철 조판
+group('중철 — 접었을 때 순서가 맞는가')
+const A5: PieceSize = { w: 148, h: 210, shape: 'rect' }
+const LAND: SheetSpec = { w: 297, h: 210, margin: 0, gap: 0, marks: 'none' }
+const pagesOf = (n: number, p = 'p') => Array.from({ length: n }, (_, i) => ({ id: `${p}${i}`, qty: 1, values: {} }))
+const saddle = planBook(A5, LAND, { binding: 'saddle', duplex: 'short', pages: pagesOf(8) })
+ok('8쪽 = 종이 2장 = 4면', saddle.sheets.length === 4, saddle.sheets.length)
+ok('바깥 장은 8·1 을 문다', saddle.sheets[0]!.slots.map((s) => s.page).join(',') === '8,1', saddle.sheets[0]!.slots)
+ok('그 뒷면은 2·7', saddle.sheets[1]!.slots.map((s) => s.page).join(',') === '2,7', saddle.sheets[1]!.slots)
+ok(
+  '안쪽 장은 6·3 / 4·5',
+  saddle.sheets[2]!.slots.map((s) => s.page).join(',') === '6,3' &&
+    saddle.sheets[3]!.slots.map((s) => s.page).join(',') === '4,5'
+)
+// 접었을 때 1..8 이 한 번씩 나와야 한다 — 이 계산의 전부가 이것이다
+const seen = saddle.sheets
+  .flatMap((s) => s.slots.map((x) => x.page))
+  .filter((n): n is number => !!n)
+  .sort((a, b) => a - b)
+ok('쪽이 빠지거나 겹치지 않는다', seen.join(',') === '1,2,3,4,5,6,7,8', seen)
+ok('두 쪽이 나란히 눕는다', saddle.sheets[0]!.slots[1]!.x - saddle.sheets[0]!.slots[0]!.x === 148)
+ok('가운데에서 접는다', saddle.foldX === 148.5, saddle.foldX)
+// 16쪽에서도 성립해야 한다 — 사람이 손으로 만들면 여기서부터 틀린다
+const big = planBook(A5, LAND, { binding: 'saddle', duplex: 'short', pages: pagesOf(16, 'b') })
+const bigSeen = big.sheets
+  .flatMap((s) => s.slots.map((x) => x.page))
+  .filter((n): n is number => !!n)
+  .sort((a, b) => a - b)
+ok('16쪽도 한 번씩', bigSeen.join(',') === Array.from({ length: 16 }, (_, i) => i + 1).join(','), bigSeen)
+ok('16쪽 = 종이 4장', big.sheets.length === 8)
+
+// 4의 배수가 아니면 백지로 채운다. 안 채우면 접었을 때 쪽이 어긋난다
+const pad = planBook(A5, LAND, { binding: 'saddle', duplex: 'short', pages: pagesOf(5, 'q') })
+ok('5쪽은 8쪽으로 채워진다', pad.padded === 8 && pad.count === 5, { padded: pad.padded })
+ok('없는 쪽 자리는 백지', pad.sheets[0]!.slots[0]!.page === null)
+
+const staple = planBook(A5, { ...LAND, w: 148, h: 210 }, { binding: 'staple', duplex: 'long', pages: pagesOf(3, 'r') })
+ok('모서리 스테이플은 한 면에 한 쪽', staple.sheets.every((s) => s.slots.length === 1))
+ok(
+  '차례대로 나온다 (마지막은 백지)',
+  staple.sheets.map((s) => s.slots[0]!.page).join(',') === '1,2,3,',
+  staple.sheets.map((s) => s.slots[0]!.page)
+)
+ok('단면이면 뒷면이 없다', planBook(A5, LAND, { binding: 'staple', duplex: false, pages: pagesOf(1, 's') }).sheets.length === 1)
+// A5 두 쪽은 A4 «세로» 에 안 들어간다 — 조용히 잘리면 안 되니 미리 말해야 한다
+ok('종이가 좁으면 넘침으로 잡는다', planBook(A5, { ...LAND, w: 210, h: 297 }, { binding: 'saddle', duplex: 'short', pages: pagesOf(4, 't') }).overflow)
+ok('맞는 종이를 짚어준다', suggestSheet(A5, 'saddle', SHEET_PRESETS)?.w === 297)
+// 한 쪽만 앉히면 폭이 절반이면 된다 — 가장 작은 종이가 A4 가 아니라 Letter 일 수도 있다.
+// 이름이 아니라 «들어가는가» 로 본다 (목록에 종이를 더해도 안 깨지게)
+const stapleSheet = suggestSheet(A5, 'staple', SHEET_PRESETS)!
+ok('한 쪽만 앉히면 더 작은 종이로 충분', stapleSheet.w >= 148 && stapleSheet.h >= 210 && stapleSheet.w < 297, stapleSheet)
+
+// 예제 프로젝트의 룰북도 같은 잣대로 본다
+const exBook = (ex.rulebooks ?? [])[0]
+ok('예제에 룰북이 있다', !!exBook)
+if (exBook) {
+  const bc = ex.components[exBook.component]!
+  ok('룰북 틀이 있다', !!bc)
+  ok('쪽이 4의 배수다', exBook.pages.length % 4 === 0, exBook.pages.length)
+  const bp = planBook(bc.size, exBook.sheet, exBook)
+  ok('종이에 들어간다', !bp.overflow)
+  ok('백지가 없다', bp.padded === bp.count, { padded: bp.padded, count: bp.count })
+  ok(
+    '넘치는 쪽이 없다',
+    exBook.pages.every((p) => !bodyFit(bc, p)!.over),
+    exBook.pages.map((p, i) => (bodyFit(bc, p)!.over ? i + 1 : 0)).filter(Boolean)
+  )
+  const values = new Set(exBook.pages.flatMap((p) => Object.keys(p.values)))
+  const overridable = new Set(bc.layers.filter((l) => l.override).map((l) => l.id))
+  ok('쪽 값이 전부 오버라이드 레이어를 가리킨다', [...values].every((v) => overridable.has(v)), [...values])
+}
 
 console.log(`\n${pass}개 통과${fail ? `, ${fail}개 실패` : ''}`)
 process.exit(fail ? 1 : 0)

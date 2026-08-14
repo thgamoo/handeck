@@ -1,8 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { Boards } from './ui/Boards.tsx'
+import { Books } from './ui/Books.tsx'
 import { Canvas } from './ui/Canvas.tsx'
 import { Cards } from './ui/Cards.tsx'
 import { Inspector } from './ui/Inspector.tsx'
 import { PrintView } from './ui/Print.tsx'
+import { PrintBoardView } from './ui/PrintBoard.tsx'
+import { PrintBookView } from './ui/PrintBook.tsx'
 import { Calibrate } from './ui/Calibrate.tsx'
 /* 내보내기는 `react-dom/server` 를 끌고 와서 무겁다 (+80KB).
    창을 열 때 받게 떼어둔다 — 안 쓰는 사람이 그 값을 치를 이유가 없다. */
@@ -98,6 +102,8 @@ export default function App() {
   }, [s])
 
   const deck = s.deck()
+  const board = s.board()
+  const book = s.rulebook()
   const c = s.component()
 
   /**
@@ -163,6 +169,44 @@ export default function App() {
           onChange={(e) => s.renameProject(e.target.value)}
         />
         {s.dirty && <span className="dirty" title="저장하지 않은 변경">*</span>}
+        {/* 덱 / 보드 — **만드는 물건의 종류가 다르다.**
+            덱은 «작은 조각 여러 장», 보드는 «한 장짜리 큰 인쇄물» 이라
+            목록도 속성도 인쇄도 갈린다. 캔버스만 같은 것을 쓴다. */}
+        <div className="modes" role="tablist">
+          <button
+            role="tab"
+            aria-selected={s.mode === 'deck'}
+            className={s.mode === 'deck' ? 'on' : undefined}
+            onClick={() => s.setMode('deck')}
+            title="카드·토큰 — 작은 조각을 여러 장 뽑아 잘라냅니다"
+          >
+            덱
+          </button>
+          <button
+            role="tab"
+            aria-selected={s.mode === 'board'}
+            className={s.mode === 'board' ? 'on' : undefined}
+            onClick={() => s.setMode('board')}
+            title="판·참조표 — 한 장짜리 큰 인쇄물. A3 를 A3 로, 또는 A4 여러 장에 나눠 뽑습니다"
+          >
+            보드
+            {(s.project.boards ?? []).length > 0 && (
+              <span className="badge">{(s.project.boards ?? []).length}</span>
+            )}
+          </button>
+          <button
+            role="tab"
+            aria-selected={s.mode === 'book'}
+            className={s.mode === 'book' ? 'on' : undefined}
+            onClick={() => s.setMode('book')}
+            title="룰북·설명서 — 여러 쪽짜리 인쇄물. 매끈한 종이에 뽑아 접거나 스테이플러로 묶습니다"
+          >
+            룰북
+            {(s.project.rulebooks ?? []).length > 0 && (
+              <span className="badge">{(s.project.rulebooks ?? []).length}</span>
+            )}
+          </button>
+        </div>
         <span className="sp" />
         <div className="zoom">
           <button onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}>−</button>
@@ -236,13 +280,35 @@ export default function App() {
         />
       </header>
 
-      <Cards />
+      {s.mode === 'board' ? <Boards /> : s.mode === 'book' ? <Books /> : <Cards />}
       <Canvas zoom={zoom} rulers={rulers} />
       <Inspector />
 
       <footer>
         <span>
-          {deck.name} · <b>{totalPieces(deck)}장</b>
+          {s.mode === 'board' ? (
+            board ? (
+              <>
+                {board.name} · <b>보드 1장</b>
+              </>
+            ) : (
+              <b>보드 없음</b>
+            )
+          ) : s.mode === 'book' ? (
+            book ? (
+              <>
+                {book.name} · <b>{book.pages.length}쪽</b>
+                {' · '}
+                {(book.binding ?? 'saddle') === 'saddle' ? '접어서 중철' : '모서리 스테이플'}
+              </>
+            ) : (
+              <b>룰북 없음</b>
+            )
+          ) : (
+            <>
+              {deck.name} · <b>{totalPieces(deck)}장</b>
+            </>
+          )}
         </span>
         <span>
           {c.size.w} × {c.size.h} mm
@@ -265,9 +331,19 @@ export default function App() {
         )}
       </footer>
 
-      {printing && (
-        <PrintView project={s.project} deckId={s.deckId} onClose={() => setPrinting(false)} />
-      )}
+      {/* 인쇄도 탭을 따라간다 — 보드는 격자로 깔지 않고 나눠 뽑아 이어 붙인다 */}
+      {printing &&
+        (s.mode === 'board' ? (
+          board ? (
+            <PrintBoardView project={s.project} board={board} onClose={() => setPrinting(false)} />
+          ) : null
+        ) : s.mode === 'book' ? (
+          book ? (
+            <PrintBookView project={s.project} book={book} onClose={() => setPrinting(false)} />
+          ) : null
+        ) : (
+          <PrintView project={s.project} deckId={s.deckId} onClose={() => setPrinting(false)} />
+        ))}
       {calibrating && <Calibrate onClose={() => setCalibrating(false)} />}
       {exporting && (
         <Suspense fallback={null}>
