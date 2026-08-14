@@ -13,80 +13,102 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#8C2F2F"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-95d7ou",
+          "x": 1.2,
+          "y": 6.3,
+          "w": 61.8,
+          "h": 80.3,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 1.1,
+          "y": 2,
+          "w": 60.6,
+          "h": 85.1,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "flavor",
+          "name": "플레이버",
+          "kind": "text",
+          "x": 3,
+          "y": 77,
+          "w": 57,
+          "h": 8,
+          "size": 7,
+          "color": "#7D1F38",
+          "align": "center",
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 14.5,
+          "y": 0.9,
+          "w": 34.1,
+          "h": 6.8,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-9y4xjm",
+          "x": 13.3,
+          "y": 1.7,
+          "w": 37,
+          "h": 5.1,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더2",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "db031e8b2922b460"
+        },
+        {
           "id": "title",
-          "name": "이름",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
+          "x": 12.5,
+          "y": 2,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
           "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
-        },
-        {
-          "id": "body",
-          "name": "본문",
-          "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
-          "align": "center",
-          "valign": "top",
-          "lineHeight": 1.45,
-          "override": "text"
-        },
-        {
-          "id": "foot",
-          "name": "덱 이름",
-          "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "능력",
-          "size": 5.5,
-          "color": "#8C2F2F",
-          "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -98,45 +120,19 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#C8A32E",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#C8A32E"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "능력",
-          "size": 12,
-          "weight": 700,
-          "color": "#FFFDFA",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "e7a90f069e047887"
         }
       ]
     },
@@ -151,80 +147,123 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#1F4E79"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-0uwie7",
+          "x": 1.8,
+          "y": 9.9,
+          "w": 59.4,
+          "h": 57.6,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0,
+          "y": 2,
+          "w": 61.2,
+          "h": 66.4,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-opjyv2",
+          "x": 3.1,
+          "y": 67.5,
           "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "h": 17.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
+          "x": 8.1,
+          "y": 72.2,
+          "w": 46.9,
+          "h": 5.3,
+          "size": 8,
+          "color": "#2E232A",
           "align": "center",
-          "valign": "top",
+          "valign": "middle",
           "lineHeight": 1.45,
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
+        },
+        {
+          "id": "text-gvq4bq",
+          "x": 9.1,
+          "y": 78.9,
+          "w": 45.1,
+          "h": 3.5,
+          "hidden": false,
+          "kind": "text",
+          "name": "플레이버",
+          "text": "",
+          "size": 7,
+          "weight": 400,
+          "color": "#001c5c",
+          "align": "center",
+          "font": "배달의민족 꾸불림_Regular",
+          "valign": "top",
           "override": "text"
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "image-p4zt30",
+          "x": 12.7,
+          "y": 2,
+          "w": 37.8,
+          "h": 7.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "b0565d388198a411"
+        },
+        {
+          "id": "title",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "과거의 단서",
-          "size": 5.5,
-          "color": "#1F4E79",
+          "x": 12.7,
+          "y": 3.5,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 10,
+          "weight": 300,
+          "color": "#001c5c",
           "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -236,45 +275,19 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#1F4E79",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#1F4E79"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#D8B976",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "물건",
-          "size": 12,
-          "weight": 700,
-          "color": "#D8B976",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "6917e9137ca27d46"
         }
       ]
     },
@@ -289,80 +302,105 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#6B4E9E"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-4u0scs",
+          "x": 2.3,
+          "y": 9.2,
+          "w": 57.8,
+          "h": 58.3,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0,
+          "y": 2,
+          "w": 61.6,
+          "h": 71.3,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-opjyv2",
+          "x": 3.1,
+          "y": 67.5,
           "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "h": 17.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
+          "x": 8.2,
+          "y": 72.3,
+          "w": 46.5,
+          "h": 7.9,
           "size": 7.5,
-          "color": "#4A423B",
+          "color": "#2E232A",
           "align": "center",
-          "valign": "top",
+          "valign": "middle",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "image-p4zt30",
+          "x": 12.7,
+          "y": 2,
+          "w": 37.8,
+          "h": 7.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "b0565d388198a411"
+        },
+        {
+          "id": "title",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "유물",
-          "size": 5.5,
-          "color": "#6B4E9E",
+          "x": 12.7,
+          "y": 3.4,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 10,
+          "weight": 300,
+          "color": "#001c5c",
           "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -374,45 +412,19 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#1F4E79",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#1F4E79"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#D8B976",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "물건",
-          "size": 12,
-          "weight": 700,
-          "color": "#D8B976",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "6917e9137ca27d46"
         }
       ]
     },
@@ -427,65 +439,58 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "art",
+          "name": "일러스트",
+          "kind": "image",
+          "x": 2.3,
+          "y": 15.9,
+          "w": 58.5,
+          "h": 59.1,
+          "fit": "cover",
+          "position": "center 35%",
+          "radius": 5,
+          "hidden": false,
+          "asset": "bbea4e8e28597bc3"
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.7,
+          "y": 2,
+          "w": 37.8,
+          "h": 7.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#C8A32E"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
-          "fit": "cover",
-          "override": "image"
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "018a297a0e291b75"
         },
         {
           "id": "title",
-          "name": "이름",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
+          "x": 12.7,
+          "y": 3.6,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
           "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
-        },
-        {
-          "id": "foot",
-          "name": "덱 이름",
-          "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "금화",
-          "size": 5.5,
-          "color": "#C8A32E",
-          "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "hidden": false,
+          "text": "금화"
         }
       ]
     },
@@ -497,51 +502,25 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#1F4E79",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#1F4E79"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#D8B976",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "물건",
-          "size": 12,
-          "weight": 700,
-          "color": "#D8B976",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "6917e9137ca27d46"
         }
       ]
     },
     "c-fate": {
       "id": "c-fate",
-      "name": "운명 카드",
+      "name": "운명 카드-초",
       "size": {
         "w": 63,
         "h": 88,
@@ -550,80 +529,134 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#14121A"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-162m7z",
+          "x": 1.6,
+          "y": 6.2,
+          "w": 59.7,
+          "h": 42.8,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0,
+          "y": 2,
+          "w": 63,
+          "h": 51.6,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-ldw84m",
+          "x": 2,
+          "y": 49.8,
+          "w": 59.3,
+          "h": 36.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "cover",
+          "asset": "20b58dcbe5b48d56",
+          "radius": 5.5
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
-          "align": "center",
+          "x": 6,
+          "y": 55,
+          "w": 52,
+          "h": 23,
+          "size": 7,
+          "color": "#2E232A",
+          "align": "left",
           "valign": "top",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "flavor",
+          "name": "플레이버",
           "kind": "text",
-          "x": 3,
-          "y": 82,
+          "x": 3.2,
+          "y": 77,
           "w": 57,
-          "h": 4,
-          "text": "운 명",
-          "size": 5.5,
-          "color": "#14121A",
+          "h": 8,
+          "size": 7,
+          "color": "#654851",
           "align": "center",
-          "letterSpacing": 0.6
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.5,
+          "y": 0.9,
+          "w": 37.8,
+          "h": 5.3,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-p61uly",
+          "x": 14.4,
+          "y": 2,
+          "w": 34.1,
+          "h": 5.6,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더2",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "144789b837cba91c"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 2,
+          "w": 37.8,
+          "h": 5.6,
+          "size": 9,
+          "weight": 300,
+          "color": "#654751",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -635,45 +668,19 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#14121A",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#14121A"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#B3893A",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "운명",
-          "size": 12,
-          "weight": 700,
-          "color": "#B3893A",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "721c91b0c3b73272"
         }
       ]
     },
@@ -688,80 +695,122 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#7D1F38"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-imzr0u",
+          "x": 3,
+          "y": 5,
+          "w": 58.5,
+          "h": 45.5,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 52.8,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 8.5
+        },
+        {
+          "id": "image-ldw84m",
+          "x": 0,
+          "y": 52.8,
+          "w": 63,
+          "h": 35.2,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "cover",
+          "asset": "20b58dcbe5b48d56",
+          "radius": 5.5
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
-          "align": "center",
+          "x": 5.7,
+          "y": 57.1,
+          "w": 51.5,
+          "h": 21.7,
+          "size": 7,
+          "color": "#2E232A",
+          "align": "left",
           "valign": "top",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "flavor",
+          "name": "플레이버",
           "kind": "text",
           "x": 3,
-          "y": 82,
+          "y": 77,
           "w": 57,
-          "h": 4,
-          "text": "재 앙",
-          "size": 5.5,
+          "h": 8,
+          "size": 7,
           "color": "#7D1F38",
           "align": "center",
-          "letterSpacing": 0.6
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "23d25dd79ae8ccd5"
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.5,
+          "y": 0.9,
+          "w": 37.8,
+          "h": 8.1,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "3e95abbdff207941"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.5,
+          "y": 2,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -773,327 +822,25 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#14121A",
-      "layers": [
-        {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#14121A"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#B3893A",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "운명",
-          "size": 12,
-          "weight": 700,
-          "color": "#B3893A",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
-        }
-      ]
-    },
-    "c-scenario": {
-      "id": "c-scenario",
-      "name": "시나리오 카드",
-      "size": {
-        "w": 63,
-        "h": 88,
-        "shape": "rect"
-      },
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#3D5A9E"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "새 이미지",
           "fit": "cover",
-          "override": "image"
-        },
-        {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
-        },
-        {
-          "id": "body",
-          "name": "본문",
-          "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
-          "align": "center",
-          "valign": "top",
-          "lineHeight": 1.45,
-          "override": "text"
-        },
-        {
-          "id": "foot",
-          "name": "덱 이름",
-          "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "서 막",
-          "size": 5.5,
-          "color": "#3D5A9E",
-          "align": "center",
-          "letterSpacing": 0.6
-        }
-      ]
-    },
-    "c-scenario-back": {
-      "id": "c-scenario-back",
-      "name": "시나리오 카드 뒷면",
-      "size": {
-        "w": 63,
-        "h": 88,
-        "shape": "rect"
-      },
-      "background": "#4A423B",
-      "layers": [
-        {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#4A423B"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#D8B976",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "시나리오",
-          "size": 12,
-          "weight": 700,
-          "color": "#D8B976",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
-        }
-      ]
-    },
-    "c-taste": {
-      "id": "c-taste",
-      "name": "남주 성향 카드",
-      "size": {
-        "w": 63,
-        "h": 88,
-        "shape": "rect"
-      },
-      "background": "#FFFDFA",
-      "layers": [
-        {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#C9738C"
-        },
-        {
-          "id": "art",
-          "name": "그림",
-          "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
-          "fit": "cover",
-          "override": "image"
-        },
-        {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
-        },
-        {
-          "id": "body",
-          "name": "본문",
-          "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
-          "size": 7.5,
-          "color": "#4A423B",
-          "align": "center",
-          "valign": "top",
-          "lineHeight": 1.45,
-          "override": "text"
-        },
-        {
-          "id": "foot",
-          "name": "덱 이름",
-          "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "성 향",
-          "size": 5.5,
-          "color": "#C9738C",
-          "align": "center",
-          "letterSpacing": 0.6
-        }
-      ]
-    },
-    "c-taste-back": {
-      "id": "c-taste-back",
-      "name": "남주 성향 카드 뒷면",
-      "size": {
-        "w": 63,
-        "h": 88,
-        "shape": "rect"
-      },
-      "background": "#C9738C",
-      "layers": [
-        {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#C9738C"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "성향",
-          "size": 12,
-          "weight": 700,
-          "color": "#FFFDFA",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "asset": "721c91b0c3b73272"
         }
       ]
     },
     "c-pc": {
       "id": "c-pc",
-      "name": "캐릭터 · 플레이어",
+      "name": "캐릭터-플레이어",
       "size": {
         "w": 63,
         "h": 88,
@@ -1102,80 +849,124 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#2E232A"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-8666ar",
+          "x": 1.4,
+          "y": 9.9,
+          "w": 60.2,
+          "h": 77.2,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0,
+          "y": 2,
+          "w": 61.6,
+          "h": 71.3,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-opjyv2",
+          "x": 10,
+          "y": 73.3,
+          "w": 43,
+          "h": 11.7,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "text-b68iom",
+          "name": "본문 사본",
           "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
+          "x": 11.4,
+          "y": 79.2,
+          "w": 40.1,
+          "h": 3.8,
+          "size": 7,
           "color": "#2E232A",
           "align": "center",
-          "valign": "middle",
+          "valign": "top",
+          "lineHeight": 1.45,
           "shrink": true,
-          "override": "text"
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 400
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
+          "x": 16,
+          "y": 75.4,
+          "w": 31.1,
+          "h": 3.8,
           "size": 7.5,
-          "color": "#4A423B",
+          "color": "#2E232A",
           "align": "center",
           "valign": "top",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "image-p4zt30",
+          "x": 12.7,
+          "y": 2,
+          "w": 37.8,
+          "h": 7.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "1ff1c45ff44bc11c"
+        },
+        {
+          "id": "title",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "플레이어",
-          "size": 5.5,
-          "color": "#2E232A",
+          "x": 12.7,
+          "y": 3.4,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#3a4a40",
           "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
@@ -1187,51 +978,25 @@
         "h": 88,
         "shape": "rect"
       },
-      "background": "#14121A",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#14121A"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#7D1F38",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "악 령",
-          "size": 12,
-          "weight": 700,
-          "color": "#7D1F38",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "카드뒷면",
+          "fit": "fill",
+          "asset": "038ebfb3f7bf5c3e"
         }
       ]
     },
     "c-npc": {
       "id": "c-npc",
-      "name": "캐릭터 · NPC",
+      "name": "캐릭터-메인빌런",
       "size": {
         "w": 63,
         "h": 88,
@@ -1240,86 +1005,111 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#6B4E9E"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "id": "image-q2i6ax",
+          "x": 1,
+          "y": 0.9,
+          "w": 61.1,
+          "h": 86.2,
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 1,
+          "y": 1.7,
+          "w": 61.1,
+          "h": 69.4,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-opjyv2",
+          "x": 9.4,
+          "y": 72,
+          "w": 44.6,
+          "h": 11.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
+          "x": 20.1,
+          "y": 75.9,
+          "w": 22.8,
+          "h": 3.8,
           "size": 7.5,
-          "color": "#4A423B",
+          "color": "#2E232A",
           "align": "center",
           "valign": "top",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "image-p4zt30",
+          "x": 12.6,
+          "y": 3,
+          "w": 36.7,
+          "h": 7.2,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "3df8bef2c333e285"
+        },
+        {
+          "id": "title",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "NPC",
-          "size": 5.5,
-          "color": "#6B4E9E",
+          "x": 12.6,
+          "y": 3.7,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
           "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
     "c-skull": {
       "id": "c-skull",
-      "name": "사기 카드",
+      "name": "해골 카드",
       "size": {
         "w": 63,
         "h": 88,
@@ -1328,115 +1118,142 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-qocucj",
+          "x": 1.6,
+          "y": 14.3,
+          "w": 59.7,
+          "h": 60.6,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
+          "fit": "cover",
+          "asset": "46130f96ef354069"
+        },
+        {
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0.9,
+          "y": 2,
+          "w": 60.6,
+          "h": 85.1,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "flavor",
+          "name": "플레이버",
+          "kind": "text",
+          "x": 3,
+          "y": 77,
+          "w": 57,
+          "h": 8,
+          "size": 7,
+          "color": "#7D1F38",
+          "align": "center",
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 14.5,
+          "y": 0.9,
+          "w": 34.1,
+          "h": 6.8,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-9y4xjm",
+          "x": 13.3,
+          "y": 1.7,
+          "w": 37,
+          "h": 5.1,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더2",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#4A423B"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
-          "fit": "cover",
-          "override": "image"
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "bf48acaa7507b470"
         },
         {
           "id": "title",
-          "name": "이름",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
+          "x": 12.5,
+          "y": 2,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
           "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "text-ogr7xu",
+          "x": 30.3,
+          "y": 2.5,
+          "w": 8.8,
+          "h": 4.8,
+          "hidden": false,
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "해 골",
-          "size": 5.5,
-          "color": "#4A423B",
+          "name": "제목 한자",
+          "text": "",
+          "size": 7,
+          "weight": 800,
+          "color": "#571026",
           "align": "center",
-          "letterSpacing": 0.6
+          "override": "text"
         }
       ]
     },
     "c-skull-back": {
       "id": "c-skull-back",
-      "name": "사기 카드 뒷면",
+      "name": "해골 카드 뒷면",
       "size": {
         "w": 63,
         "h": 88,
         "shape": "rect"
       },
-      "background": "#14121A",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#14121A"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#8A7D72",
-          "strokeWidth": 0.4,
-          "radius": 2
-        },
-        {
-          "id": "label",
-          "name": "이름",
-          "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "사기",
-          "size": 12,
-          "weight": 700,
-          "color": "#8A7D72",
-          "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "80a3be2825c48c16"
         }
       ]
     },
@@ -1458,49 +1275,20 @@
           "y": 0,
           "w": 25,
           "h": 25,
-          "fill": "#C9738C",
-          "radius": 2
+          "fill": "rgba(20,18,26,.12)",
+          "radius": 0
         },
         {
-          "id": "art",
-          "name": "그림",
+          "id": "image-y6iduk",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "hidden": false,
           "kind": "image",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 22,
-          "h": 22,
+          "name": "새 이미지",
           "fit": "cover",
-          "radius": 11,
-          "override": "image"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 22,
-          "h": 22,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 11
-        },
-        {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 1,
-          "y": 8.5,
-          "w": 23,
-          "h": 8,
-          "size": 7,
-          "weight": 700,
-          "color": "#FFFDFA",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
-          "override": "text"
+          "asset": "b2a1dfb5e25367d6"
         }
       ]
     },
@@ -1522,49 +1310,21 @@
           "y": 0,
           "w": 25,
           "h": 25,
-          "fill": "#7D1F38",
-          "radius": 2
+          "fill": "rgba(20,18,26,.12)",
+          "radius": 0
         },
         {
           "id": "art",
           "name": "그림",
           "kind": "image",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 22,
-          "h": 22,
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
           "fit": "cover",
           "radius": 11,
+          "asset": "d663de222e744353",
           "override": "image"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 22,
-          "h": 22,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 11
-        },
-        {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 1,
-          "y": 8.5,
-          "w": 23,
-          "h": 8,
-          "size": 7,
-          "weight": 700,
-          "color": "#FFFDFA",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
-          "override": "text"
         }
       ]
     },
@@ -1572,8 +1332,8 @@
       "id": "c-encounter",
       "name": "조우 토큰",
       "size": {
-        "w": 35,
-        "h": 35,
+        "w": 25,
+        "h": 25,
         "shape": "rect"
       },
       "background": "#FFFDFA",
@@ -1584,57 +1344,28 @@
           "kind": "rect",
           "x": 0,
           "y": 0,
-          "w": 35,
-          "h": 35,
-          "fill": "#3D5A9E",
-          "radius": 2
+          "w": 25,
+          "h": 25,
+          "fill": "rgba(20,18,26,.12)",
+          "radius": 0
         },
         {
-          "id": "art",
-          "name": "그림",
+          "id": "image-mtvz9h",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "hidden": false,
           "kind": "image",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 32,
-          "h": 32,
+          "name": "토큰 이미지",
           "fit": "cover",
-          "radius": 16,
           "override": "image"
-        },
-        {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 1.5,
-          "y": 1.5,
-          "w": 32,
-          "h": 32,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 16
-        },
-        {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 1,
-          "y": 11.899999999999999,
-          "w": 33,
-          "h": 11.200000000000001,
-          "size": 8,
-          "weight": 700,
-          "color": "#FFFDFA",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "shadow": "0 0.2mm 0.4mm rgba(0,0,0,.45)",
-          "override": "text"
         }
       ]
     },
-    "c-aid": {
-      "id": "c-aid",
-      "name": "요약 카드",
+    "c-o0ayy7": {
+      "id": "c-o0ayy7",
+      "name": "캐릭터 · NPC 뒷면",
       "size": {
         "w": 63,
         "h": 88,
@@ -1643,130 +1374,1154 @@
       "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#FFFDFA"
-        },
-        {
-          "id": "band",
-          "name": "머리띠",
-          "kind": "rect",
-          "x": 0,
-          "y": 0,
-          "w": 63,
-          "h": 12.32,
-          "fill": "#6D8F7A"
-        },
-        {
-          "id": "art",
-          "name": "그림",
+          "hidden": false,
           "kind": "image",
-          "x": 0,
-          "y": 12.32,
-          "w": 63,
-          "h": 36.96,
+          "name": "새 이미지",
+          "fit": "fill",
+          "asset": "1ebb6cb3a513e0c3"
+        }
+      ]
+    },
+    "c-5hb404": {
+      "id": "c-5hb404",
+      "name": "캐릭터 · 남주",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-k03m24",
+          "x": 1,
+          "y": 0.8,
+          "w": 60.7,
+          "h": 85.8,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
           "fit": "cover",
           "override": "image"
         },
         {
-          "id": "title",
-          "name": "이름",
-          "kind": "text",
-          "x": 3,
-          "y": 51.04,
-          "w": 57,
-          "h": 10.559999999999999,
-          "size": 13,
-          "weight": 700,
-          "color": "#2E232A",
-          "align": "center",
-          "valign": "middle",
-          "shrink": true,
-          "override": "text"
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0.1,
+          "y": 2,
+          "w": 62.9,
+          "h": 74.7,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-opjyv2",
+          "x": 9.2,
+          "y": 76.7,
+          "w": 44.7,
+          "h": 9.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
         },
         {
           "id": "body",
           "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 62.48,
-          "w": 55,
-          "h": 19.36,
+          "x": 20.1,
+          "y": 79.8,
+          "w": 22.8,
+          "h": 3.8,
           "size": 7.5,
-          "color": "#4A423B",
+          "color": "#2E232A",
           "align": "center",
           "valign": "top",
           "lineHeight": 1.45,
-          "override": "text"
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
         },
         {
-          "id": "foot",
-          "name": "덱 이름",
+          "id": "image-p4zt30",
+          "x": 9.2,
+          "y": 2.3,
+          "w": 44.7,
+          "h": 7.4,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "5b81701585bb073e"
+        },
+        {
+          "id": "title",
+          "name": "제목",
           "kind": "text",
-          "x": 3,
-          "y": 82,
-          "w": 57,
-          "h": 4,
-          "text": "요 약",
-          "size": 5.5,
-          "color": "#6D8F7A",
+          "x": 12.1,
+          "y": 2.8,
+          "w": 38.8,
+          "h": 6.5,
+          "size": 10,
+          "weight": 300,
+          "color": "#571026",
           "align": "center",
-          "letterSpacing": 0.6
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
         }
       ]
     },
-    "c-aid-back": {
-      "id": "c-aid-back",
-      "name": "요약 카드 뒷면",
+    "c-znd4ta": {
+      "id": "c-znd4ta",
+      "name": "캐릭터 · NPC 뒷면 사본",
       "size": {
         "w": 63,
         "h": 88,
         "shape": "rect"
       },
-      "background": "#6D8F7A",
+      "background": "#FFFDFA",
       "layers": [
         {
-          "id": "bg",
-          "name": "바탕",
-          "kind": "rect",
+          "id": "image-3b7tf1",
           "x": 0,
           "y": 0,
           "w": 63,
           "h": 88,
-          "fill": "#6D8F7A"
+          "hidden": false,
+          "kind": "image",
+          "name": "뒷면",
+          "fit": "fill",
+          "asset": "ab65788e139a4792"
+        }
+      ]
+    },
+    "c-mkz9wk": {
+      "id": "c-mkz9wk",
+      "name": "캐릭터 · 여주",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-f5ldtk",
+          "x": 1.3,
+          "y": 9.3,
+          "w": 59.6,
+          "h": 77.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
+          "fit": "cover",
+          "asset": "ef6d96fff44f4495"
         },
         {
-          "id": "ring",
-          "name": "테두리",
-          "kind": "rect",
-          "x": 5,
-          "y": 5,
-          "w": 53,
-          "h": 78,
-          "stroke": "#FFFDFA",
-          "strokeWidth": 0.4,
-          "radius": 2
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 0.1,
+          "y": 2,
+          "w": 62.9,
+          "h": 74.7,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
         },
         {
-          "id": "label",
-          "name": "이름",
+          "id": "image-opjyv2",
+          "x": 9.1,
+          "y": 73.3,
+          "w": 45.7,
+          "h": 11.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "body",
+          "name": "본문",
           "kind": "text",
-          "x": 4,
-          "y": 38,
-          "w": 55,
-          "h": 12,
-          "text": "행동 5~8",
-          "size": 12,
-          "weight": 700,
-          "color": "#FFFDFA",
+          "x": 13,
+          "y": 77.3,
+          "w": 37,
+          "h": 3.6,
+          "size": 7.5,
+          "color": "#2E232A",
           "align": "center",
-          "valign": "middle",
-          "letterSpacing": 1.2
+          "valign": "top",
+          "lineHeight": 1.45,
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.1,
+          "y": 2.5,
+          "w": 38.8,
+          "h": 8.6,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "99e735fe62229492"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.1,
+          "y": 3.5,
+          "w": 38.8,
+          "h": 6.5,
+          "size": 10,
+          "weight": 300,
+          "color": "#571026",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
+        }
+      ]
+    },
+    "c-zrqve0": {
+      "id": "c-zrqve0",
+      "name": "캐릭터 · NPC 뒷면 사본 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드뒷면",
+          "fit": "fill",
+          "asset": "38bc58f76fb55395"
+        }
+      ]
+    },
+    "c-z03yyt": {
+      "id": "c-z03yyt",
+      "name": "운명 카드-중",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-5yef2y",
+          "x": 2,
+          "y": 4.8,
+          "w": 59.3,
+          "h": 54.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 1.6,
+          "y": 3,
+          "w": 60.6,
+          "h": 50.7,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-ldw84m",
+          "x": 2,
+          "y": 49.9,
+          "w": 59.3,
+          "h": 36.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "cover",
+          "asset": "20b58dcbe5b48d56",
+          "radius": 5.5
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 5.6,
+          "y": 55.6,
+          "w": 52,
+          "h": 23,
+          "size": 7.5,
+          "color": "#2E232A",
+          "align": "left",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
+        },
+        {
+          "id": "flavor",
+          "name": "플레이버",
+          "kind": "text",
+          "x": 3,
+          "y": 77,
+          "w": 57,
+          "h": 8,
+          "size": 7,
+          "color": "#3f2c33",
+          "align": "center",
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.5,
+          "y": 0.9,
+          "w": 37.8,
+          "h": 5.3,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-p61uly",
+          "x": 14.4,
+          "y": 2,
+          "w": 34.2,
+          "h": 5.6,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더2",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "0b0e110056738b95"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 2,
+          "w": 37.8,
+          "h": 5.6,
+          "size": 9,
+          "weight": 300,
+          "color": "#3f2c33",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
+        }
+      ]
+    },
+    "c-pvfqht": {
+      "id": "c-pvfqht",
+      "name": "운명 카드 뒷면 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "721c91b0c3b73272"
+        }
+      ]
+    },
+    "c-jd5fhj": {
+      "id": "c-jd5fhj",
+      "name": "빌런 토큰 뒷면",
+      "size": {
+        "w": 25,
+        "h": 25,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-kzc1we",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "d663de222e744353"
+        }
+      ]
+    },
+    "c-b7jt8g": {
+      "id": "c-b7jt8g",
+      "name": "두근! 토큰 뒷면",
+      "size": {
+        "w": 25,
+        "h": 25,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-qd2qai",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "b2a1dfb5e25367d6"
+        }
+      ]
+    },
+    "c-n9izz3": {
+      "id": "c-n9izz3",
+      "name": "조우 토큰 뒷면",
+      "size": {
+        "w": 25,
+        "h": 25,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-f2plb5",
+          "x": 0,
+          "y": 0,
+          "w": 25,
+          "h": 25,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드 뒷면",
+          "fit": "cover",
+          "override": "image"
+        }
+      ]
+    },
+    "c-nacykg": {
+      "id": "c-nacykg",
+      "name": "운명 카드-후",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-7n0s6e",
+          "x": 1.9,
+          "y": 3.6,
+          "w": 59.4,
+          "h": 48.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 1.3,
+          "y": 3,
+          "w": 60.6,
+          "h": 50.7,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 4.5
+        },
+        {
+          "id": "image-ldw84m",
+          "x": 2,
+          "y": 49.9,
+          "w": 59.3,
+          "h": 36.9,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "cover",
+          "asset": "20b58dcbe5b48d56",
+          "radius": 5.5
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 5.5,
+          "y": 55.6,
+          "w": 52,
+          "h": 23,
+          "size": 7.5,
+          "color": "#2E232A",
+          "align": "left",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
+        },
+        {
+          "id": "flavor",
+          "name": "플레이버",
+          "kind": "text",
+          "x": 3,
+          "y": 77,
+          "w": 57,
+          "h": 8,
+          "size": 7,
+          "color": "#271c1c",
+          "align": "center",
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-p4zt30",
+          "x": 12.5,
+          "y": 0.9,
+          "w": 37.8,
+          "h": 5.3,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-p61uly",
+          "x": 14.4,
+          "y": 2,
+          "w": 34.2,
+          "h": 5.6,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더2",
+          "fit": "fill",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "contain",
+          "asset": "bb94f341d37e4105"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 1.9,
+          "w": 37.8,
+          "h": 5.6,
+          "size": 9,
+          "weight": 300,
+          "color": "#271c1c",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
+        }
+      ]
+    },
+    "c-trel65": {
+      "id": "c-trel65",
+      "name": "운명 카드 뒷면 사본 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "721c91b0c3b73272"
+        }
+      ]
+    },
+    "c-2w6vlv": {
+      "id": "c-2w6vlv",
+      "name": "남주성향",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-imzr0u",
+          "x": 3,
+          "y": 8.5,
+          "w": 58.2,
+          "h": 50.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "일러",
+          "fit": "cover",
+          "override": "image"
+        },
+        {
+          "id": "veil",
+          "name": "그늘",
+          "kind": "gradient",
+          "x": 1.6,
+          "y": 0,
+          "w": 59.6,
+          "h": 61.9,
+          "direction": "to bottom",
+          "stops": [
+            "rgba(20,18,26,.72) 0%",
+            "rgba(20,18,26,.12) 32%",
+            "rgba(255,253,250,0) 78%",
+            "rgba(255,253,250,.94) 100%"
+          ],
+          "hidden": false,
+          "radius": 8.5
+        },
+        {
+          "id": "image-ldw84m",
+          "x": 0,
+          "y": 55,
+          "w": 61.2,
+          "h": 33,
+          "hidden": false,
+          "kind": "image",
+          "name": "본문플레이스홀더",
+          "fit": "cover",
+          "asset": "20b58dcbe5b48d56",
+          "radius": 5.5
+        },
+        {
+          "id": "text-cldti8",
+          "x": 11.4,
+          "y": 76,
+          "w": 40,
+          "h": 12,
+          "hidden": false,
+          "kind": "text",
+          "name": "플레이버두줄",
+          "text": "글자",
+          "size": 6,
+          "weight": 400,
+          "color": "#b05e75",
+          "align": "center",
+          "override": "text",
+          "font": "배달의민족 한나는 열한살_Regular"
+        },
+        {
+          "id": "flavor",
+          "name": "플레이버",
+          "kind": "text",
+          "x": 3,
+          "y": 76,
+          "w": 57,
+          "h": 8,
+          "size": 6.5,
+          "color": "#b05e75",
+          "align": "center",
+          "italic": true,
+          "font": "배달의민족 꾸불림_Regular",
+          "override": "text",
+          "hidden": false,
+          "valign": "middle"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "text",
+          "x": 6.3,
+          "y": 65.1,
+          "w": 50.5,
+          "h": 6.4,
+          "size": 8,
+          "color": "#2E232A",
+          "align": "center",
+          "valign": "top",
+          "lineHeight": 1.45,
+          "shrink": true,
+          "override": "text",
+          "hidden": false,
+          "font": "KoPubWorld돋움체_Medium",
+          "weight": 700
+        },
+        {
+          "id": "text-6ui5kx",
+          "name": "본문2",
+          "kind": "text",
+          "x": 10.6,
+          "y": 69,
+          "w": 41.7,
+          "h": 3.8,
+          "size": 6.5,
+          "color": "#2E232A",
+          "align": "center",
+          "italic": true,
+          "font": "KoPubWorld돋움체_Medium",
+          "override": "text",
+          "hidden": false
+        },
+        {
+          "id": "image-vyu30w",
+          "x": 10.9,
+          "y": 2,
+          "w": 41.2,
+          "h": 8.5,
+          "hidden": false,
+          "kind": "image",
+          "name": "제목플레이스홀더",
+          "fit": "cover",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "626eda49e5cd81b5"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 3.3,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#b05e75",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "override": "text",
+          "hidden": false
+        }
+      ]
+    },
+    "c-nkr9dy": {
+      "id": "c-nkr9dy",
+      "name": "재앙 카드 뒷면 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "fill",
+          "asset": "462fcaf4061f4f8f"
+        }
+      ]
+    },
+    "c-gscwj6": {
+      "id": "c-gscwj6",
+      "name": "시나리오",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-1abw54",
+          "x": 1.6,
+          "y": 3,
+          "w": 59.8,
+          "h": 83.3,
+          "hidden": false,
+          "kind": "image",
+          "name": "플레이스홀더",
+          "fit": "cover",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "244224c3cd357bc6"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 11.4,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "hidden": false,
+          "text": "",
+          "override": "text"
+        },
+        {
+          "id": "text-l9hw75",
+          "name": "본문",
+          "kind": "text",
+          "x": 8,
+          "y": 22.5,
+          "w": 48.5,
+          "h": 49.8,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
+          "align": "left",
+          "font": "KoPubWorld돋움체_Medium",
+          "hidden": false,
+          "text": "",
+          "override": "text",
+          "valign": "bottom"
+        },
+        {
+          "id": "text-agvx47",
+          "x": 8.7,
+          "y": 19.2,
+          "w": 45.6,
+          "h": 39.8,
+          "hidden": false,
+          "kind": "text",
+          "name": "규칙",
+          "text": "",
+          "size": 7,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "left",
+          "override": "text",
+          "valign": "top"
+        }
+      ]
+    },
+    "c-eoqeik": {
+      "id": "c-eoqeik",
+      "name": "금화 뒷면 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "cover",
+          "asset": "5f2d253dd946a907"
+        }
+      ]
+    },
+    "c-h0ulsw": {
+      "id": "c-h0ulsw",
+      "name": "플레이어 힌트",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-1abw54",
+          "x": 1.6,
+          "y": 3,
+          "w": 59.8,
+          "h": 83.3,
+          "hidden": false,
+          "kind": "image",
+          "name": "플레이스홀더",
+          "fit": "cover",
+          "asset": "80833a3e303b1a23"
+        },
+        {
+          "id": "image-t51g1p",
+          "x": 0,
+          "y": 0,
+          "w": 63,
+          "h": 88,
+          "hidden": false,
+          "kind": "image",
+          "name": "카드프레임",
+          "fit": "fill",
+          "asset": "244224c3cd357bc6"
+        },
+        {
+          "id": "title",
+          "name": "제목",
+          "kind": "text",
+          "x": 12.6,
+          "y": 10,
+          "w": 37.8,
+          "h": 6.5,
+          "size": 11,
+          "weight": 300,
+          "color": "#571026",
+          "align": "center",
+          "font": "배달의민족 을지로체_Regular",
+          "hidden": false,
+          "text": "",
+          "override": "text"
+        },
+        {
+          "id": "text-agvx47",
+          "x": 8.4,
+          "y": 18.1,
+          "w": 48,
+          "h": 63.7,
+          "hidden": false,
+          "kind": "text",
+          "name": "규칙",
+          "text": "",
+          "size": 7,
+          "weight": 700,
+          "color": "#2E232A",
+          "align": "left",
+          "override": "text",
+          "valign": "top"
+        }
+      ]
+    },
+    "c-97shyr": {
+      "id": "c-97shyr",
+      "name": "금화 뒷면 사본 사본",
+      "size": {
+        "w": 63,
+        "h": 88,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "image-3b7tf1",
+          "x": -0.9,
+          "y": -1.4,
+          "w": 65,
+          "h": 91,
+          "hidden": false,
+          "kind": "image",
+          "name": "새 이미지",
+          "fit": "fill",
+          "asset": "9d364871ab1673cb"
+        }
+      ]
+    },
+    "c-501i46": {
+      "id": "c-501i46",
+      "name": "룰북 쪽",
+      "size": {
+        "w": 148,
+        "h": 210,
+        "shape": "rect"
+      },
+      "background": "#FFFDFA",
+      "layers": [
+        {
+          "id": "rule",
+          "name": "제목 밑줄",
+          "kind": "rect",
+          "x": 14.1,
+          "y": 26.1,
+          "w": 119.8,
+          "h": 0.6,
+          "fill": "#C8A32E"
+        },
+        {
+          "id": "title",
+          "name": "쪽 제목",
+          "kind": "text",
+          "x": 14.1,
+          "y": 11.6,
+          "w": 119.8,
+          "h": 13,
+          "size": 15,
+          "weight": 800,
+          "color": "#571026",
+          "align": "left",
+          "valign": "bottom",
+          "override": "text"
+        },
+        {
+          "id": "body",
+          "name": "본문",
+          "kind": "md",
+          "x": 14.1,
+          "y": 30.1,
+          "w": 119.8,
+          "h": 169.4,
+          "size": 8.6,
+          "color": "#2E232A",
+          "lineHeight": 1.5,
+          "align": "left",
+          "columns": 1,
+          "gap": 5,
+          "override": "text"
+        },
+        {
+          "id": "folio",
+          "name": "쪽번호",
+          "kind": "text",
+          "x": 14.1,
+          "y": 200.5,
+          "w": 119.8,
+          "h": 5,
+          "size": 7.5,
+          "color": "#7D1F38",
+          "align": "center",
+          "override": "text"
         }
       ]
     }
@@ -1790,59 +2545,59 @@
       "expect": 100,
       "instances": [
         {
-          "id": "card-001",
+          "id": "card-9lsy9i",
           "qty": 10,
           "values": {
             "title": "검",
-            "body": "모략 · 마수폭주 대응 · 투기장"
+            "image-95d7ou": "04c2b4415d2f00a6"
           }
         },
         {
-          "id": "card-002",
+          "id": "card-v9yjo8",
           "qty": 40,
           "values": {
             "title": "매력",
-            "body": "만남에서 1장 소모 · 약혼 유지"
+            "image-95d7ou": "3854e18f92ebf96e"
           }
         },
         {
-          "id": "card-003",
+          "id": "card-nnegl6",
           "qty": 10,
           "values": {
             "title": "마법",
-            "body": "모략 · 마수폭주 대응"
+            "image-95d7ou": "7cd1c050476f1789"
           }
         },
         {
-          "id": "card-004",
-          "qty": 10,
-          "values": {
-            "title": "선혈",
-            "body": "선혈의 비에서 이득"
-          }
-        },
-        {
-          "id": "card-005",
+          "id": "card-wnqjli",
           "qty": 10,
           "values": {
             "title": "신성",
-            "body": "모략 · 정화"
+            "image-95d7ou": "1fea4f058f249abf"
           }
         },
         {
-          "id": "card-006",
-          "qty": 10,
-          "values": {
-            "title": "독약",
-            "body": "모략"
-          }
-        },
-        {
-          "id": "card-007",
+          "id": "card-yngmvd",
           "qty": 10,
           "values": {
             "title": "어둠",
-            "body": "모략 · 은신"
+            "image-95d7ou": "ab0ca5003e67668a"
+          }
+        },
+        {
+          "id": "card-90nanc",
+          "qty": 10,
+          "values": {
+            "title": "독약",
+            "image-95d7ou": "b0621208d6deb29a"
+          }
+        },
+        {
+          "id": "card-6qnq6b",
+          "qty": 10,
+          "values": {
+            "title": "선혈",
+            "image-95d7ou": "278af082921277c7"
           }
         }
       ]
@@ -1865,147 +2620,183 @@
       "expect": 27,
       "instances": [
         {
-          "id": "card-008",
+          "id": "card-rg6z29",
           "qty": 1,
           "values": {
             "title": "유모의 일기",
-            "body": "샬롯"
+            "text-gvq4bq": "'내 사랑하는 딸, 샬롯의 앞길을 축복하며'",
+            "body": "샤를롯테의 과거 단서",
+            "image-0uwie7": "da8b36175c5819e4"
           }
         },
         {
-          "id": "card-009",
+          "id": "card-psu8dg",
           "qty": 2,
           "values": {
             "title": "황가의 팬던트",
-            "body": "샬롯 · 마리 · 제노비아"
+            "body": "샤를롯테, 마리, 제노비아의 과거 단서",
+            "text-gvq4bq": "황가만이 쓸수 있는 문장",
+            "image-0uwie7": "4e3598f041ee3aa1"
           }
         },
         {
-          "id": "card-00a",
+          "id": "card-xf7dut",
           "qty": 1,
           "values": {
             "title": "양녀증서",
-            "body": "샬롯"
+            "image-0uwie7": "4824e9605882293c",
+            "body": "샤를롯테의 과거 단서",
+            "text-gvq4bq": "'존귀한 피에 맹새코, 샬롯을 공작가의 여식으...'"
           }
         },
         {
-          "id": "card-00b",
+          "id": "card-ru6ajk",
           "qty": 2,
           "values": {
             "title": "폐태자의 편지",
-            "body": "샬롯 · 제노비아 · 이레네"
+            "body": "샤를롯테, 제노비아, 이레네의 과거 단서",
+            "text-gvq4bq": "'짐은 이 편지에 모든 황가의 치부를 담았노라'",
+            "image-0uwie7": "2ca645e432ea89f5"
           }
         },
         {
-          "id": "card-00c",
+          "id": "card-bs87ye",
           "qty": 1,
           "values": {
             "title": "메모리 칩",
-            "body": "데이지"
+            "image-0uwie7": "e6402be966e49522",
+            "body": "데이지의 과거 단서",
+            "text-gvq4bq": "데이지와 접촉하면 빛이 난다."
           }
         },
         {
-          "id": "card-00d",
+          "id": "card-miohag",
           "qty": 2,
           "values": {
             "title": "벨의 단검",
-            "body": "데이지 · 마리\n‘내 사랑하는 여동생 데이지를 생각하며’"
+            "body": "데이지, 마리의 과거 단서",
+            "image-0uwie7": "5a0c5b5588ebcf9e",
+            "text-gvq4bq": "각인 - 내 사랑하는 여동생 데이지를 위해"
           }
         },
         {
-          "id": "card-00e",
+          "id": "card-1tdhbd",
           "qty": 2,
           "values": {
             "title": "교회 7094지부의 인명부",
-            "body": "데이지 · 마리"
+            "image-0uwie7": "5cc407e38cf5d977",
+            "body": "데이지, 마리의 과거 단서",
+            "text-gvq4bq": "'7094 지부 특별관리대상: 벨, 데이지, 마리'"
           }
         },
         {
-          "id": "card-00f",
+          "id": "card-wtyl4b",
           "qty": 1,
           "values": {
             "title": "약간 남은 망각포션",
-            "body": "마리"
+            "text-gvq4bq": "주의: 2병 이상 복용하지 말것",
+            "body": "마리의 과거 단서",
+            "image-0uwie7": "495e21d46b2c3341"
           }
         },
         {
-          "id": "card-00g",
+          "id": "card-59fxq1",
           "qty": 2,
           "values": {
             "title": "교황칙서",
-            "body": "데이지 · 제노비아 · 이레네\n말살 — HAL, ZEN"
+            "body": "데이지, 제노비아, 이레네의 과거 단서",
+            "text-gvq4bq": "(말살 - HAL, ZEN 이 적혀있음)",
+            "image-0uwie7": "be6025d8487c00ae"
           }
         },
         {
-          "id": "card-00h",
+          "id": "card-f2jp1v",
           "qty": 1,
           "values": {
             "title": "요마변환기",
-            "body": "미호"
+            "image-0uwie7": "019f242a38c40017",
+            "body": "미호의 과거 단서이자 각성 아이템",
+            "text-gvq4bq": "요력을 가진 자가 착용할 경우 빨갛게 빛난다"
           }
         },
         {
-          "id": "card-00i",
+          "id": "card-tivl3q",
           "qty": 1,
           "values": {
             "title": "호요족의 기록",
-            "body": "미호"
+            "image-0uwie7": "e18133b2077468f8",
+            "text-gvq4bq": "'우두머리의 후손은 미호의 이름을 물려받는다'",
+            "body": "미호의 과거 단서"
           }
         },
         {
-          "id": "card-00j",
+          "id": "card-dpz7tp",
           "qty": 2,
           "values": {
             "title": "용사전기",
-            "body": "미호 · 바토리 · 그레이스"
+            "image-0uwie7": "c5b91f590aff3ab1",
+            "body": "미호, 바토리, 그레이스의 과거 단서",
+            "text-gvq4bq": "'인류는 요호, 흡혈귀, 인어를 조심하라.'"
           }
         },
         {
-          "id": "card-00k",
+          "id": "card-52y92u",
           "qty": 2,
           "values": {
             "title": "백요잡서",
-            "body": "미호 · 바토리"
+            "image-0uwie7": "e86ab7d83ca31f22",
+            "body": "미호, 바토리의 과거 단서",
+            "text-gvq4bq": "'요호는 음흉하며, 흡혈귀는 간악하다.'"
           }
         },
         {
-          "id": "card-00l",
+          "id": "card-bhj5uk",
           "qty": 1,
           "values": {
             "title": "진조의 전승",
-            "body": "바토리"
+            "image-0uwie7": "6b75e2420fa9717a",
+            "text-gvq4bq": "'여왕님께서 돌아오실 날을 고대하나이다'",
+            "body": "바토리의 과거 단서"
           }
         },
         {
-          "id": "card-00m",
+          "id": "card-wygi2q",
           "qty": 2,
           "values": {
-            "title": "영원의 관",
-            "body": "바토리 · 그레이스"
+            "title": "손상된 영원의 관",
+            "image-0uwie7": "2c2c9871431d92d4",
+            "body": "바토리, 그레이스의 과거 단서",
+            "text-gvq4bq": "인간이 아닌 존재를 천년동안 봉인했었다."
           }
         },
         {
-          "id": "card-00n",
+          "id": "card-h35rw0",
           "qty": 2,
           "values": {
             "title": "이교의 계약서",
-            "body": "제노비아 · 이레네 · 그레이스"
+            "body": "제노비아, 이레네, 그레이스의 과거 단서",
+            "text-gvq4bq": "'제국은 바알숭배자들에게 간섭하지 않는다'",
+            "image-0uwie7": "da6c3dc95cc71f1c"
           }
         },
         {
-          "id": "card-00o",
+          "id": "card-j6dckl",
           "qty": 1,
           "values": {
             "title": "추기경서임서",
-            "body": "이레네"
+            "body": "이레네의 과거 단서",
+            "text-gvq4bq": "파문당한 추기경의 서임서",
+            "image-0uwie7": "58855322ae99b963"
           }
         },
         {
-          "id": "card-00p",
+          "id": "card-m3xl8v",
           "qty": 1,
           "values": {
             "title": "인어의비늘",
-            "body": "그레이스"
+            "image-0uwie7": "cf82f68ac143ad8f",
+            "body": "그레이스의 과거 단서",
+            "text-gvq4bq": "인어의 피가 흐르는 자에게 다가가면 빛이 난다"
           }
         }
       ]
@@ -2028,51 +2819,57 @@
       "expect": 13,
       "instances": [
         {
-          "id": "card-00q",
+          "id": "card-w2o745",
           "qty": 2,
           "values": {
             "title": "고대 연구소의 출입증",
-            "body": "진실의 축 1 — 고대 SF 문명"
+            "body": "세계의 진실 조각 1",
+            "image-4u0scs": "dfd0e6a4098a54d7"
           }
         },
         {
-          "id": "card-00r",
+          "id": "card-btfv00",
           "qty": 2,
           "values": {
             "title": "HAL의 코어 파편",
-            "body": "진실의 축 1 — 고대 SF 문명"
+            "body": "세계의 진실 조각 2",
+            "image-4u0scs": "c72df298479393cf"
           }
         },
         {
-          "id": "card-00s",
+          "id": "card-y12kcz",
           "qty": 2,
           "values": {
             "title": "승천의 문 설계도",
-            "body": "진실의 축 2 — 용사와 승천"
+            "body": "세계의 진실 조각 3",
+            "image-4u0scs": "eb082b6bd660aad5"
           }
         },
         {
-          "id": "card-00t",
+          "id": "card-4ri3ns",
           "qty": 2,
           "values": {
             "title": "승천자의 허물",
-            "body": "진실의 축 2 — 용사와 승천"
+            "body": "세계의 진실 조각 4",
+            "image-4u0scs": "cbf47b5192e9e02c"
           }
         },
         {
-          "id": "card-00u",
+          "id": "card-96k5u2",
           "qty": 2,
           "values": {
-            "title": "이전 빙의자의 수기",
-            "body": "진실의 축 3 — 소설 메타 진실"
+            "title": "빙의자의 수기",
+            "body": "세계의 진실 조각 5",
+            "image-4u0scs": "7335b6309fedfa1d"
           }
         },
         {
-          "id": "card-00v",
+          "id": "card-sb1amv",
           "qty": 3,
           "values": {
             "title": "엘릭서",
-            "body": "사용하면 빈사 에서 벗어난다"
+            "body": "사용하여 빈사 상태에서 벗어날 수 있다",
+            "image-4u0scs": "96358e64910aabc8"
           }
         }
       ],
@@ -2096,18 +2893,16 @@
       "expect": 60,
       "instances": [
         {
-          "id": "card-00w",
+          "id": "card-qf14iw",
           "qty": 60,
-          "values": {
-            "title": "금화"
-          }
+          "values": {}
         }
       ],
       "note": "40장은 탐색 덱에 10장씩 · 20장은 세계은행연합"
     },
     {
       "id": "d-fate",
-      "name": "운명 카드",
+      "name": "운명 카드-초",
       "component": "c-fate",
       "back": "c-fate-back",
       "sheet": {
@@ -2120,184 +2915,136 @@
         "bleedMode": "none"
       },
       "duplex": "long",
-      "expect": 48,
+      "expect": 16,
       "instances": [
         {
-          "id": "card-00x",
+          "id": "card-jukfcl",
           "qty": 2,
           "values": {
-            "title": "어라... 이 힘은?",
-            "body": "초반부 · 주인공의 각성"
+            "title": "\"어라... 이 힘은?\"",
+            "body": "주사위를 굴린다. 잔느는 다음 눈에 해당하는 고유 능력을 얻는다.\n\n           | 1 | 팜므파탈      | 2 | 마리오네트\n           | 3 | 소드마스터   | 4 | 빛의 사제\n           | 5 | 마도사         | 6 | 혈술사\n",
+            "flavor": "힘에는 대가가 따르는 법이야",
+            "image-162m7z": "38edaf4308b4e423"
           }
         },
         {
-          "id": "card-00y",
+          "id": "card-ab27ok",
           "qty": 4,
           "values": {
-            "title": "내가 일을 하나 맡기려고 하는데",
-            "body": "초반부 · 악녀의 의뢰"
+            "title": "일을 하나 맡기려고 하는데",
+            "body": "· 모든 플레이어는 가장 가까운 악녀의 조우 토큰을 획득한다. (거리가 같으면 선택)\n· 모든 악녀의 토큰을 소유한 플레이어는 가장 가까운 악녀에게 금화 2개를 받고 의뢰를 받는다.\n→ 같은 지역에 있는 캐릭터를 선택하여 행동 비용 없이 모략을 진행한다. 대상이 없다면 스킵한다.\n",
+            "flavor": "이 일은 꼭 비밀로 처리해야해",
+            "image-162m7z": "8c64eb9feca8305e"
           }
         },
         {
-          "id": "card-00z",
+          "id": "card-14xa9u",
           "qty": 1,
           "values": {
-            "title": "충격! 대마법사 멀린의 사망",
-            "body": "초반부"
+            "body": "  · 마도사로 각성하지 않은 플레이어는 마법 카드 한장을 버려 애도해야 한다. (없다면 스킵)\n  · 미호의 조우 보호 효과를 끝내고, 서부로 강제로 이동한다.\n",
+            "title": "충격! 대마법사 멀린 사망",
+            "flavor": "\"지켜주지 못해 미안하구나, 미호야\"",
+            "image-162m7z": "37a70aee75cfa57a"
           }
         },
         {
-          "id": "card-010",
+          "id": "card-aai11h",
           "qty": 1,
           "values": {
             "title": "샬롯의 데뷔당트",
-            "body": "초반부"
+            "body": "· 모든 플레이어는 샬롯에게 금화를 1장 준다.\n· 샬롯은 행동비용 없이 동부로 이동한다.\n· 메살리나와 조우한다.\n· 이미 조우했다면 두근! 토큰을 1개 잃는다.",
+            "flavor": "처음뵙겠사와요.",
+            "image-162m7z": "32b3b675bfd474f2"
           }
         },
         {
-          "id": "card-011",
+          "id": "card-hiks4h",
           "qty": 1,
           "values": {
             "title": "깨어난 뱀파이어",
-            "body": "초반부"
+            "body": "· 바토리가 휴면에서 벗어난다.\n· 즉시 능력카드 10장과 물건카드 10장을 뽑는다.\n  (NPC 일 경우 생략)\n· 다음 막이 초반 시나리오라면 다음 막에는 행동할 수 없다.\n",
+            "flavor": "윽, 이 기억들은 뭐란 말이냐?",
+            "image-162m7z": "780dfeb4c1b80cb4"
           }
         },
         {
-          "id": "card-012",
+          "id": "card-vs01r8",
           "qty": 1,
           "values": {
             "title": "제노비아, 쓸어버려",
-            "body": "초반부 · 루크레치아"
+            "body": "· 제노비아는 같은 지역에 있는 캐릭터를 상대로 모략 을 진행한다. 판정을 다음으로 변경한다.\n· 3 이하: 암살\n· 4 이상: 처단 / 암습\n· 검성으로 각성했다면: 주사위를 굴리지 않고 암살\n· 같은 지역에 다른 캐릭터가 없음: 두근! 토큰 -1\n",
+            "flavor": "악마숭배자들을 모두 없애야해",
+            "image-162m7z": "8d9f8501fdc7e417"
           }
         },
         {
-          "id": "card-013",
+          "id": "card-f3ui9i",
           "qty": 1,
           "values": {
             "title": "이레네, 이 자는 이교도야",
-            "body": "초반부 · 루크레치아"
+            "body": "· 이레네는 같은 지역의 캐릭터에게 여론악화를 건다.\n· 성녀로 각성했다면 현상수배를 건다.\n· 같은 지역에 다른 캐릭터가 아무도 없다면 두근! 토큰을 1개 잃는다.\n",
+            "flavor": "이단자는 평생 노예로서 속죄하거라",
+            "image-162m7z": "00bfe30362d79bc6"
           }
         },
         {
-          "id": "card-014",
+          "id": "card-lk2t47",
           "qty": 1,
           "values": {
             "title": "데이지, 처리해",
-            "body": "초반부 · 메살리나"
+            "body": "· 데이지는 같은 지역의 다른 캐릭터에게 암습 또는 처단을 진행한다.\n· 마리오네트를 각성했다면 암살을 진행한다.\n· 같은 지역에 다른 캐릭터가 아무도 없다면 두근! 토큰을 1개 잃는다.\n",
+            "flavor": "분부대로.",
+            "image-162m7z": "534dadd0dc075223"
           }
         },
         {
-          "id": "card-015",
+          "id": "card-py3n69",
           "qty": 1,
           "values": {
             "title": "제국의 해적소탕령",
-            "body": "초반부"
+            "flavor": "아니, 갑자기 이러기 있기야?",
+            "body": "· 그레이스가 동부 해역에 있다면 두근! 토큰을 1개 잃는다. 생존했다면 아카데미로 이동한다.\n· 그레이스가 동부 해역에 없다면 금화 1장을 획득한다.",
+            "image-162m7z": "b1e86de6587b8c31"
           }
         },
         {
-          "id": "card-016",
+          "id": "card-lwut8u",
           "qty": 1,
           "values": {
             "title": "도망자 마리를 찾아",
-            "body": "초반부 · 로욱시나"
+            "flavor": "날 잡을 수 있다면야",
+            "body": "마리가 서부에 있다면:\n  1. 모든 능력 카드를 잃고 아카데미로 이동한다.\n  2. 두근! 토큰을 1개 잃는다. 생존했다면 아카데미로 이동한다.\n\n· 마리가 NPC라면 2.를 행한다.",
+            "image-162m7z": "8f3360145a23eabf"
           }
         },
         {
-          "id": "card-017",
+          "id": "card-t82o2z",
           "qty": 1,
           "values": {
             "title": "앗, 남주다!",
-            "body": "초반부"
+            "body": "· 소유하고 있지 않은 가장 가까운 남주의 조우 토큰을 획득한다. 선 플레이어부터 순서대로 획득한다.\n",
+            "flavor": "으흐흐. 말을 걸어볼까?",
+            "image-162m7z": "044356f6abc99aef"
           }
         },
         {
-          "id": "card-018",
+          "id": "card-xsz0iu",
           "qty": 1,
           "values": {
             "title": "주인공, 잔느 등장!",
-            "body": "초반부"
-          }
-        },
-        {
-          "id": "card-019",
-          "qty": 4,
-          "values": {
-            "title": "메인 악녀 공세",
-            "body": "중반부 · 각 악녀 1장"
-          }
-        },
-        {
-          "id": "card-01a",
-          "qty": 4,
-          "values": {
-            "title": "운명의 만남",
-            "body": "중반부 · 동일 카드"
-          }
-        },
-        {
-          "id": "card-01b",
-          "qty": 5,
-          "values": {
-            "title": "운명의 강제력",
-            "body": "중반부 시나리오"
-          }
-        },
-        {
-          "id": "card-01c",
-          "qty": 3,
-          "values": {
-            "title": "잔느 이벤트",
-            "body": "중반부"
-          }
-        },
-        {
-          "id": "card-01d",
-          "qty": 4,
-          "values": {
-            "title": "메인 빌런 토벌전",
-            "body": "후반부 · 각 지역 1장"
-          }
-        },
-        {
-          "id": "card-01e",
-          "qty": 7,
-          "values": {
-            "title": "엔딩 경로 개봉",
-            "body": "후반부"
-          }
-        },
-        {
-          "id": "card-01f",
-          "qty": 3,
-          "values": {
-            "title": "악령 관련",
-            "body": "후반부"
-          }
-        },
-        {
-          "id": "card-01g",
-          "qty": 1,
-          "values": {
-            "title": "잔느의 설득",
-            "body": "후반부"
-          }
-        },
-        {
-          "id": "card-01h",
-          "qty": 1,
-          "values": {
-            "title": "밝혀지는 과거",
-            "body": "후반부"
+            "flavor": "짜잔!",
+            "body": "· 잔느가 모든 플레이어들을 조우한다.",
+            "image-162m7z": "13f885769fa337e8"
           }
         }
       ],
       "note": "초·중·후반부 각 16장 = 48장. 막당 2장씩 24막에 소진"
     },
     {
-      "id": "d-omen",
-      "name": "재앙 카드",
-      "component": "c-omen",
-      "back": "c-omen-back",
+      "id": "deck-ak60qc",
+      "name": "운명 카드-중",
+      "component": "c-z03yyt",
+      "back": "c-pvfqht",
       "sheet": {
         "w": 210,
         "h": 297,
@@ -2308,96 +3055,141 @@
         "bleedMode": "none"
       },
       "duplex": "long",
-      "expect": 10,
+      "expect": 16,
       "instances": [
         {
-          "id": "card-01i",
+          "id": "card-65wla9",
           "qty": 1,
           "values": {
-            "title": "선혈의 비",
-            "body": "국지 · 주사위로 정한 지역에 게임 끝까지 지속\n매 막 능력 카드 버림 (선혈 계열은 이득)"
+            "title": "베엘제붑 강림의식",
+            "body": "북부에 있는 모든 플레이어블 캐릭터들은 두근! 토큰을 1개 잃고, 빌런 토큰을 1개 얻는다.\n\n추가로 성녀 각성자가 북부에\n· 없다면: 파리 떼 토큰을 북부에 배치한다.\n· 있다면: 이를 저지하고 물건 카드를 3장 뽑는다.",
+            "flavor": "뭇 악마들의 왕께서 강림하신다!",
+            "image-5yef2y": "f4034644e1841416"
           }
         },
         {
-          "id": "card-01j",
+          "id": "card-d151dl",
           "qty": 1,
           "values": {
-            "title": "칼날 비",
-            "body": "전역 · 동서남북·아카데미 강타\n모든 물건 또는 두근! 1 (검 각성자 이득)"
+            "title": "어둠 연회로의 초대",
+            "body": "(1) 동부에 있는 플레이어들의 모든 능력 카드 공개하고 그 중 매력 카드들을 빼앗는다.\n(2) 모든 플레이어블 캐릭터들이 동부로 이동한다.\n(3) (1)의 캐릭터에게서 빼앗은 수 만큼 강제로 해당 캐릭터는 모략을 진행한다.\n단, 팜므파탈 각성자는 빼앗기지 않는다.\n",
+            "flavor": "다 모였으면 연회를 시작해볼까?",
+            "image-5yef2y": "7fadcf20415be7cd"
           }
         },
         {
-          "id": "card-01k",
+          "id": "card-l52kco",
           "qty": 1,
           "values": {
-            "title": "돌림병",
-            "body": "확산 · 막 종료마다 이웃으로 확산\n감염 지역 행동 1개 제한"
+            "title": "최고급 남부 와인 대접",
+            "body": "루크레치아가 플레어어들에게 독배를 건넨다.\n남부 지역과 캐릭터가 가장 많이 모여있는 지역의 모든 플레어어들은 빈사 상태가 된다.\n\n독술사 각성자가 대상이 되었을 경우, 다음 막 시작 시 루크레치아를 암살한다.\n",
+            "flavor": "둘이 먹다 하나가 죽어도 모를 와인을 대접하죠.",
+            "image-5yef2y": "00d4319c0efb79e9"
           }
         },
         {
-          "id": "card-01l",
+          "id": "card-6k19jj",
           "qty": 1,
           "values": {
-            "title": "흑암",
-            "body": "전역 · 이동·탐색 불가 (마리오네트 면역)"
+            "title": "생사투기장 참가",
+            "body": "모든 플레이어블 캐릭터들은 서부로 이동한다.\n· 검 카드 1장을 낸다. 내지 못하면 두근! -1\n· 소드마스터 각성자는 검 카드를 여러 장 낼 수 있다. 그 수 당 금화를 받을 수 있다.\n· 검성은 1장 이상 검 카드를 내면 금화를 5장 지급받는다. 낸 수만큼, 모략을 진행할 수 있다.",
+            "flavor": "우승자는 부와 명예를!",
+            "image-5yef2y": "d582697364d310d8"
           }
         },
         {
-          "id": "card-01m",
-          "qty": 1,
+          "id": "card-94q8mb",
+          "qty": 4,
           "values": {
-            "title": "마력폭발",
-            "body": "전역 · 마법 카드/마도사 각성자가 폭발 피해"
+            "title": "운명의 만남",
+            "body": "잔느가 가장 가까운 남주와 약혼한다. \n잔느는 동시에 여러 명과 약혼할 수 있다.\n거리가 같을 경우 약혼하지 않은 남주를 우선한다.\n남주가 다른 약혼 상대가 있을 경우 그 상대는 매력 카드를 2장 내지 못하면 약혼이 취소된다.\n이미 약혼 중이라면 성향 카드를 1장 더 오픈한다. ",
+            "image-5yef2y": "a17d66118c0923c9"
           }
         },
         {
-          "id": "card-01n",
+          "id": "card-wl0lhs",
           "qty": 1,
           "values": {
-            "title": "초태 몰살",
-            "body": "전역 · 장자(첫째) 캐릭터 확정 사망"
+            "title": "버리는 패는 누구?",
+            "body": "· 제노비아와 이레네를 남부로 이동시킨다.\n· 둘은 제노비아, 이레네, 루크레치아 중 한 명이 사망할 때까지 번갈아 모략을 진행한다.\n· NPC 일 경우 반드시 모략의 상대로 플레이어블 캐릭터를 지정한다.\n\n",
+            "image-5yef2y": "35cbe3521c4a7886"
           }
         },
         {
-          "id": "card-01o",
+          "id": "card-d5ztck",
           "qty": 1,
           "values": {
-            "title": "마수폭주",
-            "body": "국지 · 매 막 검/마법 카드로 마수 상대\n없으면 두근! 1"
+            "title": "마탑의 척살령",
+            "flavor": "도망, 쳐야, 해...",
+            "body": "플레이어들은 미호가 위치한 지역으로 이동한다.\n(1) 미호가 각성했다면 모략을 진행한다. 암습, 암살 성공 시 무작위 상대 물건 1장을 갖는다.\n(2) 이후 플레이어가 생존했다면 미호에게 모략을 진행한다. 처단, 암살 판정 시 금화 2장을 받는다.\n발각 판정 시 아무 일도 일어나지 않는다. ",
+            "image-5yef2y": "743e860bcfb51e2d"
           }
         },
         {
-          "id": "card-01p",
+          "id": "card-itdugv",
           "qty": 1,
           "values": {
-            "title": "파리",
-            "body": "이동 · 파리 떼가 매 막 주사위로 이동 (게임 끝까지)\n놓인 지역 물건 피해"
+            "title": "인간을 증오하세요",
+            "body": "이제벨이 살아있다면 진행한다. 바토리는 북부로 이동한다. 바토리는 조건에 따라 아래를 시행한다.\n· 진조로 각성: 이제벨을 암살\n· 그외 각성: 이제벨 사망 전까지 이동 불가\n· 각성 못함: 북부에 있는 모든 다른 플레이어블 캐릭터들의 두근! 토큰 -1. 이후 바토리는 사망\n",
+            "image-5yef2y": "127974b4fc746085"
           }
         },
         {
-          "id": "card-01q",
+          "id": "card-ph986m",
           "qty": 1,
           "values": {
-            "title": "소멸",
-            "body": "전역 · 무작위 지역 하나가 통째로 사라짐"
+            "title": "오, 여기있었구나, 마리.",
+            "body": "로욱시나가 살아있다면 진행한다. 마리는 서부로 이동한다. 마리는 조건에 따라 아래를 시행한다.\n\n  · 독술사로 각성: 로욱시나를 암살한다.\n  · 각성 못함: 마리 사망\n",
+            "image-5yef2y": "247b1af5a7815425"
           }
         },
         {
-          "id": "card-01r",
+          "id": "card-rm16l8",
           "qty": 1,
           "values": {
-            "title": "종막",
-            "body": "메타 · 즉시 후반부 운명 카드 더미로 진행"
+            "title": "반란모의 누명",
+            "body": "메살리나가 살아있다면 진행한다. 샤를롯테와 데이지는 동부로 이동한다. 그리고 다음을 부여:\n· 샤를롯테: 각성하지 못했다면 중반부 시나리오 종료 시 사망한다.\n· 데이지: 중반부 시나리오 종료 시, 샬롯이 죽지 않았다면 사망한다. 메살리나가 사망하면 무효.",
+            "flavor": "데이지, 이 편지를 샤를롯테의 침실에 놓고 와.",
+            "image-5yef2y": "47a0ddf194d72f7a"
+          }
+        },
+        {
+          "id": "card-2w3ydm",
+          "qty": 1,
+          "values": {
+            "title": "우연이네, 잔느",
+            "image-5yef2y": "5f591c0257e821f4",
+            "body": "모든 남주들이 잔느가 있는 곳으로 이동한다."
+          }
+        },
+        {
+          "id": "card-ayurdy",
+          "qty": 1,
+          "values": {
+            "title": "시험기간",
+            "body": "· 잔느가 아카데미로 이동한다.\n· 이번 막은 추종처리를 하지 않는다.\n· 다음 막까지 잔느는 이동할 수 없다. (최우선)\n",
+            "flavor": "방해하지 마. 나 시험공부 해야해.",
+            "image-5yef2y": "a1c18f7ee99cf74d"
+          }
+        },
+        {
+          "id": "card-7u3gu4",
+          "qty": 1,
+          "values": {
+            "title": "잔느의 여행",
+            "flavor": "오늘은 여기에 가보자",
+            "body": "지금부터 운명카드를 뽑기 직전 잔느가 주사위를 굴린다. 결과에 따라 다음의 지역으로 이동한다.\n\n1: 동부, 2: 서부, 3: 남부, 4: 북부, 5: 중앙,\n6: 현재 지역 유지",
+            "image-5yef2y": "a8bce0243fa4f36e"
           }
         }
       ],
-      "note": "뒷면이 운명 카드와 동일해야 한다 — 섞였을 때 구분되면 안 됨"
+      "note": "초·중·후반부 각 16장 = 48장. 막당 2장씩 24막에 소진"
     },
     {
-      "id": "d-scenario",
-      "name": "시나리오 카드",
-      "component": "c-scenario",
-      "back": "c-scenario-back",
+      "id": "deck-nhegsk",
+      "name": "운명 카드-후",
+      "component": "c-nacykg",
+      "back": "c-trel65",
       "sheet": {
         "w": 210,
         "h": 297,
@@ -2408,391 +3200,134 @@
         "bleedMode": "none"
       },
       "duplex": "long",
-      "expect": 3,
+      "expect": 16,
       "instances": [
         {
-          "id": "card-01s",
+          "id": "card-cas6lc",
           "qty": 1,
           "values": {
-            "title": "초반부",
-            "body": "구간 덱 맨 위에 올린다 · 막을 소모하지 않는다"
+            "title": "북부 토벌",
+            "body": "지크프리트와 잔느가 북부로 이동한다. 북부의 이명소유자를 처형한다.\n \n이명소유자가 아닌 바토리는 진조로 각성하지 못했다면 처형한다.",
+            "flavor": "북부의 평화를 위해 끝을 내도록 하지",
+            "image-7n0s6e": "9f2182d81e8972aa"
           }
         },
         {
-          "id": "card-01t",
+          "id": "card-shfcim",
           "qty": 1,
           "values": {
-            "title": "중반부",
-            "body": "구간 덱 맨 위에 올린다 · 막을 소모하지 않는다"
+            "title": "남부 숙청",
+            "body": "조반니와 잔느가 남부로 이동한다. 남부의 이명소유자를 처형한다.\n\n이명소유자가 아닌 제노비아/이레네는 \"물건 - 교황칙서\"를 공개하지 못한다면 처형한다.",
+            "flavor": "이젠 썩어 빠진 교회를 쇄신할 때야",
+            "image-7n0s6e": "64f4541f6766c4b8"
           }
         },
         {
-          "id": "card-01u",
+          "id": "card-9rl5k6",
           "qty": 1,
           "values": {
-            "title": "후반부",
-            "body": "서막 «메인 악녀 선언» 부착"
-          }
-        }
-      ]
-    },
-    {
-      "id": "d-taste",
-      "name": "남주 성향 카드",
-      "component": "c-taste",
-      "back": "c-taste-back",
-      "sheet": {
-        "w": 210,
-        "h": 297,
-        "margin": 10,
-        "gap": 0,
-        "marks": "crop",
-        "bleed": 3,
-        "bleedMode": "none"
-      },
-      "duplex": "long",
-      "expect": 20,
-      "instances": [
-        {
-          "id": "card-01v",
-          "qty": 1,
-          "values": {
-            "title": "성향 1",
-            "body": "(문구 미정)"
+            "title": "동부 정변",
+            "body": "가이우스와 잔느가 동부로 이동한다. 동부의 이명소유자를 처형한다. \n\n이명소유자가 아닌 데이지/샤를롯테는 본인의 과거 단서 1장을 소모 혹은 2장을 공개하지 못한다면 처형한다.",
+            "flavor": "악마들과 손을 잡았던 황족들은 모두 들어라!",
+            "image-7n0s6e": "01b5a2bcb6144742"
           }
         },
         {
-          "id": "card-01w",
+          "id": "card-ldcskk",
           "qty": 1,
           "values": {
-            "title": "성향 2",
-            "body": "(문구 미정)"
+            "title": "서부 평정",
+            "body": "알렉과 잔느가 서부로 이동한다. 서부의 이명소유자를 처형한다. \n\n마리가 살아있고 독술사로 각성했다면, 마리가 대신 이명소유자를 처형한다. ",
+            "flavor": "내가 할 수 있다고 말했지, 잔느?",
+            "image-7n0s6e": "8ab78bd1dae7b9ea"
           }
         },
         {
-          "id": "card-01x",
+          "id": "card-qsqnoe",
           "qty": 1,
           "values": {
-            "title": "성향 3",
-            "body": "(문구 미정)"
+            "title": "극동의 예언",
+            "body": "황제의 증표를 극동의 섬에 모두 배치한다.\n플레이어가 극동의 섬에서 과거 진실 단서 3장을 지불하거나, 이명소유한 상태로 남주와 약혼하면 황제의 증표를 얻는다. 황제의 증표 보유자들이 같은 지역에 있을 경우 한 명이 사망할 때까지 모략을 진행한다. (나중에 온 사람이 먼저 진행)",
+            "flavor": "온 대륙을 지배할 진정한 군주께서 탄생할 것입니다",
+            "image-7n0s6e": "4d18af68fab9af49"
           }
         },
         {
-          "id": "card-01y",
+          "id": "card-c4wun7",
           "qty": 1,
           "values": {
-            "title": "성향 4",
-            "body": "(문구 미정)"
+            "title": "세계의 진실을 깨달았노라",
+            "body": "이 카드를 중앙에 배치한다. 서로 다른 세계 진실 3장 이상을 가진 플레이어가 중부로 이동 후 2개의 행동과 세계 진실 3장을 소모하여 승천의 문 토큰을 획득한다. 막 종료 시 토큰을 소유한 플레이어가 여럿일 경우, 한 명만 생존할 때까지 아무도 승천 엔딩을 달성할 수 없다.",
+            "image-7n0s6e": "8c01ad44faadc804",
+            "flavor": ""
           }
         },
         {
-          "id": "card-01z",
+          "id": "card-j5c6k5",
           "qty": 1,
           "values": {
-            "title": "성향 5",
-            "body": "(문구 미정)"
+            "title": "진실의 규합",
+            "body": "모든 플레이어는 물건 카드를 서로에게 공개한다. 세계 진실 물건을 2장 가진 플레이어는, 1장만 가진 플레이어에게서 세계 진실 물건 1장을 가져와 3장을 채울 수 있다(합의 불필요). 2장 보유자가 여럿이면 이번 막 차례의 순서대로 처리한다. 2장 보유자들끼리는 빼앗을 수 없다.\n",
+            "image-7n0s6e": "b9b6ea49d0fdda77",
+            "flavor": ""
           }
         },
         {
-          "id": "card-020",
+          "id": "card-7i58tj",
           "qty": 1,
           "values": {
-            "title": "성향 6",
-            "body": "(문구 미정)"
+            "title": "살아남은 대해적",
+            "flavor": "이 몸은 해적왕이 될거야!",
+            "body": "그레이스가 생존 플레이어면 이 카드를 가져가 손에 둔다.\n만물금본으로 각성했다면, 자기 차례에 이 카드를 소모하고 금화 5장을 지불하면, 황제의 증표 또는 승천의 문 토큰을 구매할 수 있다. 아니라면 이 카드를 소모할 때 금화를 10장까지 얻는다.",
+            "image-7n0s6e": "4a3c66998cfb4022"
           }
         },
         {
-          "id": "card-021",
+          "id": "card-c7hy8r",
           "qty": 1,
           "values": {
-            "title": "성향 7",
-            "body": "(문구 미정)"
+            "title": "요술의 왕 — 미호",
+            "body": "미호가 생존 플레이어면 이 카드를 가져가 손에 둔다.\n요술사로 각성했다면, 자기 차례에 이 카드를 소모하고 마법 카드 5장을 소모하여 황제의 증표 또는 승천의 문 토큰을 획득한다.",
+            "image-7n0s6e": "3e6cfe88a514af9a",
+            "flavor": "우매한 인간들이여. 머리를 조아려라."
           }
         },
         {
-          "id": "card-022",
-          "qty": 1,
+          "id": "card-d2rat0",
+          "qty": 4,
           "values": {
-            "title": "성향 8",
-            "body": "(문구 미정)"
+            "title": "사자들의 합창",
+            "body": "모든 악령 플레이어는 즉시 사기 카드 2장을 얻는다.",
+            "image-7n0s6e": "6ed4e44869a0efc9",
+            "flavor": "다이것 할망멸 곧 은상세"
           }
         },
         {
-          "id": "card-023",
-          "qty": 1,
+          "id": "card-oxnc3c",
+          "qty": 2,
           "values": {
-            "title": "성향 9",
-            "body": "(문구 미정)"
+            "title": "종말의 전조",
+            "body": "징조 카드를 운명 더미에 1장 섞어 넣는다.\n",
+            "flavor": "하얀 까마귀들이 날아다닌다.",
+            "image-7n0s6e": "1580ce0ccbd95cee"
           }
         },
         {
-          "id": "card-024",
+          "id": "card-qvf0ux",
           "qty": 1,
           "values": {
-            "title": "성향 10",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-025",
-          "qty": 1,
-          "values": {
-            "title": "성향 11",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-026",
-          "qty": 1,
-          "values": {
-            "title": "성향 12",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-027",
-          "qty": 1,
-          "values": {
-            "title": "성향 13",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-028",
-          "qty": 1,
-          "values": {
-            "title": "성향 14",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-029",
-          "qty": 1,
-          "values": {
-            "title": "성향 15",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-02a",
-          "qty": 1,
-          "values": {
-            "title": "성향 16",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-02b",
-          "qty": 1,
-          "values": {
-            "title": "성향 17",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-02c",
-          "qty": 1,
-          "values": {
-            "title": "성향 18",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-02d",
-          "qty": 1,
-          "values": {
-            "title": "성향 19",
-            "body": "(문구 미정)"
-          }
-        },
-        {
-          "id": "card-02e",
-          "qty": 1,
-          "values": {
-            "title": "성향 20",
-            "body": "(문구 미정)"
+            "title": "잔느의 설득",
+            "flavor": "너도 일부러 그런게 아니잖아, 그렇지?",
+            "body": "플레이어 전원은 다음 둘 중 하나를 시행해야한다.\n· 오해청산: 빌런 포인트를 모두 잃는다. 현상수배와 여론악화를 제거한다. 앞으로 잔느와 조우하더라도 여론약화가 되지 않는다.\n· 오해가 아니었다: 빌런 토큰을 1 얻는다.\n",
+            "image-7n0s6e": "22a7d3f846c926b2"
           }
         }
       ],
-      "note": "시작 시 각 남주에게 3장씩 뒷면으로 배치. 만남으로 오픈, 약혼에 사용"
-    },
-    {
-      "id": "d-pc",
-      "name": "캐릭터 · 플레이어",
-      "component": "c-pc",
-      "back": "c-pc-back",
-      "sheet": {
-        "w": 210,
-        "h": 297,
-        "margin": 10,
-        "gap": 0,
-        "marks": "crop",
-        "bleed": 3,
-        "bleedMode": "none"
-      },
-      "duplex": "long",
-      "expect": 8,
-      "instances": [
-        {
-          "id": "card-02f",
-          "qty": 1,
-          "values": {
-            "title": "샬롯",
-            "body": "동부의 꽃 · 중부 시작"
-          }
-        },
-        {
-          "id": "card-02g",
-          "qty": 1,
-          "values": {
-            "title": "데이지",
-            "body": "어둠의 시녀 · 동부 시작"
-          }
-        },
-        {
-          "id": "card-02h",
-          "qty": 1,
-          "values": {
-            "title": "마리",
-            "body": "부두술사 · 서부 시작"
-          }
-        },
-        {
-          "id": "card-02i",
-          "qty": 1,
-          "values": {
-            "title": "미호",
-            "body": "호요족 · 극동 시작"
-          }
-        },
-        {
-          "id": "card-02j",
-          "qty": 1,
-          "values": {
-            "title": "바토리",
-            "body": "진조 · 북부 시작"
-          }
-        },
-        {
-          "id": "card-02k",
-          "qty": 1,
-          "values": {
-            "title": "제노비아",
-            "body": "황가의 그림자 · 동부 시작"
-          }
-        },
-        {
-          "id": "card-02l",
-          "qty": 1,
-          "values": {
-            "title": "이레네",
-            "body": "추기경 · 중부 시작"
-          }
-        },
-        {
-          "id": "card-02m",
-          "qty": 1,
-          "values": {
-            "title": "그레이스",
-            "body": "대해적 · 남부 시작"
-          }
-        }
-      ],
-      "note": "양면 — 뒷면은 악령 버전"
-    },
-    {
-      "id": "d-npc",
-      "name": "캐릭터 · NPC",
-      "component": "c-npc",
-      "sheet": {
-        "w": 210,
-        "h": 297,
-        "margin": 10,
-        "gap": 0,
-        "marks": "crop",
-        "bleed": 3,
-        "bleedMode": "none"
-      },
-      "duplex": false,
-      "expect": 9,
-      "instances": [
-        {
-          "id": "card-02n",
-          "qty": 1,
-          "values": {
-            "title": "잔느",
-            "body": "주인공"
-          }
-        },
-        {
-          "id": "card-02o",
-          "qty": 1,
-          "values": {
-            "title": "알렉",
-            "body": "남주 · 서부"
-          }
-        },
-        {
-          "id": "card-02p",
-          "qty": 1,
-          "values": {
-            "title": "가이우스",
-            "body": "남주 · 동부"
-          }
-        },
-        {
-          "id": "card-02q",
-          "qty": 1,
-          "values": {
-            "title": "조반니",
-            "body": "남주 · 남부"
-          }
-        },
-        {
-          "id": "card-02r",
-          "qty": 1,
-          "values": {
-            "title": "지크프리트",
-            "body": "남주 · 북부"
-          }
-        },
-        {
-          "id": "card-02s",
-          "qty": 1,
-          "values": {
-            "title": "루크레치아",
-            "body": "메인 악녀"
-          }
-        },
-        {
-          "id": "card-02t",
-          "qty": 1,
-          "values": {
-            "title": "메살리나",
-            "body": "메인 악녀"
-          }
-        },
-        {
-          "id": "card-02u",
-          "qty": 1,
-          "values": {
-            "title": "로욱시나",
-            "body": "메인 악녀"
-          }
-        },
-        {
-          "id": "card-02v",
-          "qty": 1,
-          "values": {
-            "title": "이제벨",
-            "body": "메인 악녀"
-          }
-        }
-      ]
+      "note": "초·중·후반부 각 16장 = 48장. 막당 2장씩 24막에 소진"
     },
     {
       "id": "d-skull",
-      "name": "사기 카드",
+      "name": "해골 카드",
       "component": "c-skull",
       "back": "c-skull-back",
       "sheet": {
@@ -2808,14 +3343,632 @@
       "expect": 40,
       "instances": [
         {
-          "id": "card-02w",
+          "id": "card-wy71lm",
           "qty": 40,
           "values": {
-            "title": "사기"
+            "title": "사기(死氣)",
+            "text-ogr7xu": "死氣"
           }
         }
       ],
       "note": "악령 전용. 손패 상한 10장 × 최대 4인"
+    },
+    {
+      "id": "d-omen",
+      "name": "재앙",
+      "component": "c-omen",
+      "back": "c-omen-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 10,
+      "instances": [
+        {
+          "id": "card-pq2qtx",
+          "qty": 1,
+          "values": {
+            "title": "선혈의 비",
+            "flavor": "피비린내가 나는군…",
+            "body": "주사위를 굴린다. 선혈의 비 토큰을 놓는다.\n1: 동부, 2: 서부, 3: 남부, 4: 북부, 5: 중앙, 6: 리롤\n매 막 종료 시 그 지역의 플레이어는 다음을 행한다.\n혈술사 각성: 능력 카드 1장을 얻는다.\n진조 각성: 능력 카드 2장을 얻는다.\n그외 각성: 능력 카드 1장을 버린다.\n",
+            "image-imzr0u": "dcdf76a0f389e075"
+          }
+        },
+        {
+          "id": "card-6ezgcu",
+          "qty": 1,
+          "values": {
+            "title": "칼날 비",
+            "flavor": "수 만개의 칼이 하늘에서 떨어진다",
+            "image-imzr0u": "4b6d9b98a4dd0a97",
+            "body": "동·서·남·북·중앙에 칼날 비가 쏟아진다. 해당 지역의 플레이어는 다음을 행한다.\n소드마스터 각성: 아무런 피해를 받지 않는다.\n검성 각성: 능력카드 5장을 얻는다.\n그외 각성: 모든 물건 카드를 잃거나, 두근! 토큰을 1개 잃는다."
+          }
+        },
+        {
+          "id": "card-0zhhjx",
+          "qty": 1,
+          "values": {
+            "title": "돌림병",
+            "flavor": "콜록콜록… 이거 낫는 거 맞죠?",
+            "image-imzr0u": "7e00b535ea1ea0c5",
+            "body": "전염병 토큰을 놓는다. 이후 매 막 종료 시 이웃 지역 중 하나로 확산된다. 초기 위치와 확산 방향은 마지막 차례였던 악령이 결정한다. 감염 지역의 플레이어 캐릭터는 자기 턴에 행동을 1번만 할 수 있다.\n빛의 사제, 성녀가 행동을 1번하여 금화 2개를 얻고 해당 지역의 돌림병 토큰을 제거한다. (재확산 X)"
+          }
+        },
+        {
+          "id": "card-y2o4md",
+          "qty": 1,
+          "values": {
+            "title": "흑암",
+            "flavor": "태양은 삼켜지고, 어둠이 내려앉았다.",
+            "image-imzr0u": "29bbae6de07ac423",
+            "body": "전 지역에서 이동·탐색이 불가능하다. 해제 방법 -\n빛의 사제 각성자: 신성 카드 3장 사용\n성녀 각성자: 행동을 2번 사용\n그외 각성자: 신성 카드 5장 사용\n해제한 플레이어는 금화 카드를 3장 받는다.\n*마리오네트를 각성한 플레이어는 이동·탐색이 가능"
+          }
+        },
+        {
+          "id": "card-it9ii4",
+          "qty": 1,
+          "values": {
+            "flavor": "으악, 부탑주님이 폭발한다!",
+            "title": "마력 폭발",
+            "image-imzr0u": "e0bac58083ebe125",
+            "body": "마법 카드를 손에 가진 플레이어 및 마도사 각성자는 가진 마법 카드를 모두 버리고 두근! 포인트를 1 잃는다.\n\n요술사는 이 효과를 받지 않는다."
+          }
+        },
+        {
+          "id": "card-rj6gfu",
+          "qty": 1,
+          "values": {
+            "title": "마수 폭주",
+            "flavor": "개굴, 개굴.",
+            "image-imzr0u": "dd5e04ad4a7f722b",
+            "body": "주사위를 굴린다. 마수 토큰을 놓는다.\n1: 동부, 2: 서부, 3: 남부, 4: 북부, 5: 중앙, 6: 리롤\n매 막 종료 시 검 또는 마법 카드 1장을 사용한다. 검 또는 마법 카드가 없다면 두근! 토큰을 1개 잃는다.\n소드마스터/마법사는 효과의 대상이 되지 않는다.\n검성/요술사는 즉시 마수 토큰을 제거, 금화 +3장"
+          }
+        },
+        {
+          "id": "card-n2xyhb",
+          "qty": 1,
+          "values": {
+            "title": "파리",
+            "flavor": "위이이이잉",
+            "image-imzr0u": "a4a93d51a06af952",
+            "body": "매 막 마지막, 주사위를 굴린다. 파리 토큰을 놓는다.\n1: 동부, 2: 서부, 3: 남부, 4: 북부, 5: 중앙, 6: 리롤\n같은 지역에 다른 파리 토큰이 있었다면, 파리 토큰 대신 베엘제붑 토큰을 배치한다. 베엘제붑 토큰은 매 막이 끝날 때 해당 지역을 소멸시킨다. 성녀는 행동\n하여 베엘제붑을 처치할 수 있다. 처치 시 금화 +5"
+          }
+        },
+        {
+          "id": "card-urozav",
+          "qty": 1,
+          "values": {
+            "title": "초태 몰살",
+            "flavor": "모든 장자의 숨이 멎는다.",
+            "image-imzr0u": "189d3839d4ae2d29",
+            "body": "첫째 속성을 가진 캐릭터(지크프리트·조반니·가이우스)가 즉시 사망한다."
+          }
+        },
+        {
+          "id": "card-xezdcz",
+          "qty": 1,
+          "values": {
+            "title": "소멸",
+            "flavor": "일순간 도시가 사라졌다",
+            "image-imzr0u": "a16174dc1f7b489e",
+            "body": "주사위를 굴린다. 다음 지역이 소멸된다\n1: 동부, 2: 서부, 3: 남부, 4: 북부, 5: 중앙, 6: 리롤\n해당 지역의 플레이어는 두근! 토큰을 1개 잃고 인접 지역으로 강제 이동, 남주는 사망, 주인공은 중앙으로 이동한다."
+          }
+        },
+        {
+          "id": "card-2bieys",
+          "qty": 1,
+          "values": {
+            "title": "종막",
+            "flavor": "막이 오른다. 이야기는 결말을 향해.",
+            "image-imzr0u": "b4dbaa7e80198bbf",
+            "body": "즉시 두근! 토큰을 1개 잃고 후반부 시나리오 운명 카드 더미로 넘어간다.\n이미 후반부 시나리오라면 모든 플레이어블 캐릭터는 두근! 토큰을 1개 더 잃는다."
+          }
+        }
+      ],
+      "note": "뒷면이 운명 카드와 동일해야 한다 — 섞였을 때 구분되면 안 됨"
+    },
+    {
+      "id": "deck-7zgra6",
+      "name": "남주성향",
+      "component": "c-2w6vlv",
+      "back": "c-nkr9dy",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 20,
+      "instances": [
+        {
+          "id": "card-04y0ey",
+          "qty": 1,
+          "values": {
+            "title": "귀족주의",
+            "flavor": "귀족이라면 만 영지민을 보살펴야하는 법",
+            "body": "매력 1, 검 1, 마법 1",
+            "image-imzr0u": "920e93d6a6dc54ac",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-u0ps85",
+          "qty": 1,
+          "values": {
+            "title": "재능주의",
+            "flavor": "넌 어떤 걸 할 수 있지?",
+            "body": "검 1, 마법 1, 신성 1 / 특수 고유능력 각성",
+            "image-imzr0u": "63ce97ce4c027ea4",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-2xb7bi",
+          "qty": 1,
+          "values": {
+            "title": "악성",
+            "flavor": "이 녀석을 이렇게 처리해보는건 어때?",
+            "body": "어둠 1, 독약 1, 선혈 1 / 빌런 토큰 1개",
+            "image-imzr0u": "699366b46f4e3b4b",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-wn6kls",
+          "qty": 1,
+          "values": {
+            "title": "알코홀릭",
+            "flavor": "...히끅! 한 잔만 더...",
+            "body": "독약 2 / 독술사 각성",
+            "image-imzr0u": "9765dc87d1fa557d",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-nxopd3",
+          "qty": 1,
+          "values": {
+            "title": "사디즘",
+            "flavor": "착하지? 가만있어봐?",
+            "image-imzr0u": "b5426a56382994c1",
+            "body": "매력 1, 독약 1, 선혈 1",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-azqz72",
+          "qty": 1,
+          "values": {
+            "title": "마조히즘",
+            "flavor": "날 더 옭아매줘.",
+            "image-imzr0u": "d6c47c1d1d46d11a",
+            "body": "어둠 2 / 마리오네트 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-lihln3",
+          "qty": 1,
+          "values": {
+            "title": "츤데레",
+            "flavor": "착각하지 마. 오다 주운 거야.",
+            "image-imzr0u": "6dffac5a83e04341",
+            "body": "매력 1, 신성 1, 어둠 1",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-4ah0cc",
+          "qty": 1,
+          "values": {
+            "title": "집착",
+            "flavor": "내 눈 앞에서 절대 사라지지 마",
+            "image-imzr0u": "c035f6683e9942d3",
+            "body": "매력 1, 독약 1, 어둠 1",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-a3r24w",
+          "qty": 1,
+          "values": {
+            "flavor": "레이디의 명예를 위해",
+            "title": "기사도",
+            "image-imzr0u": "f763e4367aa49179",
+            "body": "매력 1, 검 1, 신성 1 / 팜므파탈 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-sv2x99",
+          "qty": 1,
+          "values": {
+            "flavor": "꾸준하다는 건 뛰어나다는 거야",
+            "title": "노력가",
+            "image-imzr0u": "0abe3dccc692c9e8",
+            "body": "아무 능력 각성 상태",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-xll4ax",
+          "qty": 1,
+          "values": {
+            "title": "선민주의",
+            "flavor": "마력이 있다는 건 선택받았다는 뜻이지",
+            "image-imzr0u": "1d85f42ea3246d70",
+            "body": "매력 1, 마법 1, 선혈 1 / 팜므파탈 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-st3wj7",
+          "qty": 1,
+          "values": {
+            "title": "물질만능주의",
+            "flavor": "반짝이는 금이 최고야!",
+            "image-imzr0u": "14dcf36cc5ab6529",
+            "body": "금화 2 / \"만물금본\"으로 능력 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-xo2zby",
+          "qty": 1,
+          "values": {
+            "title": "수집가",
+            "flavor": "오, 이 물건 좀 갖고 싶은데.",
+            "image-imzr0u": "1b1b4f64ac9273fc",
+            "body": "금화를 제외한 물건 1개",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-to3k1y",
+          "qty": 1,
+          "values": {
+            "title": "외모지상주의",
+            "flavor": "영애, 너무 아름다우십니다.",
+            "image-imzr0u": "28bc846cbc881bbc",
+            "body": "매력 2 / 팜므파탈 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-c1uaj6",
+          "qty": 1,
+          "values": {
+            "title": "무투파",
+            "flavor": "검을 들어.",
+            "image-imzr0u": "7988a17812f6e85f",
+            "body": "검 2 / 소드마스터 또는 검성 각성",
+            "text-6ui5kx": "*검성과의 약혼은 파기할 수 없다 (잔느라도)",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-l1zns3",
+          "qty": 1,
+          "values": {
+            "title": "독실",
+            "flavor": "빛의 은총이 있길",
+            "image-imzr0u": "0888a112e3820367",
+            "body": "신성 2 / 빛의 사제 또는 성녀 각성",
+            "text-6ui5kx": "*성녀와의 약혼은 파기할 수 없다 (잔느라도)",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-p9u3gg",
+          "qty": 1,
+          "values": {
+            "title": "숭혈",
+            "flavor": "위대한 뱀파이어 퀸이시여",
+            "image-imzr0u": "be68e07189cca58e",
+            "body": "선혈 2 / 혈술사 또는 진조 각성",
+            "text-6ui5kx": "*진조와의 약혼은 파기할 수 없다 (잔느라도)",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-ulgyk9",
+          "qty": 1,
+          "values": {
+            "title": "상냥함",
+            "flavor": "나쁜 짓 안했지?",
+            "image-imzr0u": "8178908130688578",
+            "body": "빌런 토큰 0개",
+            "text-6ui5kx": "* 빌런 토큰을 1개라도 획득하면 약혼 파기",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-1yhfca",
+          "qty": 1,
+          "values": {
+            "title": "진심을 준다면",
+            "flavor": "잔느? 그게 누구더라?",
+            "image-imzr0u": "37673bf096aec3df",
+            "body": "두근! 토큰 1개를 지불",
+            "text-6ui5kx": "잔느가 약혼을 파기할 수 없다.",
+            "text-cldti8": ""
+          }
+        },
+        {
+          "id": "card-cebp80",
+          "qty": 1,
+          "values": {
+            "title": "책벌레",
+            "flavor": "",
+            "image-imzr0u": "9dc96203887b7d89",
+            "body": "마법 2 / 마법사 또는 요술사 각성",
+            "text-6ui5kx": "",
+            "text-cldti8": "빙계마법은사실수계마법보다는시간계마법에더\n높은연관성이있다는가설에대해서너도동의하지?"
+          }
+        }
+      ],
+      "note": "뒷면이 운명 카드와 동일해야 한다 — 섞였을 때 구분되면 안 됨"
+    },
+    {
+      "id": "d-pc",
+      "name": "캐릭터-플레이어",
+      "component": "c-pc",
+      "back": "c-pc-back",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 8,
+      "instances": [
+        {
+          "id": "card-f87s92",
+          "qty": 1,
+          "values": {
+            "title": "샤를롯테",
+            "body": "중앙 시작",
+            "image-8666ar": "46c4a80e25b394b3",
+            "text-b68iom": "동부 출신 공작가의 여식"
+          }
+        },
+        {
+          "id": "card-m5cms4",
+          "qty": 1,
+          "values": {
+            "title": "데이지",
+            "image-8666ar": "e6ce8bfa4a762506",
+            "body": "동부 시작",
+            "text-b68iom": "마리오네트로 각성 후 선택적 조우 가능"
+          }
+        },
+        {
+          "id": "card-urmgva",
+          "qty": 1,
+          "values": {
+            "title": "마리",
+            "image-8666ar": "da178d23cd285484",
+            "body": "서부 시작",
+            "text-b68iom": "독술사 외 고유능력 각성 불가"
+          }
+        },
+        {
+          "id": "card-ltbn2z",
+          "qty": 1,
+          "values": {
+            "title": "미호",
+            "image-8666ar": "484cb9673a845db5",
+            "body": "은거 상태로 중앙 시작",
+            "text-b68iom": "*은거: 이동/조우불가, 요술사각성가능자"
+          }
+        },
+        {
+          "id": "card-vsdyhg",
+          "qty": 1,
+          "values": {
+            "image-8666ar": "d92fcf3f44d6a417",
+            "title": "바토리",
+            "body": "휴면 상태로 북부 시작",
+            "text-b68iom": "*휴면: 행동/조우불가, 진조각성가능자"
+          }
+        },
+        {
+          "id": "card-iatzxs",
+          "qty": 1,
+          "values": {
+            "title": "제노비아",
+            "image-8666ar": "f3e36f842c9c052b",
+            "body": "남부 시작",
+            "text-b68iom": "소드마스터 대신 검성으로 각성"
+          }
+        },
+        {
+          "id": "card-4e7t4x",
+          "qty": 1,
+          "values": {
+            "title": "이레네",
+            "image-8666ar": "8a43ff23e0a2de2c",
+            "body": "남부 시작",
+            "text-b68iom": "빛의 사제 대신 성녀로 각성"
+          }
+        },
+        {
+          "id": "card-3kggdl",
+          "qty": 1,
+          "values": {
+            "title": "그레이스",
+            "image-8666ar": "f0cfa4d1a1f53925",
+            "body": "동부 바다 시작",
+            "text-b68iom": "특수고유능력: 만물금본"
+          }
+        }
+      ],
+      "note": "양면 — 뒷면은 악령 버전"
+    },
+    {
+      "id": "d-npc",
+      "name": "캐릭터-메인빌런",
+      "component": "c-npc",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 4,
+      "instances": [
+        {
+          "id": "card-yulia9",
+          "qty": 1,
+          "values": {
+            "title": "메살리나",
+            "body": "제국의 장미",
+            "image-q2i6ax": "ce4dcd31085c84a6"
+          }
+        },
+        {
+          "id": "card-wvbzkr",
+          "qty": 1,
+          "values": {
+            "title": "로욱시나",
+            "body": "서부의 꽃",
+            "image-q2i6ax": "02afcb2380a70db1"
+          }
+        },
+        {
+          "id": "card-yxwyf4",
+          "qty": 1,
+          "values": {
+            "title": "루크레치아",
+            "body": "남부의 보석",
+            "image-q2i6ax": "45d772bd222e7f31"
+          }
+        },
+        {
+          "id": "card-nxnhmm",
+          "qty": 1,
+          "values": {
+            "title": "이제벨",
+            "body": "북부의 마녀",
+            "image-q2i6ax": "474dd0dd7925ef8d"
+          }
+        }
+      ],
+      "back": "c-o0ayy7"
+    },
+    {
+      "id": "deck-5iylw1",
+      "name": "캐릭터 · 남주",
+      "component": "c-5hb404",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 4,
+      "instances": [
+        {
+          "id": "card-iuw4ax",
+          "qty": 1,
+          "values": {
+            "title": "지크프리트 폰 프로스트하임",
+            "body": "북부대공의 첫째 공자",
+            "image-k03m24": "92947493ff037836"
+          }
+        },
+        {
+          "id": "card-4v37iz",
+          "qty": 1,
+          "values": {
+            "title": "가이우스 프린켑스 투리누스",
+            "body": "동부 제국의 황태자",
+            "image-k03m24": "b4b10e62715fe172"
+          }
+        },
+        {
+          "id": "card-5tw9wc",
+          "qty": 1,
+          "values": {
+            "title": "조반니 데 메디치",
+            "body": "교황의 첫째 아들",
+            "image-k03m24": "62bd314b03922b7e"
+          }
+        },
+        {
+          "id": "card-qnwxu0",
+          "qty": 1,
+          "values": {
+            "title": "알렉",
+            "body": "서부의 패자",
+            "image-k03m24": "b51bd1fe30a7e7b3"
+          }
+        }
+      ],
+      "back": "c-znd4ta"
+    },
+    {
+      "id": "deck-dicbny",
+      "name": "캐릭터 · 여주",
+      "component": "c-mkz9wk",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": false,
+      "expect": 1,
+      "instances": [
+        {
+          "id": "card-scqmxg",
+          "qty": 1,
+          "values": {
+            "title": "잔느",
+            "body": "여주는 사망하지 않는다."
+          }
+        }
+      ],
+      "back": "c-zrqve0"
     },
     {
       "id": "d-heart",
@@ -2834,14 +3987,13 @@
       "expect": 30,
       "instances": [
         {
-          "id": "card-02x",
+          "id": "card-8azfvp",
           "qty": 30,
-          "values": {
-            "title": "두근!"
-          }
+          "values": {}
         }
       ],
-      "note": "지름 25mm 원형 토큰 자리 — 지금은 같은 크기의 네모로 뽑는다. 규격만 «토큰 · 원형 25» 로 바꾸면 그대로 둥글어진다. 시작 개수는 난이도로 결정 (플레이어 5~1 · NPC 0~2)"
+      "note": "지름 25mm 원형 토큰 자리 — 지금은 같은 크기의 네모로 뽑는다. 규격만 «토큰 · 원형 25» 로 바꾸면 그대로 둥글어진다. 시작 개수는 난이도로 결정 (플레이어 5~1 · NPC 0~2)",
+      "back": "c-b7jt8g"
     },
     {
       "id": "d-villain",
@@ -2856,18 +4008,17 @@
         "bleed": 3,
         "bleedMode": "none"
       },
-      "duplex": false,
+      "duplex": "long",
       "expect": 30,
       "instances": [
         {
-          "id": "card-02y",
+          "id": "card-orn1nw",
           "qty": 30,
-          "values": {
-            "title": "빌런"
-          }
+          "values": {}
         }
       ],
-      "note": "지름 25mm 원형 토큰 자리 — 지금은 네모. 암살 성공마다 1개 (운명 저항력 겸 승점)"
+      "note": "지름 25mm 원형 토큰 자리 — 지금은 네모. 암살 성공마다 1개 (운명 저항력 겸 승점)",
+      "back": "c-jd5fhj"
     },
     {
       "id": "d-encounter",
@@ -2886,76 +4037,77 @@
       "expect": 36,
       "instances": [
         {
-          "id": "card-02z",
+          "id": "card-5aey45",
           "qty": 4,
           "values": {
-            "title": "잔느"
+            "image-mtvz9h": "954771e6dc10dd67"
           }
         },
         {
-          "id": "card-030",
+          "id": "card-6ecc77",
           "qty": 4,
           "values": {
-            "title": "루크레치아"
+            "image-mtvz9h": "f44530a089d65c53"
           }
         },
         {
-          "id": "card-031",
+          "id": "card-d7v4mr",
           "qty": 4,
           "values": {
-            "title": "메살리나"
+            "image-mtvz9h": "ab1035783240605f"
           }
         },
         {
-          "id": "card-032",
+          "id": "card-p4tm1l",
           "qty": 4,
           "values": {
-            "title": "로욱시나"
+            "image-mtvz9h": "e514367846237a51"
           }
         },
         {
-          "id": "card-033",
+          "id": "card-lf1cq8",
           "qty": 4,
           "values": {
-            "title": "이제벨"
+            "image-mtvz9h": "fa5a713af24df3ad"
           }
         },
         {
-          "id": "card-034",
+          "id": "card-2ta75k",
           "qty": 4,
           "values": {
-            "title": "알렉"
+            "image-mtvz9h": "ad3d6097b9dd7d89"
           }
         },
         {
-          "id": "card-035",
+          "id": "card-vzi25t",
           "qty": 4,
           "values": {
-            "title": "가이우스"
+            "image-mtvz9h": "bf7cace08997a6c1"
           }
         },
         {
-          "id": "card-036",
+          "id": "card-c6vqxo",
           "qty": 4,
           "values": {
-            "title": "조반니"
+            "image-mtvz9h": "8d8b50e5bb3da262"
           }
         },
         {
-          "id": "card-037",
+          "id": "card-425dx9",
           "qty": 4,
           "values": {
-            "title": "지크프리트"
+            "image-mtvz9h": "2948bb5e881a1662"
           }
         }
       ],
-      "note": "9종 각 4개 = 36개. 이름이 들어가야 해서 지름 35mm — 지금은 네모"
+      "note": "9종 각 4개 = 36개. 이름이 들어가야 해서 지름 35mm — 지금은 네모",
+      "back": "c-n9izz3"
     },
     {
-      "id": "d-aid",
-      "name": "요약 카드",
-      "component": "c-aid",
-      "back": "c-aid-back",
+      "id": "deck-hyr7qg",
+      "name": "시나리오",
+      "component": "c-gscwj6",
+      "back": "c-eoqeik",
       "sheet": {
         "w": 210,
         "h": 297,
@@ -2966,18 +4118,61 @@
         "bleedMode": "none"
       },
       "duplex": "long",
-      "expect": 4,
+      "expect": 3,
       "instances": [
         {
-          "id": "card-038",
-          "qty": 4,
+          "id": "card-77a9lz",
+          "qty": 1,
           "values": {
-            "title": "행동 1~4",
-            "body": "이동 — 이웃 지역으로. 금화 1장\n탐색 — 주사위 1·2 능력 / 3~5 물건 / 6 물건 2\n수행 — 능력 2장 (아카데미 3장)\n각성 — 같은 능력 5장으로 고유 능력"
+            "title": "초반 - 예기치 못한 사건"
+          }
+        },
+        {
+          "id": "card-gbn2aw",
+          "qty": 1,
+          "values": {
+            "title": "중반 - 운명의 강제력",
+            "text-agvx47": "매 막 종료 시 잔느가 있는 지역에 남주가 한 명도 없는 경우 남주 1명이 다음 우선순위로 잔느가 있는 지역으로 이동.\n\n1. 잔느와 약혼한 사이인 남주\n2. 잔느까지의 거리가 가장 가까운 남주\n3. 그래도 같으면 대상 남주들 모두 이동\n\n*현상수배 및 남주의 추종 처리 참고"
+          }
+        },
+        {
+          "id": "card-m0tqnh",
+          "qty": 1,
+          "values": {
+            "title": "후반 - 엔딩을 향해",
+            "text-agvx47": "플레이어가 메인 빌런이 사망한 지역에 있다면 지금 이명소유를 선언할 수 있다.\n\n- 1명 선언: 그 플레이어가 이명을 상속해 해당 지역의 메인 빌런이 된다.\n- 2명+ 선언: 한 명만 남을 때까지 서로 모략하거나 「양보」하여 1명을 결정한다.\n\n메인 빌런은 빌런 토큰 3개를 얻는다.\n자신의 지역에서는 잔느 조우 효과 및 추종 처리를 받지 않는다."
           }
         }
       ],
-      "note": "양면. 뒷면은 행동 5~8 (만남·모략·거래·약혼)"
+      "note": "40장은 탐색 덱에 10장씩 · 20장은 세계은행연합"
+    },
+    {
+      "id": "deck-tv6axa",
+      "name": "플레이어 힌트",
+      "component": "c-h0ulsw",
+      "back": "c-97shyr",
+      "sheet": {
+        "w": 210,
+        "h": 297,
+        "margin": 10,
+        "gap": 0,
+        "marks": "crop",
+        "bleed": 3,
+        "bleedMode": "none"
+      },
+      "duplex": "long",
+      "expect": 1,
+      "instances": [
+        {
+          "id": "card-uxrvsb",
+          "qty": 1,
+          "values": {
+            "title": "페이즈",
+            "text-agvx47": "1. 개막 - 선 플레이어부터 상태이상 체크\n\n2. 플레이어 행동 - 2번 수행 (빈사 시 1번)\n\n3. 운명 카드 공개 - 마지막 순번 플레이어\n가 모든 행동을 마친 뒤, 운명 카드 2장을 오픈하여 순서대로 적용\n오픈한 카드가 재앙 카드면 적용 후 운명 카드를 1장 더 뽑는다.\n\n4. 폐막 - 재앙의 주사위 판정을 처리\n이 시점의 잔느 최종 위치를 기준으로 \"남주의 잔느 추종\"을 판정\n\n5. 무대정리 - 막이 내리면, 이번 막의 마지막 순번 플레이어가 다음 막의 선 플레이어가 된다. 다음 막을 개막한다."
+          }
+        }
+      ],
+      "note": "40장은 탐색 덱에 10장씩 · 20장은 세계은행연합"
     }
   ],
   "keywords": [
@@ -2990,7 +4185,7 @@
     },
     {
       "id": "kw-villain",
-      "word": "빌런 포인트",
+      "word": "빌런",
       "style": "chip",
       "bg": "#7D1F38",
       "color": "#FFFDFA"
@@ -3025,6 +4220,75 @@
       "word": "약혼",
       "style": "bold",
       "color": "#C9738C"
+    },
+    {
+      "id": "kw-bm84fs",
+      "word": "모략",
+      "style": "bold",
+      "bg": "#2f2323",
+      "color": "#800000"
+    },
+    {
+      "id": "kw-kcpnrm",
+      "word": "암습",
+      "style": "bold",
+      "color": "#7d1f38"
+    },
+    {
+      "id": "kw-y2vgq2",
+      "word": "처단",
+      "style": "bold",
+      "color": "#7d1f38"
+    },
+    {
+      "id": "kw-kjumxa",
+      "word": "발각",
+      "style": "bold",
+      "color": "#800000"
+    },
+    {
+      "id": "kw-thkcph",
+      "word": "처형",
+      "style": "bold",
+      "color": "#800000"
+    },
+    {
+      "id": "kw-ttlj6v",
+      "word": "황제의 증표",
+      "style": "chip",
+      "bg": "#d1871f"
+    },
+    {
+      "id": "kw-xyp71x",
+      "word": "승천의 문 토큰",
+      "style": "chip",
+      "bg": "#85afc1"
+    },
+    {
+      "id": "kw-kwssz2",
+      "word": "승천 엔딩",
+      "style": "chip",
+      "bg": "#85afc1"
+    },
+    {
+      "id": "kw-mpv18f",
+      "word": "징조",
+      "style": "color"
+    },
+    {
+      "id": "kw-k4480h",
+      "word": "서브 빌런",
+      "style": "bold"
+    },
+    {
+      "id": "kw-hm0xy3",
+      "word": "메인 빌런",
+      "style": "color"
+    },
+    {
+      "id": "kw-3xhwxp",
+      "word": "이명소유",
+      "style": "color"
     }
   ],
   "printGroups": [
@@ -3039,12 +4303,16 @@
         "d-gold",
         "d-fate",
         "d-omen",
-        "d-scenario",
-        "d-taste",
         "d-pc",
         "d-npc",
         "d-skull",
-        "d-aid"
+        "deck-5iylw1",
+        "deck-ak60qc",
+        "deck-dicbny",
+        "deck-nhegsk",
+        "deck-hyr7qg",
+        "deck-tv6axa",
+        "deck-7zgra6"
       ]
     },
     {
@@ -3053,7 +4321,206 @@
       "color": "#1F4E79",
       "decks": [
         "d-heart",
-        "d-villain"
+        "d-villain",
+        "d-encounter"
+      ]
+    }
+  ],
+  "rulebooks": [
+    {
+      "id": "book-dbqqri",
+      "name": "룰북",
+      "component": "c-501i46",
+      "sheet": {
+        "w": 297,
+        "h": 210,
+        "margin": 0,
+        "gap": 0,
+        "marks": "none"
+      },
+      "binding": "saddle",
+      "duplex": "short",
+      "pages": [
+        {
+          "id": "page-bfkz8q",
+          "qty": 1,
+          "values": {
+            "title": "삼류 악녀는 싫어!",
+            "body": "> 본격! 한국풍 로판 클리셰 전략 보드게임\n\n2~4인 · 만 14세 이상 · 약 60분",
+            "folio": ""
+          }
+        },
+        {
+          "id": "page-rucn3w",
+          "qty": 1,
+          "values": {
+            "title": "이 게임은 무엇인가",
+            "body": "당신은 로맨스판타지 소설 **《판 로만티카의 소녀》** 의 세계로 빙의했다.\n그것도 하필 주인공 잔느에게 **처단당하는 조연 악녀** 중 하나로.\n\n원작대로라면 당신의 결말은 정해져 있다. 파멸이다.\n하지만 당신은 원작을 읽었고, 앞으로 무슨 일이 벌어질지 알고 있다.\n\n**목표는 하나다 — 살아남아, 자기만의 결말을 쟁취하는 것.**\n\n- 지역을 오가며 **능력 카드**와 **물건 카드**를 모은다\n- 같은 능력을 다섯 장 모아 **각성**해 고유능력을 얻는다\n- 남주와 **만나고 약혼**하거나, 경쟁자를 **모략**해 치운다\n- 24막이 끝나기 전에 다섯 엔딩 중 하나의 조건을 완성한다\n\n> **인간성을 뜻하는 «두근!» 토큰이 0이 되면 사망한다.**\n> 죽어도 게임은 끝나지 않는다 — `악령` 이 되어 세계의 멸망을 노릴 수 있다.",
+            "folio": "2"
+          }
+        },
+        {
+          "id": "page-50lzjo",
+          "qty": 1,
+          "values": {
+            "title": "준비물 — 카드",
+            "body": "### 카드\n\n| 구성품 | 장수 | 뒷면 | 비고 |\n| --- | ---: | --- | --- |\n| 능력 카드 | 100 | 노랑 | 매력 40 · 검/마법/선혈/신성/독약/어둠 각 10 |\n| 물건 카드 · 단서 | 27 | 파랑 | 18종 (공유 물건은 2장) |\n| 물건 카드 · 유물 | 13 | 파랑 | 세계 진실 10 (5종×2) + 엘릭서 3 |\n| 금화 | 60 | 파랑 | 탐색 덱 40 + 세계은행연합 20 |\n| 운명 카드 | 48 | 검정 | 초반 16 · 중반 16 · 후반 16 |\n| 시나리오 카드 | 3 | 별도 | 구간 서막. 막을 소모하지 않는다 |\n| 재앙 카드 | 10 | 검정 | **운명 카드와 뒷면이 완전히 같아야 한다** |\n| 남주 성향 카드 | 20 | 분홍 | 남주당 3장 뒷면으로 배치 |\n| 사기(死氣) 카드 | 40 | 검정 | 악령 전용. 손패 상한 10 × 4인 |\n| 캐릭터 카드 | 17 | — | 플레이어 8(양면·악령면) · 남주 4 · 메인 악녀 4 · 잔느 1 |\n| 요약 카드 | 4 | 양면 | 인원수만큼. 행동 8종 요약 |",
+            "folio": "3"
+          }
+        },
+        {
+          "id": "page-fiaq6p",
+          "qty": 1,
+          "values": {
+            "title": "준비물 — 토큰 · 기타",
+            "body": "| 구성품 | 개수 | 비고 |\n| --- | ---: | --- |\n| 두근! 토큰 | 30 *(미정)* | 인간성 = 라이프. 회복 불가 |\n| 빌런 토큰 | 30 *(미정)* | 암살 1회당 1개. 운명 저항 · 멸망 승점 |\n| 조우 토큰 | 36 | 9종 각 4개 (잔느 1 · 악녀 4 · 남주 4) |\n| 선혈의 비 토큰 | 1 *(초안)* | 재앙 1번. 게임 종료까지 유지 |\n| 전염병 토큰 | 5 *(초안)* | 재앙 3번. 매 막 이웃 지역으로 확산 |\n| 파리 떼 토큰 | 1 *(초안)* | 재앙 8번. 매 막 주사위로 이동 |\n| 범용 재앙 마커 | 2 *(초안)* | 마수폭주 · 소멸 · 흑암 표시 겸용 |\n| 막 트랙 마커 | 1 | 게임판의 24칸 막 트랙 위에 놓는다 |\n| 6면체 주사위 | 1 | 모든 판정을 이 하나로 처리한다 |\n| 게임판 | 1 | 7개 지역 + 24칸 막 트랙 |\n| 룰북 | 1 | 이 책자 |\n\n> **아직 정해지지 않은 것** — 두근!·빌런 토큰의 실제 개수, 재앙 토큰 수량,\n> 캐릭터 카드의 재질(하드보드지 여부), 남주 성향 카드 20장의 문구.",
+            "folio": "4"
+          }
+        },
+        {
+          "id": "page-hrys3h",
+          "qty": 1,
+          "values": {
+            "title": "셋업",
+            "body": "1. **게임판**을 펼치고 막 트랙의 1칸에 마커를 놓는다.\n2. **시나리오 덱** — 운명 카드를 초반·중반·후반 **각 16장씩** 세 덱으로 나눠 섞고,\n   각 덱 맨 위에 해당 구간의 **시나리오 카드 1장**을 올린다.\n3. **탐색 덱** — 물건(단서+유물) 40장을 섞어 **10장씩 4묶음**으로 나누고,\n   각 묶음에 **금화 10장**을 넣어 다시 섞는다. 동·서·남·북에 1덱씩(각 20장) 놓는다.\n4. **캐릭터 배정** — 플레이어는 무작위로 캐릭터를 받는다.\n   선택되지 않은 플레이어블 캐릭터는 시작 지점에 **NPC 서브빌런**으로 놓는다.\n5. **선 플레이어** — 전원 주사위를 굴려 **가장 낮은 눈**이 선. 동점자는 재굴림.\n   진행 방향(시계/반시계)은 선이 정한다.\n6. **초기 자원** — 캐릭터 카드에 적힌 시작 자원을 받는다.\n   **두근! 토큰은 난이도표대로** 지급한다. 순번 3·4위는 **빌런 포인트 1점**\n   또는 **능력 카드 1장** 중 하나를 더 받는다.\n7. **이상형 세팅** — 각 남주에게 성향 카드를 **3장씩 뒷면으로** 놓는다.\n8. **개막** — 초반부 시나리오 카드를 낭독하고 시작한다.",
+            "folio": "5"
+          }
+        },
+        {
+          "id": "page-ufejxu",
+          "qty": 1,
+          "values": {
+            "title": "게임판과 지역",
+            "body": "| 코드 | 지역 | 탐색 | 특징 |\n| --- | --- | --- | --- |\n| A | 동부 — 율리우스 제국 | 가능 | 황가와 음모의 땅 |\n| B | 서부 — 무법지대 | 가능 | 투기장 |\n| C | 남부 — 루멘교 왕국연합 | 가능 | 교회에서 `빈사` 치료 |\n| D | 북부 — 프로스트하임 공국 | 가능 | 설원, 영원의 관 |\n| E | 중부 — 아카데미 | **불가** | 대신 `수행` 이 3장. 승천의 문이 잠들어 있다 |\n| F | 동부 바다 | 가능 | **동부 덱**을 쓴다. 극동으로 가는 유일한 관문 |\n| G | 극동의 섬 | **불가** | 황제의 증표 (군림 엔딩) |\n\n- **이동은 이웃 지역으로만** 하고, 갈 때마다 금화 1장을 낸다.\n- 극동의 섬은 **동부 바다를 통해서만** 드나들 수 있다.\n- 북동부(이제벨의 자유도시)는 그림으로만 있고 이동할 수 없다.",
+            "folio": "6"
+          }
+        },
+        {
+          "id": "page-uxf60n",
+          "qty": 1,
+          "values": {
+            "title": "플레이어 캐릭터",
+            "body": "여덟 명의 조연 악녀 중 하나를 무작위로 맡는다. 고르지 않은 캐릭터는\n**NPC 서브빌런**으로 시작 지점에 놓인다.\n\n| 캐릭터 | 시작 지점 | 시작 자원 | 특수 각성 |\n| --- | --- | --- | --- |\n| 동부의 꽃 — 샬롯 | 중부 | 금화 2 · 매력 3 | — |\n| 어둠의 시녀 — 데이지 | 동부 | 금화 1 · 매력 1 · 어둠 2 | — |\n| 부두술사 — 마리 | 서부 | 금화 1 · 매력 1 · 독 2 | 독술사 |\n| 마력없는 마법사 — 미호 | 중부 | 금화 1 · 매력 2 · 마법 2 | 요술사 |\n| 잊혀진 진조 — 바토리 | 북부 | 매력 2 · 선혈 2 | 진조 |\n| 전처녀 — 제노비아 | 남부 | 금화 1 · 검 2 | 검성 |\n| 성녀후보 — 이레네 | 중부 | 신성 2 · 매력 1 | 성녀 |\n| 대해적 — 그레이스 | 동부 바다 | 금화 3 · 매력 2 | 만물금본 |\n\n각 캐릭터에게는 원작에서 처단당하는 **«원래 운명»**, 반전이 담긴 **«숨겨진 과거»**,\n그리고 그것을 밝히는 **«과거의 단서»** 물건 카드가 있다.",
+            "folio": "7"
+          }
+        },
+        {
+          "id": "page-fh0ywo",
+          "qty": 1,
+          "values": {
+            "title": "한 막의 진행",
+            "body": "게임은 **24막(라운드)** 이다. 한 막은 다음 순서로 흐른다.\n\n1. **개막** — 선 플레이어부터 상태이상을 처리한다.\n2. **플레이어 행동** — 선부터 진행 방향으로, 각자 **행동 2개**를 한다.\n   (`빈사` 상태면 1개만 할 수 있다.)\n3. **운명 카드 공개** — 그 막의 **마지막 순번 플레이어**가 자기 차례를 마친 뒤\n   **운명 카드 2장**을 열어 순서대로 적용한다.\n4. **폐막** — 잔느의 최종 위치를 기준으로 «남주의 잔느 추종» 을 판정하고,\n   재앙의 주사위 판정을 처리한다.\n5. **무대정리** — 방금 운명 카드를 연 **마지막 순번 플레이어가 다음 막의 선**이 된다.\n   막 트랙 마커를 한 칸 옮긴다.\n\n> **시나리오 카드와 재앙 카드는 막을 소모하지 않는다.**\n> 둘 중 하나가 나오면 처리한 뒤 **운명 카드를 1장 더** 뽑는다.\n> 그래서 운명 카드 48장이 정확히 24막에 소진된다.",
+            "folio": "8"
+          }
+        },
+        {
+          "id": "page-vwr4u0",
+          "qty": 1,
+          "values": {
+            "title": "행동 ① — 이동 · 탐색 · 수행 · 각성",
+            "body": "### 이동\n\n이웃한 지역으로 간다. **금화 1장**을 낸다.\n\n### 탐색\n\n그 지역의 탐색 덱에서 주사위를 굴려 뽑는다. **중부·극동에서는 할 수 없다.**\n\n| 주사위 | 결과 |\n| --- | --- |\n| 1 · 2 | 능력 카드 1장 |\n| 3 · 4 · 5 | 물건 카드 1장 |\n| 6 | 물건 카드 2장, 또는 능력 2장 + 물건 1장 |\n\n> 탐색 덱은 **리셔플하지 않는다.** 파고들수록 그 지역의 물건/금화 비율이 틀어지는 것이\n> 의도된 설계다. 덱이 마르면 세계은행연합에서 **금화 2장만** 보충되므로,\n> 단서와 유물은 게임 전체에서 유한하다.\n\n### 수행\n\n능력 카드를 **2장** 뽑는다. **아카데미(중부)에서는 3장.**\n\n### 각성\n\n**같은 능력 카드 5장**을 내고 고유능력을 얻는다.\n특수 고유능력을 얻을 수 있는 캐릭터는 **반드시 그쪽으로** 각성한다.",
+            "folio": "9"
+          }
+        },
+        {
+          "id": "page-vrot1q",
+          "qty": 1,
+          "values": {
+            "title": "행동 ② — 만남 · 모략 · 거래 · 약혼",
+            "body": "### 만남\n\n**매력 카드 1장**을 써서, 같은 지역에 있는 남주의 성향 카드 1장을 연다.\n\n### 모략\n\n메인 빌런 · 남주 · 다른 플레이어 · 잔느를 상대로 시도한다. → 다음 쪽\n\n### 거래\n\n같은 지역에 다른 플레이어가 있으면 **금화 5개를 걸고** 거래를 제안한다.\n상대는 반드시 응하고 물건 카드 1장을 보여준다.\n\n| 제안자의 선택 | 금화 | 결과 |\n| --- | --- | --- |\n| 수락 | 암상 2 + 상대 3 | 그 물건을 가져온다 |\n| 거절 | 암상 2 (3은 반환) | 아무 일도 없다 |\n| 거절 후 파괴 의뢰 | 5 전부 | 암상이 그 물건을 파괴한다 |\n\n### 약혼\n\n성향 카드가 **1장 이상 열려 있으면**, 열린 조건을 능력·물건으로 충족해 약혼한다.\n약혼 후 **10막이 지나면** 결혼 엔딩 판정 대상이 된다.\n\n- 이미 다른 플레이어가 약혼했다면, 성향 카드를 **추가로 열고** 그 조건까지 채워\n  **파혼**시키고 자신이 약혼할 수 있다.\n- `팜므파탈` 을 각성하지 않았다면 **두 명 이상의 남주와 동시에 약혼할 수 없다.**",
+            "folio": "10"
+          }
+        },
+        {
+          "id": "page-cic5jj",
+          "qty": 1,
+          "values": {
+            "title": "모략 판정",
+            "body": "같은 능력 카드를 **2~5장** 내고 주사위를 굴린다.\n**나온 눈과 낸 장수를 비교**한다.\n\n| 주사위 | 결과 |\n| --- | --- |\n| 장수 **초과** | **발각** — 두근! 1 손실, `현상수배` |\n| 장수 **미만** | **처단** — `여론악화`, 대상 처치 (카드를 내 앞으로) |\n| 장수와 **같음** | **암살** — 대상 처치. **빌런 토큰 1개 획득** |\n\n| 낸 장수 | 발각 | 처단 | 암살 |\n| ---: | ---: | ---: | ---: |\n| 2장 | 4/6 | 1/6 | 1/6 |\n| 3장 | 3/6 | 2/6 | 1/6 |\n| 4장 | 2/6 | 3/6 | 1/6 |\n| 5장 | 1/6 | 4/6 | 1/6 |\n\n> **암살 확률은 장수와 무관하게 언제나 1/6이다.** 카드를 더 쓰면 오르는 것은\n> «안전하게 처치할 확률» 이지 «빌런 포인트를 벌 확률» 이 아니다.\n\n### 대상이 다르면 결과도 다르다\n\n- **남주** — «처단» 이면 `현상수배` 가 된다.\n- **다른 플레이어** — «처단» 대신 **암습**(상대 능력 카드 2장 무작위 파괴).\n  «암살» 이면 상대는 두근! 1을 잃고 `빈사`. 두근!이 없으면 **사망 → 악령**.\n- **잔느** — 운명의 가호로 **절대 죽지 않는다.** 빌런 포인트도 못 얻는다.\n\n| 주사위 (잔느 상대) | 결과 |\n| --- | --- |\n| 장수 초과 | **역공** — 두근! **2** 손실 |\n| 장수 미만 | **반격** — 두근! **1** 손실 |\n| 장수와 같음 | **조용한 실패** — 아무 일도 없다 |",
+            "folio": "11"
+          }
+        },
+        {
+          "id": "page-okalez",
+          "qty": 1,
+          "values": {
+            "title": "상태이상",
+            "body": "상태이상의 **해제는 «특수행동»** 이라 행동 칸을 쓰지 않는다.\n\n### 빈사\n\n자기 턴에 **행동을 1개만** 할 수 있다. 해제 방법 셋:\n\n1. 남부 교회에서 **금화 3개**를 내고 치료\n2. **엘릭서** 사용\n3. `빛의 사제` 또는 `성녀` 의 치료\n\n### 현상수배\n\n막 시작마다 주사위를 굴려 **4 이상**이면 같은 지역의 상대에 따라 피해를 입는다.\n\n| 같은 지역 | 기본 | 잔느가 함께 있으면 |\n| --- | --- | --- |\n| 남주 | 두근! 1 감소 | **두근! 2 감소** |\n| 메인 빌런 | 능력 2장 또는 물건 1장 버림 | **능력 4장 또는 물건 2장** |\n\n해제 — **금화 5개**로 여론 조작(→`여론악화`) / 고유능력으로 여론 조작(→`여론악화`) /\n원인이 된 상대가 사망. **잔느가 원인이면 앞의 두 가지로만** 풀 수 있다.\n\n### 여론악화\n\n**거래와 만남을 할 수 없다.**\n해제 — **금화 3개**를 써서, 또는 고유능력으로\n«처단 대상이 악녀/빌런이었음» 을 공표한다.",
+            "folio": "12"
+          }
+        },
+        {
+          "id": "page-jtg7d6",
+          "qty": 1,
+          "values": {
+            "title": "잔느를 조심하라",
+            "body": "잔느는 **운명 카드의 지시대로만** 움직인다. 자율 행동은 없다.\n하지만 운명 카드 자체가 **당신과 마주치도록 짜여 있다.**\n\n### 조우 (플레이어마다 따로 센다)\n\n| 조우 시점의 상태 | 결과 |\n| --- | --- |\n| 첫 조우 | 아무 일도 없다 |\n| 두 번째 이후 | `여론악화` |\n| 이미 `여론악화` | `현상수배` |\n| 이미 `현상수배` | **강제로 잔느에게 모략을 시도한다** |\n\n마지막 줄은 선택이 아니다. 그래서 **여론악화 단계에서 해제 수단(금화 3개 또는 고유능력)을\n확보해두지 못하면** 원치 않는 모략까지 끌려간다.\n\n### 남주의 추종 (중반부부터)\n\n막 종료 시 **잔느가 있는 지역에 남주가 하나도 없으면** 남주 1명이 그리로 이동한다.\n① 잔느의 약혼자 → ② 가장 가까운 남주 → ③ 동률이면 해당 전원.\n\n> 결국 잔느 곁에는 늘 남주가 있게 된다. `현상수배` 상태로 잔느와 마주치는 것이\n> 이 게임에서 가장 비싼 사고다.",
+            "folio": "13"
+          }
+        },
+        {
+          "id": "page-x0fawt",
+          "qty": 1,
+          "values": {
+            "title": "각성과 고유능력",
+            "body": "같은 능력 카드 5장으로 각성한다. **일반 6종**과 캐릭터 **특수 6종**은 상호 배타적이다 —\n누군가 `마도사` 로 각성하면 미호는 `요술사` 가 될 수 없고, 그 반대도 같다.\n\n| 고유능력 | 재료 | 효과 요약 |\n| --- | --- | --- |\n| 팜므파탈 | 매력 5 | 여러 남주와 동시에 약혼 |\n| 마리오네트 | 어둠 5 | `현상수배` 자동 완화 · 모략 주사위 3회까지 재굴림 |\n| 소드마스터 | 검 5 | 모략의 «발각» 을 «처단» 으로 |\n| 빛의 사제 | 신성 5 | 신성 카드를 주사위 눈만큼 소모해 처단·암살 방어 |\n| 마도사 | 마법 5 | 마법 카드로 모략하면 발각되지 않는다 |\n| 혈술사 | 선혈 5 | 빌런 토큰으로 두근! 손실을 대신 지불 |\n\n**특수 고유능력** — 요술사(미호) · 검성(제노비아) · 성녀(이레네) ·\n진조(바토리) · 만물금본(그레이스) · 독술사(마리).\n조건과 효과는 캐릭터 카드에 적혀 있다.",
+            "folio": "14"
+          }
+        },
+        {
+          "id": "page-aeqyey",
+          "qty": 1,
+          "values": {
+            "title": "죽음과 멸망",
+            "body": "두근! 토큰이 **0이 되면 사망**한다. 두근!은 **회복되지 않는 일방향 자원**이다.\n\n죽은 플레이어는 **악령**이 되어 계속 플레이한다.\n\n- 캐릭터 카드를 **악령 면으로 뒤집는다**\n- **사기(死氣) 카드**를 쓴다 (손패 상한 10장)\n- `징조` 로 **재앙 카드**를 운명 덱에 몰래 섞어 넣는다 —\n  악령 자신도 그 내용을 보지 못한 채 넣는다\n- 목표는 **멸망 엔딩** — 전원이 죽었을 때 빌런 포인트가 가장 많은 자가 이긴다\n\n> 재앙 카드는 운명 카드와 **뒷면이 완전히 같다.** 섞여 들어간 순간부터\n> 다음에 열릴 카드가 무엇인지 아무도 알 수 없다.",
+            "folio": "15"
+          }
+        },
+        {
+          "id": "page-f8v8ge",
+          "qty": 1,
+          "values": {
+            "title": "엔딩",
+            "body": "| 엔딩 | 조건 |\n| --- | --- |\n| **노멀** — 나는 살아있다 | 최후의 1인 생존 + 각성 + 모든 빌런 처치 |\n| **해피** — 저 오늘 결혼해요 | 생존 + 각성 + 남주와 결혼 + 그 남주 통치권의 빌런 제거 |\n| **군림** — 짐의 발 앞에 조아리거라 | 생존 + 각성 + 황제의 증표 + 대륙에서 황제 선언 후 1막 경과 |\n| **승천** — 본녀는 세계의 진실을 깨달았도다 | 각성 + 세계 진실 물건 **3장 이상** → 승천의 문 토큰 + 아카데미에서 소환 |\n| **멸망** — 내가 가질 수 없다면 부숴버릴거야 | 전원 사망. 빌런 포인트 최다 획득자 승리 |\n\n### 게임이 끝나는 시점\n\n① 운명 카드가 모두 소진되었을 때 ② 누군가 엔딩 조건을 충족했을 때\n③ 모든 플레이어가 사망했을 때 (그 막은 끝까지 진행한다)\n\n### 같은 막에 둘 이상이 달성했다면\n\n① 빌런 포인트가 많은 쪽 → ② 남은 두근!이 많은 쪽 → ③ 그 막에서 먼저 달성한 쪽",
+            "folio": "16"
+          }
+        },
+        {
+          "id": "page-j3wb1m",
+          "qty": 1,
+          "values": {
+            "title": "난이도",
+            "body": "시나리오 덱은 **모든 난이도에서 똑같다** (운명 카드 48장).\n난이도는 **두근! 토큰 개수로만** 갈린다.\n\n| 난이도 | 플레이어 시작 두근! | NPC 서브빌런 두근! |\n| --- | ---: | ---: |\n| 데이지 (Daisy) | 5 | 0 |\n| 릴리 (Lily) | 5 | 1 |\n| 로즈 (Rose) | 3 | 1 |\n| 아네모네 (Anemone) | 2 | 1 |\n| 리코리스 (Lycoris) | **1** | **2** |\n\n- 쉬운 쪽일수록 내 두근!이 넉넉하고 NPC는 손쉽게 정리된다.\n- 리코리스에서는 **강제 모략 한 번에 5/6 확률로 죽는다.**",
+            "folio": "17"
+          }
+        },
+        {
+          "id": "page-4br6nv",
+          "qty": 1,
+          "values": {
+            "title": "빠른 참조",
+            "body": "**한 턴 = 행동 2개** (`빈사` 면 1개). 상태이상 해제는 행동을 쓰지 않는다.\n\n| 행동 | 요약 |\n| --- | --- |\n| 이동 | 이웃 지역. 금화 1 |\n| 탐색 | 1·2 능력 1 / 3·4·5 물건 1 / 6 물건 2 (또는 능력 2 + 물건 1) |\n| 수행 | 능력 2장 (아카데미 3장) |\n| 각성 | 같은 능력 5장 → 고유능력 |\n| 만남 | 매력 1장 → 성향 카드 1장 공개 |\n| 모략 | 같은 능력 2~5장 + 주사위. 초과=발각 / 미만=처단 / 동일=암살 |\n| 거래 | 금화 5 (수수료 2 + 상대 3) |\n| 약혼 | 열린 성향 조건을 충족 |\n\n**손패 상한** — 물건 10 · 능력 10 · 합계 20 · 사기 카드 10\n\n**막** — 24막 / 막당 운명 카드 2장 / 시나리오·재앙 카드는 막을 소모하지 않는다",
+            "folio": "18"
+          }
+        },
+        {
+          "id": "page-zmgsw9",
+          "qty": 1,
+          "values": {
+            "title": "헷갈리는 것",
+            "body": "**시나리오·재앙 카드는 막을 소모하지 않는다.** 뽑았으면 처리한 뒤 운명 카드를\n한 장 더 뽑는다. 그래야 48장이 24막에 정확히 맞는다.\n\n**잔느는 죽지 않는다.** 모략의 대상은 되지만 처치·암살이 성립하지 않고\n빌런 포인트도 주지 않는다. 잃을 것만 있다.\n\n**두근!은 회복되지 않는다.** 엘릭서와 교회는 `빈사` 를 푸는 것이지 두근!을\n돌려주지 않는다.\n\n**각성은 서로를 막는다.** 누군가 일반 고유능력으로 각성하면, 그와 짝인\n특수 고유능력은 그 게임에서 잠긴다 (반대도 같다).\n\n**탐색 덱은 다시 섞지 않는다.** 마른 지역에는 금화만 2장씩 보충된다 —\n단서와 유물은 유한하다.\n\n**죽어도 계속한다.** 악령이 되어 사기 카드를 쓰고, 재앙 카드를 덱에 섞고,\n멸망 엔딩을 노린다.",
+            "folio": "19"
+          }
+        },
+        {
+          "id": "page-6l5e0b",
+          "qty": 1,
+          "values": {
+            "title": "메모",
+            "body": "",
+            "folio": "20"
+          }
+        }
       ]
     }
   ]

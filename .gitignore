@@ -1,3 +1,8 @@
 dist/
 node_modules/
 checks/run.cjs
+# 그림까지 든 묶음 — 215MB 라 저장소에 안 올린다.
+# 구조는 example/project.json 에 있고, 그림이 필요하면 이 파일을 앱에서 연다.
+example/*.handeck
+# 한 번 돌리고 마는 생성기의 빌드 산출물
+example/*.cjs
